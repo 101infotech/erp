@@ -1,0 +1,133 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Create Vendor')
+@section('page-title', 'Create Vendor')
+
+@section('content')
+<div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-6 max-w-4xl mx-auto">
+    <div class="mb-6">
+        <a href="{{ route('admin.finance.vendors.index', ['company_id' => $companyId]) }}"
+            class="text-blue-600 hover:text-blue-800">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Vendors
+        </a>
+    </div>
+
+    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Create New Vendor</h2>
+
+    <form action="{{ route('admin.finance.vendors.store') }}" method="POST">
+        @csrf
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Company *</label>
+                <select name="company_id" required
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                    @foreach($companies as $company)
+                    <option value="{{ $company->id }}" {{ $companyId==$company->id ? 'selected' : '' }}>
+                        {{ $company->name }}
+                    </option>
+                    @endforeach
+                </select>
+                @error('company_id')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Vendor Code</label>
+                <input type="text" name="vendor_code" value="{{ old('vendor_code') }}" placeholder="Auto-generated"
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                @error('vendor_code')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Vendor Name *</label>
+                <input type="text" name="name" value="{{ old('name') }}" required
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                @error('name')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Vendor Type *</label>
+                <select name="vendor_type" required
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                    <option value="supplier" {{ old('vendor_type')=='supplier' ? 'selected' : '' }}>Supplier</option>
+                    <option value="contractor" {{ old('vendor_type')=='contractor' ? 'selected' : '' }}>Contractor
+                    </option>
+                    <option value="service_provider" {{ old('vendor_type')=='service_provider' ? 'selected' : '' }}>
+                        Service Provider</option>
+                </select>
+                @error('vendor_type')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">PAN Number</label>
+                <input type="text" name="pan_number" value="{{ old('pan_number') }}"
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                @error('pan_number')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Contact Person</label>
+                <input type="text" name="contact_person" value="{{ old('contact_person') }}"
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                @error('contact_person')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}"
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                @error('email')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Phone</label>
+                <input type="text" name="phone" value="{{ old('phone') }}"
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">
+                @error('phone')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Address</label>
+                <textarea name="address" rows="2"
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white">{{ old('address') }}</textarea>
+                @error('address')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="flex items-center">
+                    <input type="checkbox" name="is_active" value="1" checked class="mr-2">
+                    <span class="text-sm text-slate-700 dark:text-slate-300">Active</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="flex justify-end space-x-4 mt-6">
+            <a href="{{ route('admin.finance.vendors.index', ['company_id' => $companyId]) }}"
+                class="px-6 py-2 bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg">
+                Cancel
+            </a>
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Create Vendor
+            </button>
+        </div>
+    </form>
+</div>
+@endsection
