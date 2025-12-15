@@ -19,14 +19,10 @@
                     class="px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 font-medium transition">
                     Edit
                 </a>
-                <form action="{{ route('admin.announcements.destroy', $announcement) }}" method="POST" class="inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this announcement?')"
-                        class="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 font-medium transition">
-                        Delete
-                    </button>
-                </form>
+                <button type="button" onclick="openModal('deleteAnnouncementModal')"
+                    class="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 font-medium transition">
+                    Delete
+                </button>
             </div>
         </div>
     </div>
@@ -123,4 +119,33 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Announcement Modal -->
+<x-professional-modal id="deleteAnnouncementModal" title="Delete Announcement" subtitle="This action cannot be undone"
+    icon="trash" iconColor="red" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Are you sure you want to delete this announcement?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Title:</span> {{ $announcement->title }}</p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Published:</span> {{
+                $announcement->published_at?->diffForHumans() ?? 'Not published' }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('deleteAnnouncementModal')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Keep</button>
+        <form action="{{ route('admin.announcements.destroy', $announcement) }}" method="POST" class="inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
 @endsection

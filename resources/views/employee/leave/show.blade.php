@@ -111,8 +111,8 @@
                     <!-- Actions -->
                     @if($leave->status === 'pending')
                     <div class="flex items-center gap-4 pt-4 border-t border-slate-700">
-                        <button type="button" onclick="cancelLeave('{{ route('employee.leave.cancel', $leave->id) }}')"
-                            class="flex-1 px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg font-semibold hover:bg-red-500/30 transition">
+                        <button type="button" onclick="openModal('cancelLeaveModal')"
+                            class="w-full px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg font-semibold hover:bg-red-500/30 transition">
                             Cancel Request
                         </button>
                     </div>
@@ -122,19 +122,33 @@
         </div>
     </div>
 
-    <!-- Cancel Leave Confirmation Dialog -->
-    <x-confirm-dialog name="cancel-leave" title="Cancel Leave Request"
-        message="Are you sure you want to cancel this leave request?" type="danger" confirmText="Cancel Leave"
-        form="cancelLeaveForm" />
-
-    <form id="cancelLeaveForm" method="POST" style="display: none;">
-        @csrf
-    </form>
-
-    <script>
-        function cancelLeave(url) {
-            document.getElementById('cancelLeaveForm').action = url;
-            window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'cancel-leave' }));
-        }
-    </script>
+    <!-- Cancel Leave Request Modal -->
+    <x-professional-modal id="cancelLeaveModal" title="Cancel Leave Request" subtitle="This action cannot be undone"
+        icon="warning" iconColor="red" maxWidth="max-w-md">
+        <div class="space-y-4">
+            <p class="text-slate-300">Are you sure you want to cancel this leave request?</p>
+            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+                <p class="text-sm text-white"><span class="font-medium">Leave Type:</span> {{ $leave->leaveType->name }}
+                </p>
+                <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Status:</span> {{
+                    ucfirst($leave->status) }}</p>
+            </div>
+        </div>
+        <x-slot name="footer">
+            <button onclick="closeModal('cancelLeaveModal')"
+                class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Keep
+                Request</button>
+            <form method="POST" action="{{ route('employee.leave.cancel', $leave->id) }}" class="inline">
+                @csrf
+                <button type="submit"
+                    class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Cancel Request
+                </button>
+            </form>
+        </x-slot>
+    </x-professional-modal>
 </x-app-layout>

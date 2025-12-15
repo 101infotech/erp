@@ -165,15 +165,39 @@
         <h3 class="text-lg font-semibold text-red-400 mb-2">Danger Zone</h3>
         <p class="text-slate-400 text-sm mb-4">Deleting this company will also delete all associated departments and
             employees. This action cannot be undone.</p>
-        <form method="POST" action="{{ route('admin.hrm.companies.destroy', $company) }}"
-            onsubmit="return confirm('Are you absolutely sure? This will permanently delete the company, all its departments, and all its employees.')">
+        <button type="button" onclick="openModal('deleteCompanyShowModal')"
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition">Delete
+            Company</button>
+    </div>
+</div>
+
+<!-- Delete Company Modal -->
+<x-professional-modal id="deleteCompanyShowModal" title="Delete Company" subtitle="This action cannot be undone"
+    icon="trash" iconColor="red" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Are you absolutely sure? This will permanently delete the company, all its
+            departments, and all its employees.</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Company:</span> {{ $company->name }}</p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Location:</span> {{ $company->location ??
+                'N/A' }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('deleteCompanyShowModal')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Cancel</button>
+        <form method="POST" action="{{ route('admin.hrm.companies.destroy', $company) }}" class="inline">
             @csrf
             @method('DELETE')
             <button type="submit"
-                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition">
-                Delete Company
+                class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete Permanently
             </button>
         </form>
-    </div>
-</div>
+    </x-slot>
+</x-professional-modal>
 @endsection

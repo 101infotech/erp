@@ -131,28 +131,21 @@
                                 class="text-yellow-600 hover:text-yellow-800" title="Edit"><i
                                     class="fas fa-edit"></i></a>
 
-                            <form action="{{ route('admin.finance.founder-transactions.approve', $transaction) }}"
-                                method="POST" class="inline" onsubmit="return confirm('Approve this transaction?')">
-                                @csrf
-                                <button type="submit" class="text-green-600 hover:text-green-800" title="Approve"><i
-                                        class="fas fa-check"></i></button>
-                            </form>
+                            <button type="button" onclick="openModal('approveFTModal_{{ $transaction->id }}')"
+                                class="text-green-600 hover:text-green-800" title="Approve"><i
+                                    class="fas fa-check"></i></button>
 
-                            <form action="{{ route('admin.finance.founder-transactions.cancel', $transaction) }}"
-                                method="POST" class="inline" onsubmit="return confirm('Cancel this transaction?')">
-                                @csrf
-                                <button type="submit" class="text-red-600 hover:text-red-800" title="Cancel"><i
-                                        class="fas fa-times"></i></button>
-                            </form>
+                            <button type="button" onclick="openModal('cancelFTModal_{{ $transaction->id }}')"
+                                class="text-red-600 hover:text-red-800" title="Cancel"><i
+                                    class="fas fa-times"></i></button>
+
                             @endif
 
                             @if($transaction->status == 'approved')
-                            <form action="{{ route('admin.finance.founder-transactions.settle', $transaction) }}"
-                                method="POST" class="inline" onsubmit="return confirm('Mark as settled?')">
-                                @csrf
-                                <button type="submit" class="text-purple-600 hover:text-purple-800" title="Settle"><i
-                                        class="fas fa-check-double"></i></button>
-                            </form>
+                            <button type="button" onclick="openModal('settleFTModal_{{ $transaction->id }}')"
+                                class="text-purple-600 hover:text-purple-800" title="Settle"><i
+                                    class="fas fa-check-double"></i></button>
+
                             @endif
 
                             @if($transaction->document_path)
@@ -174,4 +167,96 @@
 
     <div class="mt-6">{{ $transactions->links() }}</div>
 </div>
+@foreach($transactions as $transaction)
+@if($transaction->status == 'pending')
+<!-- Approve Founder Transaction Modal -->
+<x-professional-modal id="approveFTModal_{{ $transaction->id }}" title="Approve Transaction"
+    subtitle="Mark transaction as approved" icon="check" iconColor="green" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Approve this transaction?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Founder:</span> {{ $transaction->founder->name }}
+            </p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Amount:</span> NPR {{
+                number_format($transaction->amount, 2) }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('approveFTModal_{{ $transaction->id }}')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Cancel</button>
+        <form action="{{ route('admin.finance.founder-transactions.approve', $transaction) }}" method="POST"
+            class="inline">
+            @csrf
+            <button type="submit"
+                class="px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Approve
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
+
+<!-- Cancel Founder Transaction Modal -->
+<x-professional-modal id="cancelFTModal_{{ $transaction->id }}" title="Cancel Transaction"
+    subtitle="Mark transaction as cancelled" icon="warning" iconColor="red" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Cancel this transaction?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Founder:</span> {{ $transaction->founder->name }}
+            </p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Amount:</span> NPR {{
+                number_format($transaction->amount, 2) }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('cancelFTModal_{{ $transaction->id }}')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Keep</button>
+        <form action="{{ route('admin.finance.founder-transactions.cancel', $transaction) }}" method="POST"
+            class="inline">
+            @csrf
+            <button type="submit"
+                class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Cancel
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
+@endif
+
+@if($transaction->status == 'approved')
+<!-- Settle Founder Transaction Modal -->
+<x-professional-modal id="settleFTModal_{{ $transaction->id }}" title="Settle Transaction"
+    subtitle="Mark transaction as settled" icon="check" iconColor="blue" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Mark this transaction as settled?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Founder:</span> {{ $transaction->founder->name }}
+            </p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Amount:</span> NPR {{
+                number_format($transaction->amount, 2) }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('settleFTModal_{{ $transaction->id }}')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Keep</button>
+        <form action="{{ route('admin.finance.founder-transactions.settle', $transaction) }}" method="POST"
+            class="inline">
+            @csrf
+            <button type="submit"
+                class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Settle
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
+@endif
+@endforeach
 @endsection

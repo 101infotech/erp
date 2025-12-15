@@ -19,9 +19,7 @@ class PayslipPdfService
         // Load payroll record with relationships
         $payrollRecord->load([
             'employee.company',
-            'employee.department',
-            'company',
-            'anomalies'
+            'employee.department'
         ]);
 
         // Prepare data for PDF

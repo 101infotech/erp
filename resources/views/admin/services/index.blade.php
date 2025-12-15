@@ -115,8 +115,8 @@
                                 </path>
                             </svg>
                         </a>
-                        <button type="button" class="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition"
-                            onclick="deleteService('{{ route('workspace.services.destroy', ['workspace' => $workspace ?? 'all', 'service' => $service->id]) }}')">
+                        <button type="button" onclick="openModal('deleteServiceModal_{{ $service->id }}')"
+                            class="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -151,21 +151,35 @@
 </div>
 @endif
 
-<!-- Delete Service Confirmation Dialog -->
-<x-confirm-dialog name="delete-service" title="Delete Service"
-    message="Are you sure you want to delete this service? This action cannot be undone." type="danger"
-    confirmText="Delete Service" form="deleteServiceForm" />
-
-<form id="deleteServiceForm" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
-</form>
-
-<script>
-    function deleteService(url) {
-        document.getElementById('deleteServiceForm').action = url;
-        window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'delete-service' }));
-    }
-</script>
-
+@foreach($services as $service)
+<!-- Delete Service Modal -->
+<x-professional-modal id="deleteServiceModal_{{ $service->id }}" title="Delete Service"
+    subtitle="This action cannot be undone" icon="trash" iconColor="red" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Are you sure you want to delete this service?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Service:</span> {{ $service->name }}</p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Type:</span> {{ $service->type }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('deleteServiceModal_{{ $service->id }}')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Keep</button>
+        <form method="POST"
+            action="{{ route('workspace.services.destroy', ['workspace' => $workspace ?? 'all', 'service' => $service->id]) }}"
+            class="inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
+@endforeach
 @endsection

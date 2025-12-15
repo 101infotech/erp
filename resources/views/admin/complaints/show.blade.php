@@ -48,7 +48,7 @@
                         @endif
                     </div>
                 </div>
-                <button onclick="document.getElementById('deleteModal').classList.remove('hidden')"
+                <button onclick="openModal('deleteModal')"
                     class="px-3 py-2 text-sm bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition">
                     Delete
                 </button>
@@ -177,27 +177,32 @@
     </div>
 </div>
 
-<!-- Delete Modal -->
-<div id="deleteModal"
-    class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-800 rounded-lg p-6 max-w-md w-full border border-slate-700">
-        <h3 class="text-lg font-bold text-white mb-2">Delete Complaint</h3>
-        <p class="text-slate-400 mb-6">Are you sure you want to delete this complaint? This action cannot be undone.</p>
-        <div class="flex gap-3 justify-end">
-            <button onclick="document.getElementById('deleteModal').classList.add('hidden')"
-                class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition">
-                Cancel
-            </button>
-            <form method="POST" action="{{ route('admin.complaints.destroy', $complaint) }}" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                    Delete
-                </button>
-            </form>
-        </div>
+<!-- Delete Complaint Modal -->
+<x-professional-modal id="deleteModal" title="Delete Complaint" icon="trash" iconColor="red" maxWidth="max-w-md">
+    <p class="text-slate-300 mb-4">Are you sure you want to delete this complaint? This action cannot be undone.</p>
+    <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700 mb-4">
+        <p class="text-sm text-white"><span class="font-medium">Subject:</span> {{ $complaint->subject }}</p>
+        <p class="text-sm text-slate-400"><span class="font-medium">Status:</span> {{ ucfirst($complaint->status) }}</p>
     </div>
-</div>
+    <x-slot name="footer">
+        <button type="button" onclick="closeModal('deleteModal')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">
+            Cancel
+        </button>
+        <form method="POST" action="{{ route('admin.complaints.destroy', $complaint) }}" class="inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete Complaint
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
 
 @if(session('success'))
 <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"

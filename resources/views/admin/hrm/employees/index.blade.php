@@ -145,8 +145,8 @@
                             class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="text-red-400 hover:text-red-300"
-                                onclick="deleteEmployee('{{ route('admin.hrm.employees.destroy', $employee->id) }}')">Delete</button>
+                            <button type="submit" class="text-red-400 hover:text-red-300"
+                                onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -226,9 +226,9 @@
             <form method="POST" action="{{ route('admin.hrm.employees.destroy', $employee) }}" class="inline">
                 @csrf
                 @method('DELETE')
-                <button type="button"
+                <button type="submit"
                     class="px-3 py-1.5 text-xs bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition"
-                    onclick="deleteEmployee('{{ route('admin.hrm.employees.destroy', $employee->id) }}')">Delete</button>
+                    onclick="return confirm('Are you sure?')">Delete</button>
             </form>
         </div>
     </div>
@@ -248,21 +248,4 @@
 <div class="mt-6">
     {{ $employees->links() }}
 </div>
-
-<!-- Delete Employee Confirmation Dialog -->
-<x-confirm-dialog name="delete-employee" title="Delete Employee"
-    message="Are you sure you want to delete this employee? This action cannot be undone." type="danger"
-    confirmText="Delete Employee" form="deleteEmployeeForm" />
-
-<form id="deleteEmployeeForm" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
-</form>
-
-<script>
-    function deleteEmployee(url) {
-        document.getElementById('deleteEmployeeForm').action = url;
-        window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'delete-employee' }));
-    }
-</script>
 @endsection

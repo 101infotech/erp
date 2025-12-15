@@ -29,12 +29,12 @@
                 Edit
             </a>
             @if(empty($payroll->anomalies) || $payroll->anomalies_reviewed)
-            <button type="button" @click="$dispatch('open-confirm', 'approve-payroll')"
+            <button type="button" onclick="openModal('approvePayrollModal')"
                 class="px-4 py-2.5 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition whitespace-nowrap">
                 Approve
             </button>
             @endif
-            <button type="button" onclick="openDeleteModal()"
+            <button type="button" onclick="openModal('deletePayrollModal')"
                 class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -43,12 +43,12 @@
                 Delete
             </button>
             @elseif($payroll->status === 'approved')
-            <button type="button" onclick="document.getElementById('markAsPaidModal').classList.remove('hidden')"
+            <button type="button" onclick="openModal('markAsPaidModal')"
                 class="px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition whitespace-nowrap">
                 Mark as Paid
             </button>
             @if($payroll->employee->email)
-            <button type="button" @click="$dispatch('open-confirm', 'send-payslip')"
+            <button type="button" onclick="openModal('sendPayslipApprovedModal')"
                 class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -63,7 +63,7 @@
             @endif
             @elseif($payroll->status === 'paid')
             @if($payroll->employee->email)
-            <button type="button" @click="$dispatch('open-confirm', 'send-payslip')"
+            <button type="button" onclick="openModal('sendPayslipPaidModal')"
                 class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -424,134 +424,157 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div id="deletePayrollModal"
-    class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-xl max-w-md w-full">
-        <div class="flex items-center justify-between p-6 border-b border-slate-700">
-            <h3 class="text-xl font-semibold text-white">Delete Draft Payroll</h3>
-            <button onclick="closeDeleteModal()" class="text-slate-400 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="p-6">
-            <div class="flex items-start space-x-4 mb-6">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="flex-1">
-                    <p class="text-slate-300 mb-2">
-                        Are you sure you want to delete this draft payroll?
-                    </p>
-                    <div class="bg-slate-900/50 rounded p-3 mb-3 border border-slate-700">
-                        <p class="text-sm text-white"><span class="font-medium">Employee:</span> {{
-                            $payroll->employee->name }}</p>
-                        <p class="text-sm text-slate-400"><span class="font-medium">Period:</span> {{
-                            $payroll->period_start_bs }} to {{ $payroll->period_end_bs }}</p>
-                    </div>
-                    <p class="text-sm text-red-400 font-medium">
-                        ⚠️ This action cannot be undone.
-                    </p>
-                </div>
-            </div>
-            <form method="POST" action="{{ route('admin.hrm.payroll.destroy', $payroll->id) }}" id="deletePayrollForm">
-                @csrf
-                @method('DELETE')
-                <div class="flex justify-end gap-3">
-                    <button type="button" onclick="closeDeleteModal()"
-                        class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Delete Payroll
-                    </button>
-                </div>
-            </form>
+<!-- Delete Payroll Modal -->
+<x-professional-modal id="deletePayrollModal" title="Delete Draft Payroll" icon="trash" iconColor="red"
+    maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Are you sure you want to delete this draft payroll? This action cannot be undone.</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Employee:</span> {{ $payroll->employee->name }}</p>
+            <p class="text-sm text-slate-400"><span class="font-medium">Period:</span> {{ $payroll->period_start_bs }}
+                to {{ $payroll->period_end_bs }}</p>
         </div>
     </div>
-</div>
+    <x-slot name="footer">
+        <button type="button" onclick="closeModal('deletePayrollModal')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">
+            Cancel
+        </button>
+        <form method="POST" action="{{ route('admin.hrm.payroll.destroy', $payroll->id) }}" class="inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete Payroll
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
 
 <!-- Mark as Paid Modal -->
-<div id="markAsPaidModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4 border border-slate-700">
-        <h3 class="text-xl font-semibold text-white mb-4">Mark Payroll as Paid</h3>
-        <form method="POST" action="{{ route('admin.hrm.payroll.mark-as-paid', $payroll->id) }}">
-            @csrf
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-2">Payment Method</label>
-                    <select name="payment_method" required
-                        class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2">
-                        <option value="bank_transfer">Bank Transfer</option>
-                        <option value="cash">Cash</option>
-                        <option value="cheque">Cheque</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-2">Transaction Reference
-                        (Optional)</label>
-                    <input type="text" name="transaction_reference"
-                        class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2">
-                </div>
+<x-professional-modal id="markAsPaidModal" title="Mark Payroll as Paid" icon="check" iconColor="green"
+    maxWidth="max-w-md">
+    <form method="POST" action="{{ route('admin.hrm.payroll.mark-as-paid', $payroll->id) }}">
+        @csrf
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Payment Method <span
+                        class="text-red-400">*</span></label>
+                <select name="payment_method" required
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <option value="">Select payment method</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                    <option value="cash">Cash</option>
+                    <option value="cheque">Cheque</option>
+                </select>
             </div>
-            <div class="flex justify-end gap-2 mt-6">
-                <button type="button" onclick="document.getElementById('markAsPaidModal').classList.add('hidden')"
-                    class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">
-                    Cancel
-                </button>
-                <button type="submit"
-                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition">
-                    Confirm Payment
-                </button>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Transaction Reference (Optional)</label>
+                <input type="text" name="transaction_reference" placeholder="Enter transaction reference"
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
-        </form>
+        </div>
+        <x-slot name="footer">
+            <button type="button" onclick="closeModal('markAsPaidModal')"
+                class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">
+                Cancel
+            </button>
+            <button type="submit"
+                class="px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Confirm Payment
+            </button>
+        </x-slot>
+    </form>
+</x-professional-modal>
+
+<!-- Approve Payroll Modal -->
+<x-professional-modal id="approvePayrollModal" title="Approve Payroll"
+    subtitle="This action will mark the payroll as approved." icon="check" iconColor="green" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Are you sure you want to approve this payroll?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Employee:</span> {{ $payroll->employee->full_name }}
+            </p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Period:</span> {{ $payroll->period_start_bs
+                }} to {{ $payroll->period_end_bs }}</p>
+        </div>
     </div>
-</div>
+    <x-slot name="footer">
+        <button onclick="closeModal('approvePayrollModal')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Cancel</button>
+        <form method="POST" action="{{ route('admin.hrm.payroll.approve', $payroll->id) }}" class="inline">
+            @csrf
+            <button type="submit"
+                class="px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Approve
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
 
-<!-- Confirmation Dialogs -->
-<x-confirm-dialog name="approve-payroll" title="Approve Payroll"
-    message="Are you sure you want to approve this payroll? Once approved, it cannot be edited." type="success"
-    confirmText="Approve" form="approvePayrollForm" />
+<!-- Send Payslip (Approved Status) Modal -->
+<x-professional-modal id="sendPayslipApprovedModal" title="Send Payslip to Employee"
+    subtitle="Payslip will be sent to the employee email" icon="check" iconColor="blue" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Send payslip to employee email?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Email:</span> {{ $payroll->employee->email }}</p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Employee:</span> {{
+                $payroll->employee->full_name }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('sendPayslipApprovedModal')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Cancel</button>
+        <form method="POST" action="{{ route('admin.hrm.payroll.mark-as-sent', $payroll->id) }}" class="inline">
+            @csrf
+            <button type="submit"
+                class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Send
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
 
-<form id="approvePayrollForm" method="POST" action="{{ route('admin.hrm.payroll.approve', $payroll->id) }}"
-    style="display: none;">
-    @csrf
-</form>
-
-<x-confirm-dialog name="send-payslip" title="Send Payslip" message="Send payslip to {{ $payroll->employee->email }}?"
-    type="info" confirmText="Send" form="sendPayslipForm" />
-
-<form id="sendPayslipForm" method="POST" action="{{ route('admin.hrm.payroll.mark-as-sent', $payroll->id) }}"
-    style="display: none;">
-    @csrf
-</form>
+<!-- Send Payslip (Paid Status) Modal -->
+<x-professional-modal id="sendPayslipPaidModal" title="Send Payslip to Employee"
+    subtitle="Payslip will be sent to the employee email" icon="check" iconColor="blue" maxWidth="max-w-md">
+    <div class="space-y-4">
+        <p class="text-slate-300">Send payslip to employee email?</p>
+        <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+            <p class="text-sm text-white"><span class="font-medium">Email:</span> {{ $payroll->employee->email }}</p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Employee:</span> {{
+                $payroll->employee->full_name }}</p>
+        </div>
+    </div>
+    <x-slot name="footer">
+        <button onclick="closeModal('sendPayslipPaidModal')"
+            class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Cancel</button>
+        <form method="POST" action="{{ route('admin.hrm.payroll.mark-as-sent', $payroll->id) }}" class="inline">
+            @csrf
+            <button type="submit"
+                class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Send
+            </button>
+        </form>
+    </x-slot>
+</x-professional-modal>
 @endsection
-<script>
-    // Delete modal functions
-    function openDeleteModal() {
-        document.getElementById('deletePayrollModal').classList.remove('hidden');
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deletePayrollModal').classList.add('hidden');
-    }
-
-    // Close modal on escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeDeleteModal();
-        }
-    });
-</script>

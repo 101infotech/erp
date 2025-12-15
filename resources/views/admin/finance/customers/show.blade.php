@@ -158,7 +158,7 @@
     <div class="bg-white dark:bg-slate-800 shadow-md rounded-lg overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Documents</h3>
-            <button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
+            <button onclick="openModal('uploadModal')"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
                 Upload Document
             </button>
@@ -224,27 +224,20 @@
 </div>
 
 <!-- Upload Document Modal -->
-<div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Upload Document</h3>
-            <button onclick="document.getElementById('uploadModal').classList.add('hidden')"
-                class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <form action="{{ route('admin.finance.documents.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="documentable_type" value="customer">
-            <input type="hidden" name="documentable_id" value="{{ $customer->id }}">
-            <input type="hidden" name="company_id" value="{{ $customer->company_id }}">
+<x-professional-modal id="uploadModal" title="Upload Document" icon="info" iconColor="blue" maxWidth="max-w-md">
+    <form action="{{ route('admin.finance.documents.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="documentable_type" value="customer">
+        <input type="hidden" name="documentable_id" value="{{ $customer->id }}">
+        <input type="hidden" name="company_id" value="{{ $customer->company_id }}">
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Document Type *</label>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Document Type <span
+                        class="text-red-400">*</span></label>
                 <select name="type" required
-                    class="w-full border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg">
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="">Select document type</option>
                     <option value="invoice">Invoice</option>
                     <option value="receipt">Receipt</option>
                     <option value="contract">Contract</option>
@@ -255,36 +248,41 @@
                 </select>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Title *</label>
-                <input type="text" name="title" required
-                    class="w-full border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Title <span
+                        class="text-red-400">*</span></label>
+                <input type="text" name="title" required placeholder="Enter document title"
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Description</label>
-                <textarea name="description" rows="2"
-                    class="w-full border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg"></textarea>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Description</label>
+                <textarea name="description" rows="2" placeholder="Enter optional description"
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">File * (Max
-                    5MB)</label>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">File <span class="text-red-400">*</span>
+                    (Max 5MB)</label>
                 <input type="file" name="file" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                    class="w-full border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg">
-                <p class="text-xs text-slate-500 mt-1">Accepted: PDF, JPG, PNG, DOC, DOCX</p>
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <p class="text-xs text-slate-400 mt-2">Accepted: PDF, JPG, PNG, DOC, DOCX</p>
             </div>
+        </div>
 
-            <div class="flex gap-2">
-                <button type="button" onclick="document.getElementById('uploadModal').classList.add('hidden')"
-                    class="flex-1 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-900 dark:text-white px-4 py-2 rounded-lg">
-                    Cancel
-                </button>
-                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    Upload
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
+        <x-slot name="footer">
+            <button type="button" onclick="closeModal('uploadModal')"
+                class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">
+                Cancel
+            </button>
+            <button type="submit"
+                class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Upload
+            </button>
+        </x-slot>
+    </form>
+</x-professional-modal>
 @endsection

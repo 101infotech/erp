@@ -54,36 +54,42 @@
                                 </div>
                             </span>
                         </button>
-                        <button type="button"
-                            onclick="sendResetLink('{{ route('admin.users.send-reset-link', $user) }}')"
-                            class="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-white border-b border-slate-700">
-                            <span class="flex items-center">
-                                <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                <div>
-                                    <div class="font-medium">Send Reset Link</div>
-                                    <div class="text-xs text-slate-400">User sets their own password</div>
-                                </div>
-                            </span>
-                        </button>
-                        <button type="button"
-                            onclick="generatePassword('{{ route('admin.users.reset-password', $user) }}')"
-                            class="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-white">
-                            <span class="flex items-center">
-                                <svg class="w-5 h-5 mr-3 text-yellow-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                                <div>
-                                    <div class="font-medium">Generate & Email Password</div>
-                                    <div class="text-xs text-slate-400">Auto-generate random password</div>
-                                </div>
-                            </span>
-                        </button>
+                        <form action="{{ route('admin.users.send-reset-link', $user) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                onclick="return confirm('Send password reset link to {{ $user->email }}?')"
+                                class="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-white border-b border-slate-700">
+                                <span class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    <div>
+                                        <div class="font-medium">Send Reset Link</div>
+                                        <div class="text-xs text-slate-400">User sets their own password</div>
+                                    </div>
+                                </span>
+                            </button>
+                        </form>
+                        <form action="{{ route('admin.users.reset-password', $user) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                onclick="return confirm('Generate random password and email to {{ $user->email }}?')"
+                                class="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-white">
+                                <span class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3 text-yellow-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    <div>
+                                        <div class="font-medium">Generate & Email Password</div>
+                                        <div class="text-xs text-slate-400">Auto-generate random password</div>
+                                    </div>
+                                </span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -335,34 +341,6 @@
             closeSetPasswordModal();
         }
     });
-</script>
-
-<!-- Confirmation Dialogs -->
-<x-confirm-dialog name="send-reset-link" title="Send Reset Link"
-    message="Send password reset link to {{ $user->email }}?" type="info" confirmText="Send" form="sendResetLinkForm" />
-
-<form id="sendResetLinkForm" method="POST" style="display: none;">
-    @csrf
-</form>
-
-<x-confirm-dialog name="generate-password" title="Generate & Email Password"
-    message="Generate random password and email to {{ $user->email }}?" type="warning" confirmText="Generate & Send"
-    form="generatePasswordForm" />
-
-<form id="generatePasswordForm" method="POST" style="display: none;">
-    @csrf
-</form>
-
-<script>
-    function sendResetLink(url) {
-        document.getElementById('sendResetLinkForm').action = url;
-        window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'send-reset-link' }));
-    }
-
-    function generatePassword(url) {
-        document.getElementById('generatePasswordForm').action = url;
-        window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'generate-password' }));
-    }
 </script>
 
 @endsection

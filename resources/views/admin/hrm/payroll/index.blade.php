@@ -144,7 +144,7 @@
                                 class="text-blue-400 hover:text-blue-300 font-medium">Edit</a>
                             <span class="text-slate-600 mx-1">|</span>
                             <button type="button"
-                                onclick="openDeleteModal({{ $payroll->id }}, '{{ $payroll->employee->name }}', '{{ $payroll->period_start_bs }}', '{{ $payroll->period_end_bs }}')"
+                                onclick="openPayrollDeleteModal({{ $payroll->id }}, '{{ $payroll->employee->name }}', '{{ $payroll->period_start_bs }}', '{{ $payroll->period_end_bs }}')"
                                 class="text-red-400 hover:text-red-300 font-medium">Delete</button>
                             @endif
                         </td>
@@ -178,13 +178,14 @@
 </div>
 </div>
 @endsection
-<!-- Delete Confirmation Modal -->
+
+<!-- Delete Payroll Modal for Index -->
 <div id="deletePayrollModal"
     class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-xl max-w-md w-full">
         <div class="flex items-center justify-between p-6 border-b border-slate-700">
             <h3 class="text-xl font-semibold text-white">Delete Draft Payroll</h3>
-            <button onclick="closeDeleteModal()" class="text-slate-400 hover:text-white">
+            <button onclick="closeModal('deletePayrollModal')" class="text-slate-400 hover:text-white">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -219,7 +220,7 @@
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-3">
-                    <button type="button" onclick="closeDeleteModal()"
+                    <button type="button" onclick="closeModal('deletePayrollModal')"
                         class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">
                         Cancel
                     </button>
@@ -238,26 +239,10 @@
 </div>
 
 <script>
-    let currentPayrollId = null;
-
-    // Delete modal functions
-    function openDeleteModal(payrollId, employeeName, periodStart, periodEnd) {
-        currentPayrollId = payrollId;
+    function openPayrollDeleteModal(payrollId, employeeName, periodStart, periodEnd) {
         document.getElementById('deleteEmployeeName').textContent = employeeName;
         document.getElementById('deletePeriod').textContent = periodStart + ' to ' + periodEnd;
         document.getElementById('deletePayrollForm').action = '/admin/hrm/payroll/' + payrollId;
-        document.getElementById('deletePayrollModal').classList.remove('hidden');
+        openModal('deletePayrollModal');
     }
-
-    function closeDeleteModal() {
-        document.getElementById('deletePayrollModal').classList.add('hidden');
-        currentPayrollId = null;
-    }
-
-    // Close modal on escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeDeleteModal();
-        }
-    });
 </script>
