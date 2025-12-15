@@ -159,18 +159,13 @@
                                             </svg>
                                         </a>
                                         @if($leave->status === 'pending')
-                                        <form method="POST" action="{{ route('employee.leave.cancel', $leave->id) }}"
-                                            class="inline">
-                                            @csrf
-                                            <button type="submit" class="text-red-400 hover:text-red-300"
-                                                onclick="return confirm('Are you sure you want to cancel this leave request?')">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="text-red-400 hover:text-red-300"
+                                            onclick="cancelLeave('{{ route('employee.leave.cancel', $leave->id) }}')">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
                                         @endif
                                     </div>
                                 </td>
@@ -195,4 +190,20 @@
             @endif
         </div>
     </div>
+
+    <!-- Cancel Leave Confirmation Dialog -->
+    <x-confirm-dialog name="cancel-leave" title="Cancel Leave Request"
+        message="Are you sure you want to cancel this leave request?" type="danger" confirmText="Cancel Leave"
+        form="cancelLeaveForm" />
+
+    <form id="cancelLeaveForm" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        function cancelLeave(url) {
+            document.getElementById('cancelLeaveForm').action = url;
+            window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'cancel-leave' }));
+        }
+    </script>
 </x-app-layout>

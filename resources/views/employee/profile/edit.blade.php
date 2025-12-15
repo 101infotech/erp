@@ -392,17 +392,21 @@
                 }
             });        // Remove Avatar
         if (removeAvatarBtn) {
-            removeAvatarBtn.addEventListener('click', async () => {
-                if (!confirm('Are you sure you want to remove your profile picture?')) return;
+            removeAvatarBtn.addEventListener('click', () => {
+                window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'remove-avatar' }));
+            });
+        }
 
-                uploadSpinner.style.display = 'flex';
+        // Attach the removal function to window for the dialog
+        window.confirmRemoveAvatar = async function() {
+            uploadSpinner.style.display = 'flex';
 
-                try {
-                    const response = await fetch('{{ route("employee.profile.avatar.delete") }}', {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json'
+            try {
+                const response = await fetch('{{ route("employee.profile.avatar.delete") }}', {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
                         }
                     });
 
@@ -420,7 +424,6 @@
                 } finally {
                     uploadSpinner.style.display = 'none';
                 }
-            });
         }
 
         function showMessage(message, type) {
@@ -437,5 +440,11 @@
             }, 5000);
         }
     </script>
+
+    <!-- Remove Avatar Confirmation Dialog -->
+    <x-confirm-dialog name="remove-avatar" title="Remove Profile Picture"
+        message="Are you sure you want to remove your profile picture?" type="danger" confirmText="Remove"
+        onConfirm="confirmRemoveAvatar()" />
+
     @endpush
 </x-app-layout>

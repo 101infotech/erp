@@ -111,18 +111,30 @@
                     <!-- Actions -->
                     @if($leave->status === 'pending')
                     <div class="flex items-center gap-4 pt-4 border-t border-slate-700">
-                        <form method="POST" action="{{ route('employee.leave.cancel', $leave->id) }}" class="flex-1">
-                            @csrf
-                            <button type="submit"
-                                class="w-full px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg font-semibold hover:bg-red-500/30 transition"
-                                onclick="return confirm('Are you sure you want to cancel this leave request?')">
-                                Cancel Request
-                            </button>
-                        </form>
+                        <button type="button" onclick="cancelLeave('{{ route('employee.leave.cancel', $leave->id) }}')"
+                            class="flex-1 px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg font-semibold hover:bg-red-500/30 transition">
+                            Cancel Request
+                        </button>
                     </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Cancel Leave Confirmation Dialog -->
+    <x-confirm-dialog name="cancel-leave" title="Cancel Leave Request"
+        message="Are you sure you want to cancel this leave request?" type="danger" confirmText="Cancel Leave"
+        form="cancelLeaveForm" />
+
+    <form id="cancelLeaveForm" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        function cancelLeave(url) {
+            document.getElementById('cancelLeaveForm').action = url;
+            window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'cancel-leave' }));
+        }
+    </script>
 </x-app-layout>

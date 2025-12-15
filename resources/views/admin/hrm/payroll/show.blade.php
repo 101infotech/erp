@@ -29,13 +29,10 @@
                 Edit
             </a>
             @if(empty($payroll->anomalies) || $payroll->anomalies_reviewed)
-            <form method="POST" action="{{ route('admin.hrm.payroll.approve', $payroll->id) }}" class="inline">
-                @csrf
-                <button type="submit" onclick="return confirm('Are you sure you want to approve this payroll?')"
-                    class="px-4 py-2.5 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition whitespace-nowrap">
-                    Approve
-                </button>
-            </form>
+            <button type="button" @click="$dispatch('open-confirm', 'approve-payroll')"
+                class="px-4 py-2.5 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition whitespace-nowrap">
+                Approve
+            </button>
             @endif
             <button type="button" onclick="openDeleteModal()"
                 class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
@@ -51,41 +48,33 @@
                 Mark as Paid
             </button>
             @if($payroll->employee->email)
-            <form method="POST" action="{{ route('admin.hrm.payroll.mark-as-sent', $payroll->id) }}" class="inline">
-                @csrf
-                <button type="submit"
-                    onclick="return confirm('Send payslip to employee email: {{ $payroll->employee->email }}?')"
-                    class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    @if($payroll->sent_at)
-                    Resend to Employee
-                    @else
-                    Send to Employee
-                    @endif
-                </button>
-            </form>
+            <button type="button" @click="$dispatch('open-confirm', 'send-payslip')"
+                class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                @if($payroll->sent_at)
+                Resend to Employee
+                @else
+                Send to Employee
+                @endif
+            </button>
             @endif
             @elseif($payroll->status === 'paid')
             @if($payroll->employee->email)
-            <form method="POST" action="{{ route('admin.hrm.payroll.mark-as-sent', $payroll->id) }}" class="inline">
-                @csrf
-                <button type="submit"
-                    onclick="return confirm('Send payslip to employee email: {{ $payroll->employee->email }}?')"
-                    class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    @if($payroll->sent_at)
-                    Resend to Employee
-                    @else
-                    Send to Employee
-                    @endif
-                </button>
-            </form>
+            <button type="button" @click="$dispatch('open-confirm', 'send-payslip')"
+                class="px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition inline-flex items-center gap-2 whitespace-nowrap">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                @if($payroll->sent_at)
+                Resend to Employee
+                @else
+                Send to Employee
+                @endif
+            </button>
             @endif
             @endif
             <a href="{{ route('admin.hrm.payroll.index') }}"
@@ -530,6 +519,24 @@
         </form>
     </div>
 </div>
+
+<!-- Confirmation Dialogs -->
+<x-confirm-dialog name="approve-payroll" title="Approve Payroll"
+    message="Are you sure you want to approve this payroll? Once approved, it cannot be edited." type="success"
+    confirmText="Approve" form="approvePayrollForm" />
+
+<form id="approvePayrollForm" method="POST" action="{{ route('admin.hrm.payroll.approve', $payroll->id) }}"
+    style="display: none;">
+    @csrf
+</form>
+
+<x-confirm-dialog name="send-payslip" title="Send Payslip" message="Send payslip to {{ $payroll->employee->email }}?"
+    type="info" confirmText="Send" form="sendPayslipForm" />
+
+<form id="sendPayslipForm" method="POST" action="{{ route('admin.hrm.payroll.mark-as-sent', $payroll->id) }}"
+    style="display: none;">
+    @csrf
+</form>
 @endsection
 <script>
     // Delete modal functions

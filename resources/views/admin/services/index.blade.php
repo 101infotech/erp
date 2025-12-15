@@ -115,19 +115,14 @@
                                 </path>
                             </svg>
                         </a>
-                        <form method="POST"
-                            action="{{ route('workspace.services.destroy', ['workspace' => $workspace ?? 'all', 'service' => $service->id]) }}"
-                            onsubmit="return confirm('Are you sure you want to delete this service?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                    </path>
-                                </svg>
-                            </button>
-                        </form>
+                        <button type="button" class="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition"
+                            onclick="deleteService('{{ route('workspace.services.destroy', ['workspace' => $workspace ?? 'all', 'service' => $service->id]) }}')">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -155,5 +150,22 @@
     {{ $services->links() }}
 </div>
 @endif
+
+<!-- Delete Service Confirmation Dialog -->
+<x-confirm-dialog name="delete-service" title="Delete Service"
+    message="Are you sure you want to delete this service? This action cannot be undone." type="danger"
+    confirmText="Delete Service" form="deleteServiceForm" />
+
+<form id="deleteServiceForm" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
+<script>
+    function deleteService(url) {
+        document.getElementById('deleteServiceForm').action = url;
+        window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'delete-service' }));
+    }
+</script>
 
 @endsection
