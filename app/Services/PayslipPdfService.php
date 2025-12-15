@@ -58,6 +58,20 @@ class PayslipPdfService
             ['label' => 'Basic Salary', 'amount' => $payrollRecord->basic_salary],
         ];
 
+        // Surface per-day amount and payable days similar to Excel
+        if ($payrollRecord->per_day_rate > 0) {
+            $earnings[] = [
+                'label' => 'Per Day Amount',
+                'amount' => $payrollRecord->per_day_rate,
+            ];
+        }
+        if ($payrollRecord->total_payable_days > 0) {
+            $earnings[] = [
+                'label' => 'Total Payable Days',
+                'amount' => $payrollRecord->total_payable_days,
+            ];
+        }
+
         if ($payrollRecord->overtime_payment > 0) {
             $earnings[] = [
                 'label' => "Overtime ({$payrollRecord->overtime_hours} hrs @ NPR " .
@@ -81,6 +95,14 @@ class PayslipPdfService
             ['label' => 'Tax (TDS)', 'amount' => $payrollRecord->tax_amount],
         ];
 
+        // Show leave deduction explicitly
+        if ($payrollRecord->unpaid_leave_deduction > 0) {
+            $deductions[] = [
+                'label' => 'Leave Deduction (Unpaid)',
+                'amount' => $payrollRecord->unpaid_leave_deduction,
+            ];
+        }
+
         // Add deductions
         if (!empty($payrollRecord->deductions)) {
             foreach ($payrollRecord->deductions as $deduction) {
@@ -101,6 +123,10 @@ class PayslipPdfService
             'Weekend Days' => $payrollRecord->weekend_days,
             'Holiday Days' => $payrollRecord->holiday_days,
         ];
+        // Include payable days for quick reference
+        if ($payrollRecord->total_payable_days > 0) {
+            $attendanceSummary['Total Payable Days'] = $payrollRecord->total_payable_days;
+        }
 
         // Get anomalies (cast as array, not collection)
         $anomalies = [];
@@ -125,7 +151,7 @@ class PayslipPdfService
             'attendanceSummary' => $attendanceSummary,
             'anomalies' => $anomalies,
             'totalEarnings' => $payrollRecord->gross_salary,
-            'totalDeductions' => $payrollRecord->tax_amount + array_sum(array_column($payrollRecord->deductions ?? [], 'amount')),
+            'totalDeductions' => $payrollRecord->tax_amount + $payrollRecord->unpaid_leave_deduction + array_sum(array_column($payrollRecord->deductions ?? [], 'amount')),
             'netSalary' => $payrollRecord->net_salary,
         ];
     }

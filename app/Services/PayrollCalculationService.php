@@ -64,7 +64,7 @@ class PayrollCalculationService
         $paidLeaveData = $this->getPaidLeaveData($employee, $periodStart, $periodEnd);
 
         // Calculate basic salary for the period
-        $basicSalary = $this->calculateBasicSalary(
+        $basicSalaryResult = $this->calculateBasicSalary(
             $employee,
             $attendanceData,
             $paidLeaveData,
@@ -72,6 +72,9 @@ class PayrollCalculationService
             $periodStart,
             $periodEnd
         );
+        $basicSalary = $basicSalaryResult['basic_salary'];
+        $perDayRate = $basicSalaryResult['per_day_rate'];
+        $totalPayableDays = $basicSalaryResult['total_payable_days'];
 
         // Calculate working hours metrics
         $workingHoursMetrics = $this->calculateWorkingHoursMetrics(
@@ -132,6 +135,8 @@ class PayrollCalculationService
             'hourly_deduction_amount' => 0, // Admin will approve/edit
             'hourly_deduction_approved' => false,
             'basic_salary' => round($basicSalary, 2),
+            'per_day_rate' => round($perDayRate, 2),
+            'total_payable_days' => $totalPayableDays,
             'overtime_payment' => round($overtimePayment, 2),
             'allowances' => $allowances,
             'allowances_total' => round($allowancesTotal, 2),
@@ -322,8 +327,22 @@ class PayrollCalculationService
         int $monthTotalDays,
         Carbon $periodStart,
         Carbon $periodEnd
-    ): float {
+    ): array {
         $basicSalaryNpr = $employee->basic_salary_npr ?? 0;
+
+        // Determine paid leave entitlement if available on employee
+        $paidLeaveQuotaDays = $employee->paid_leave_quota_days ?? null; // optional field
+        $paidLeaveUsed = $employee->paid_leave_used_days ?? null; // optional field
+        $remainingPaidLeave = null;
+        if ($paidLeaveQuotaDays !== null && $paidLeaveUsed !== null) {
+            $remainingPaidLeave = max(0, (int)$paidLeaveQuotaDays - (int)$paidLeaveUsed);
+        }
+
+        // Apply policy: do not deduct assigned paid leaves; cap paid leaves to remaining entitlement if provided
+        $paidLeaveDays = $paidLeaveData['paid_leave_days'];
+        if ($remainingPaidLeave !== null) {
+            $paidLeaveDays = min($paidLeaveDays, $remainingPaidLeave);
+        }
 
         switch ($employee->salary_type) {
             case 'monthly':
@@ -331,7 +350,7 @@ class PayrollCalculationService
                 $dailyRate = $basicSalaryNpr / $monthTotalDays;
 
                 // Days to pay = days worked + paid leave days (they get paid for paid leaves)
-                $daysToPay = $attendanceData['days_worked'] + $paidLeaveData['paid_leave_days'];
+                $daysToPay = $attendanceData['days_worked'] + $paidLeaveDays;
 
                 // If it's a partial period, only pay for actual days in the period
                 $periodTotalDays = $periodStart->diffInDays($periodEnd) + 1;
@@ -341,21 +360,42 @@ class PayrollCalculationService
                 // Don't pay more than the work days in the period
                 $daysToPay = min($daysToPay, $workDaysInPeriod);
 
-                return $dailyRate * $daysToPay;
+                return [
+                    'basic_salary' => $dailyRate * $daysToPay,
+                    'per_day_rate' => $dailyRate,
+                    'total_payable_days' => (int) $daysToPay,
+                ];
 
             case 'daily':
                 // For daily employees, pay only for days worked + paid leave days
-                $daysToPay = $attendanceData['days_worked'] + $paidLeaveData['paid_leave_days'];
-                return $basicSalaryNpr * $daysToPay;
+                $daysToPay = $attendanceData['days_worked'] + $paidLeaveDays;
+                return [
+                    'basic_salary' => $basicSalaryNpr * $daysToPay,
+                    'per_day_rate' => $basicSalaryNpr,
+                    'total_payable_days' => (int) $daysToPay,
+                ];
 
             case 'hourly':
                 $hourlyRate = $employee->hourly_rate_npr ?? 0;
                 // For hourly employees, paid leave should also be compensated
-                $paidLeaveHours = $paidLeaveData['paid_leave_days'] * 8; // Assume 8 hours per day
-                return $hourlyRate * ($attendanceData['total_hours'] + $paidLeaveHours);
+                $paidLeaveHours = $paidLeaveDays * 8; // Assume 8 hours per day
+                // Derive equivalent payable days for display purposes
+                $standardHours = 8;
+                $totalHoursForDays = $attendanceData['total_hours'] + $paidLeaveHours;
+                $daysToPay = floor($totalHoursForDays / $standardHours);
+                $perDayRate = $hourlyRate * $standardHours;
+                return [
+                    'basic_salary' => $hourlyRate * $totalHoursForDays,
+                    'per_day_rate' => $perDayRate,
+                    'total_payable_days' => (int) $daysToPay,
+                ];
 
             default:
-                return $basicSalaryNpr;
+                return [
+                    'basic_salary' => $basicSalaryNpr,
+                    'per_day_rate' => $monthTotalDays > 0 ? ($basicSalaryNpr / $monthTotalDays) : $basicSalaryNpr,
+                    'total_payable_days' => 0,
+                ];
         }
     }
 

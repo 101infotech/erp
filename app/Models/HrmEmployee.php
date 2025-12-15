@@ -202,6 +202,39 @@ class HrmEmployee extends Model
     }
 
     /**
+     * Get total paid leave quota days (sum of all leave types)
+     */
+    public function getPaidLeaveQuotaDaysAttribute(): ?int
+    {
+        $annual = $this->paid_leave_annual ?? 0;
+        $sick = $this->paid_leave_sick ?? 0;
+        $casual = $this->paid_leave_casual ?? 0;
+
+        if ($annual > 0 || $sick > 0 || $casual > 0) {
+            return (int) ($annual + $sick + $casual);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get total paid leave used days (computed from balances)
+     */
+    public function getPaidLeaveUsedDaysAttribute(): ?int
+    {
+        $quotaDays = $this->paid_leave_quota_days;
+        if ($quotaDays === null) {
+            return null;
+        }
+
+        $annualUsed = max(0, ($this->paid_leave_annual ?? 0) - ($this->annual_leave_balance ?? 0));
+        $sickUsed = max(0, ($this->paid_leave_sick ?? 0) - ($this->sick_leave_balance ?? 0));
+        $casualUsed = max(0, ($this->paid_leave_casual ?? 0) - ($this->casual_leave_balance ?? 0));
+
+        return (int) ($annualUsed + $sickUsed + $casualUsed);
+    }
+
+    /**
      * Get formatted contract start date in Nepali
      */
     public function getContractStartDateFormattedAttribute(): ?string

@@ -212,6 +212,25 @@
                         <p class="text-sm text-slate-400">Paid Leave</p>
                     </div>
                 </div>
+                <!-- Excel-style fields -->
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <h3 class="text-sm font-semibold text-slate-300 mb-3">Salary Calculation</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        @if($payroll->per_day_rate > 0)
+                        <div>
+                            <p class="text-sm text-slate-400">Per Day Amount</p>
+                            <p class="text-lg font-semibold text-white">NPR {{ number_format($payroll->per_day_rate, 2)
+                                }}</p>
+                        </div>
+                        @endif
+                        @if($payroll->total_payable_days > 0)
+                        <div>
+                            <p class="text-sm text-slate-400">Total Payable Days</p>
+                            <p class="text-lg font-semibold text-white">{{ $payroll->total_payable_days }}</p>
+                        </div>
+                        @endif
+                    </div>
+                </div>
             </div>
 
             <!-- Working Hours Review -->

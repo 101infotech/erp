@@ -33,6 +33,19 @@
                 <div class="p-6 border-b border-slate-700">
                     <h3 class="text-lg font-bold text-white mb-4">Earnings</h3>
                     <div class="space-y-3">
+                        @if($payroll->per_day_rate > 0)
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Per Day Amount</span>
+                            <span class="text-slate-400 font-semibold">NPR {{ number_format($payroll->per_day_rate, 2)
+                                }}</span>
+                        </div>
+                        @endif
+                        @if($payroll->total_payable_days > 0)
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Total Payable Days</span>
+                            <span class="text-slate-400 font-semibold">{{ $payroll->total_payable_days }} days</span>
+                        </div>
+                        @endif
                         <div class="flex justify-between items-center">
                             <span class="text-slate-300">Base Salary</span>
                             <span class="text-white font-semibold">NPR {{ number_format($payroll->gross_salary, 2)
@@ -70,6 +83,13 @@
                             <span class="text-slate-300">Income Tax</span>
                             <span class="text-red-400 font-semibold">- NPR {{ number_format($payroll->tax_amount, 2)
                                 }}</span>
+                        </div>
+                        @endif
+                        @if($payroll->unpaid_leave_deduction > 0)
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Leave Deduction (Unpaid)</span>
+                            <span class="text-red-400 font-semibold">- NPR {{
+                                number_format($payroll->unpaid_leave_deduction, 2) }}</span>
                         </div>
                         @endif
                         @if($payroll->ssf_employee > 0)

@@ -218,6 +218,8 @@ class HrmPayrollController extends Controller
 
         $validated = $request->validate([
             'overtime_payment' => 'nullable|numeric|min:0',
+            'bonus_amount' => 'nullable|numeric|min:0',
+            'bonus_reason' => 'nullable|string',
             'allowances' => 'nullable|array',
             'deductions' => 'nullable|array',
             'tax_amount' => 'nullable|numeric|min:0',
@@ -235,10 +237,28 @@ class HrmPayrollController extends Controller
                 $payroll->overtime_payment = $validated['overtime_payment'];
             }
 
+            // Update bonus as an allowance
+            if (isset($validated['bonus_amount']) && $validated['bonus_amount'] > 0) {
+                $existingAllowances = $payroll->allowances ?? [];
+                // Remove any existing bonus entry
+                $existingAllowances = array_filter($existingAllowances, function ($a) {
+                    return !isset($a['name']) || !str_contains(strtolower($a['name']), 'bonus');
+                });
+                // Add new bonus
+                $existingAllowances[] = [
+                    'name' => $validated['bonus_reason'] ?: 'Bonus',
+                    'amount' => $validated['bonus_amount']
+                ];
+                $payroll->allowances = array_values($existingAllowances);
+            }
+
             // Update allowances
             if (isset($validated['allowances'])) {
                 $payroll->allowances = $validated['allowances'];
                 $payroll->allowances_total = collect($validated['allowances'])->sum('amount');
+            } elseif (isset($validated['bonus_amount'])) {
+                // Recalculate allowances total if bonus was added
+                $payroll->allowances_total = collect($payroll->allowances)->sum('amount');
             }
 
             // Update deductions

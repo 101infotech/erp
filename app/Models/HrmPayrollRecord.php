@@ -27,6 +27,8 @@ class HrmPayrollRecord extends Model
         'hourly_deduction_amount',
         'hourly_deduction_approved',
         'basic_salary',
+        'per_day_rate',
+        'total_payable_days',
         'overtime_payment',
         'allowances',
         'allowances_total',

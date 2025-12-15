@@ -35,6 +35,33 @@
             </div>
         </div>
 
+        <!-- Bonus -->
+        <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+            <h2 class="text-xl font-semibold text-white mb-4">Bonus</h2>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">
+                    Bonus Amount (NPR)
+                </label>
+                <input type="number" step="0.01" min="0" name="bonus_amount" value="{{ old('bonus_amount', 0) }}"
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                <p class="text-xs text-slate-400 mt-1">Add performance bonus or any additional bonus amount</p>
+                @error('bonus_amount')
+                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-slate-300 mb-2">
+                    Bonus Reason
+                </label>
+                <input type="text" name="bonus_reason" value="{{ old('bonus_reason', '') }}"
+                    placeholder="e.g., Performance bonus, Festival bonus"
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                @error('bonus_reason')
+                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+
         <!-- Allowances -->
         <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
             <h2 class="text-xl font-semibold text-white mb-4">Allowances</h2>
