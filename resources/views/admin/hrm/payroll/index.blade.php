@@ -18,14 +18,14 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+    <div class="bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-700">
         <form method="GET" action="{{ route('admin.hrm.payroll.index') }}"
-            class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            class="flex flex-nowrap items-end gap-3 md:gap-4 overflow-x-auto pb-2">
             <!-- Status Filter -->
-            <div>
+            <div class="flex-1 min-w-[200px]">
                 <label class="block text-sm font-medium text-slate-300 mb-2">Status</label>
                 <select name="status"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
                     <option value="">All Statuses</option>
                     <option value="draft" {{ request('status')==='draft' ? 'selected' : '' }}>Draft</option>
                     <option value="approved" {{ request('status')==='approved' ? 'selected' : '' }}>Approved
@@ -35,25 +35,25 @@
             </div>
 
             <!-- Employee Filter -->
-            <div>
+            <div class="flex-1 min-w-[220px]">
                 <label class="block text-sm font-medium text-slate-300 mb-2">Employee</label>
                 <select name="employee_id"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
                     <option value="">All Employees</option>
                     @foreach($employees as $employee)
                     <option value="{{ $employee->id }}" {{ request('employee_id')==$employee->id ? 'selected' : ''
                         }}>
-                        {{ $employee->first_name }} {{ $employee->last_name }}
+                        {{ $employee->name ?? $employee->full_name }}
                     </option>
                     @endforeach
                 </select>
             </div>
 
             <!-- Company Filter -->
-            <div>
+            <div class="flex-1 min-w-[220px]">
                 <label class="block text-sm font-medium text-slate-300 mb-2">Company</label>
                 <select name="company_id"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
                     <option value="">All Companies</option>
                     @foreach($companies as $company)
                     <option value="{{ $company->id }}" {{ request('company_id')==$company->id ? 'selected' : '' }}>
@@ -64,15 +64,15 @@
             </div>
 
             <!-- Period Filter -->
-            <div>
+            <div class="flex-1 min-w-[200px]">
                 <label class="block text-sm font-medium text-slate-300 mb-2">Period From</label>
                 <input type="date" name="period_start" value="{{ request('period_start') }}"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
             </div>
 
-            <div class="flex items-end">
+            <div class="flex-none min-w-[160px] flex items-end">
                 <button type="submit"
-                    class="w-full px-4 py-2 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition">
+                    class="w-full px-6 py-2.5 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition whitespace-nowrap">
                     Apply Filters
                 </button>
             </div>
@@ -81,61 +81,66 @@
 
     <!-- Payroll Records Table -->
     <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-slate-900">
+        <!-- Desktop Table View (hidden on mobile) -->
+        <div class="hidden lg:block overflow-x-auto">
+            <table class="w-full min-w-[1000px]">
+                <thead class="bg-slate-900 sticky top-0 z-10">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Employee</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Period</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Gross Salary</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Net Salary</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-3 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Status</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-3 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-700">
                     @forelse($payrolls as $payroll)
                     <tr class="hover:bg-slate-750">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-white">{{ $payroll->employee->full_name }}</div>
-                            <div class="text-sm text-slate-400">{{ $payroll->employee->employee_code }}</div>
+                        <td class="px-6 py-4">
+                            <div class="text-sm font-medium text-white whitespace-nowrap">{{ $payroll->employee->name ??
+                                $payroll->employee->full_name }}</div>
+                            <div class="text-xs text-slate-400 whitespace-nowrap">{{ $payroll->employee->code }}</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                            {{ format_nepali_date($payroll->period_start_bs, 'j M Y') }} - {{
-                            format_nepali_date($payroll->period_end_bs, 'j M Y') }}
+                        <td class="px-4 py-4 text-sm text-slate-300">
+                            <div class="whitespace-nowrap">{{ format_nepali_date($payroll->period_start_bs, 'j M Y') }}
+                            </div>
+                            <div class="whitespace-nowrap text-xs text-slate-400">to {{
+                                format_nepali_date($payroll->period_end_bs, 'j M Y') }}</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-white">
+                        <td class="px-4 py-4 text-right text-sm font-medium text-white whitespace-nowrap">
                             NPR {{ number_format($payroll->gross_salary, 2) }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-lime-400">
+                        <td class="px-4 py-4 text-right text-sm font-medium text-lime-400 whitespace-nowrap">
                             NPR {{ number_format($payroll->net_salary, 2) }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <td class="px-4 py-4 text-center">
                             @if($payroll->status === 'draft')
                             <span
-                                class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400">Draft</span>
+                                class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 whitespace-nowrap">Draft</span>
                             @elseif($payroll->status === 'approved')
                             <span
-                                class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400">Approved</span>
+                                class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400 whitespace-nowrap">Approved</span>
                             @elseif($payroll->status === 'paid')
                             <span
-                                class="px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400">Paid</span>
+                                class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400 whitespace-nowrap">Paid</span>
                             @endif
 
                             @if(!empty($payroll->anomalies) && !$payroll->anomalies_reviewed)
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400 ml-1"
+                            <span
+                                class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400 ml-1 whitespace-nowrap"
                                 title="Has unreviewed anomalies">
                                 ⚠ Anomalies
                             </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
+                        <td class="px-4 py-4 text-center text-sm whitespace-nowrap">
                             <a href="{{ route('admin.hrm.payroll.show', $payroll->id) }}"
                                 class="text-lime-400 hover:text-lime-300 font-medium">View</a>
                             @if($payroll->status === 'draft')
@@ -151,7 +156,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-12 text-center text-slate-400">
+                        <td colspan="6" class="px-6 py-12 text-center text-slate-400">
                             <svg class="mx-auto h-12 w-12 text-slate-600" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -175,6 +180,87 @@
         </div>
         @endif
     </div>
+</div>
+
+<!-- Mobile Card View (visible on mobile only) -->
+<div class="lg:hidden divide-y divide-slate-700">
+    @forelse($payrolls as $payroll)
+    <div class="p-4 hover:bg-slate-750">
+        <!-- Employee Info -->
+        <div class="flex items-start justify-between mb-3">
+            <div class="flex-1">
+                <h3 class="text-sm font-medium text-white">{{ $payroll->employee->name ?? $payroll->employee->full_name
+                    }}</h3>
+                <p class="text-xs text-slate-400 mt-0.5">{{ $payroll->employee->code }}</p>
+            </div>
+            <div class="ml-3">
+                @if($payroll->status === 'draft')
+                <span
+                    class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400">Draft</span>
+                @elseif($payroll->status === 'approved')
+                <span
+                    class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400">Approved</span>
+                @elseif($payroll->status === 'paid')
+                <span
+                    class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400">Paid</span>
+                @endif
+            </div>
+        </div>
+
+        <!-- Period -->
+        <div class="mb-3">
+            <div class="text-xs text-slate-400 mb-1">Period</div>
+            <div class="text-sm text-slate-300">
+                {{ format_nepali_date($payroll->period_start_bs, 'j M Y') }} - {{
+                format_nepali_date($payroll->period_end_bs, 'j M Y') }}
+            </div>
+        </div>
+
+        <!-- Salary Info -->
+        <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+                <div class="text-xs text-slate-400 mb-1">Gross Salary</div>
+                <div class="text-sm font-medium text-white">NPR {{ number_format($payroll->gross_salary, 2) }}</div>
+            </div>
+            <div>
+                <div class="text-xs text-slate-400 mb-1">Net Salary</div>
+                <div class="text-sm font-medium text-lime-400">NPR {{ number_format($payroll->net_salary, 2) }}</div>
+            </div>
+        </div>
+
+        <!-- Anomalies Warning -->
+        @if(!empty($payroll->anomalies) && !$payroll->anomalies_reviewed)
+        <div class="mb-3">
+            <span class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400">
+                ⚠ Has Anomalies
+            </span>
+        </div>
+        @endif
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3 pt-3 border-t border-slate-700">
+            <a href="{{ route('admin.hrm.payroll.show', $payroll->id) }}"
+                class="text-lime-400 hover:text-lime-300 font-medium text-sm">View</a>
+            @if($payroll->status === 'draft')
+            <a href="{{ route('admin.hrm.payroll.edit', $payroll->id) }}"
+                class="text-blue-400 hover:text-blue-300 font-medium text-sm">Edit</a>
+            <button type="button"
+                onclick="openPayrollDeleteModal({{ $payroll->id }}, '{{ $payroll->employee->name }}', '{{ $payroll->period_start_bs }}', '{{ $payroll->period_end_bs }}')"
+                class="text-red-400 hover:text-red-300 font-medium text-sm">Delete</button>
+            @endif
+        </div>
+    </div>
+    @empty
+    <div class="px-6 py-12 text-center text-slate-400">
+        <svg class="mx-auto h-12 w-12 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <p class="mt-2">No payroll records found</p>
+        <a href="{{ route('admin.hrm.payroll.create') }}"
+            class="text-lime-400 hover:text-lime-300 mt-2 inline-block">Generate your first payroll</a>
+    </div>
+    @endforelse
 </div>
 </div>
 @endsection

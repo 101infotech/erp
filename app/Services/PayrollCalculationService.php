@@ -50,6 +50,11 @@ class PayrollCalculationService
         ?int $monthTotalDays = null,
         float $standardWorkingHours = 8.00
     ): array {
+        // Validate employee has basic salary configured
+        if (!$employee->basic_salary_npr || $employee->basic_salary_npr <= 0) {
+            throw new \Exception("Employee {$employee->name} (ID: {$employee->id}) does not have basic salary configured. Please set basic salary before generating payroll.");
+        }
+
         // Determine month total days
         if ($monthTotalDays === null) {
             // Auto-detect from BS start date

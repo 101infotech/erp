@@ -103,11 +103,37 @@
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-2">
                     Select Employees <span class="text-red-400">*</span>
+                    <span class="text-slate-400 text-xs ml-2">({{ count($employees) }} active employees)</span>
                 </label>
+
+                @if(isset($employeesWithoutSalary) && $employeesWithoutSalary > 0)
+                <div class="mb-3 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                    <div class="flex items-start">
+                        <svg class="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-300">
+                                <strong>{{ $employeesWithoutSalary }}</strong> employee(s) don't have basic salary
+                                configured.
+                                Payroll generation will fail for them. Employees without salary are marked with ⚠️
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="mb-2">
                     <button type="button" onclick="selectAllEmployees()"
                         class="text-sm text-lime-400 hover:text-lime-300">
                         Select All
+                    </button>
+                    <span class="text-slate-600 mx-2">|</span>
+                    <button type="button" onclick="selectEmployeesWithSalary()"
+                        class="text-sm text-lime-400 hover:text-lime-300">
+                        Select Only With Salary
                     </button>
                     <span class="text-slate-600 mx-2">|</span>
                     <button type="button" onclick="deselectAllEmployees()"
@@ -116,8 +142,13 @@
                     </button>
                 </div>
                 <div class="bg-slate-900 border border-slate-700 rounded-lg p-4 max-h-64 overflow-y-auto">
-                    @foreach($employees as $employee)
-                    <label class="flex items-center py-2 hover:bg-slate-800 px-2 rounded cursor-pointer">
+                    @forelse($employees as $employee)
+                    @php
+                    $hasSalary = isset($employee->basic_salary_npr) && $employee->basic_salary_npr > 0;
+                    @endphp
+                    <label
+                        class="flex items-center py-2 hover:bg-slate-800 px-2 rounded cursor-pointer {{ !$hasSalary ? 'opacity-60' : '' }}"
+                        data-has-salary="{{ $hasSalary ? 'true' : 'false' }}">
                         <input type="checkbox" name="employee_ids[]" value="{{ $employee->id }}"
                             class="w-4 h-4 text-lime-500 bg-slate-900 border-slate-600 rounded focus:ring-lime-500 focus:ring-2">
                         <span class="ml-3 text-sm text-white">
@@ -125,9 +156,28 @@
                             @if($employee->company)
                             <span class="text-slate-400">- {{ $employee->company->name }}</span>
                             @endif
+                            @if(!$hasSalary)
+                            <span class="text-yellow-400 text-xs ml-2" title="No basic salary configured">⚠️ No
+                                Salary</span>
+                            @else
+                            <span class="text-slate-500 text-xs ml-2">(NPR {{ number_format($employee->basic_salary_npr,
+                                2) }})</span>
+                            @endif
                         </span>
                     </label>
-                    @endforeach
+                    @empty
+                    <div class="text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-slate-600" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <p class="mt-4 text-slate-400 text-sm">No active employees found</p>
+                        <p class="mt-1 text-slate-500 text-xs">
+                            Please add active employees before generating payroll
+                        </p>
+                    </div>
+                    @endforelse
                 </div>
                 @error('employee_ids')
                 <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
@@ -235,6 +285,11 @@
 <script>
     function selectAllEmployees() {
             document.querySelectorAll('input[name="employee_ids[]"]').forEach(cb => cb.checked = true);
+        }
+        
+        function selectEmployeesWithSalary() {
+            document.querySelectorAll('label[data-has-salary="true"] input[name="employee_ids[]"]').forEach(cb => cb.checked = true);
+            document.querySelectorAll('label[data-has-salary="false"] input[name="employee_ids[]"]').forEach(cb => cb.checked = false);
         }
         
         function deselectAllEmployees() {

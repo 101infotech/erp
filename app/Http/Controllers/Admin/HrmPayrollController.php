@@ -84,14 +84,28 @@ class HrmPayrollController extends Controller
     public function create()
     {
         $employees = HrmEmployee::where('status', 'active')
-            ->select('id', 'name', 'code', 'company_id')
+            ->select('id', 'name', 'code', 'company_id', 'basic_salary_npr')
             ->with('company:id,name')
             ->orderBy('name')
             ->get();
 
         $companies = HrmCompany::all();
 
-        return view('admin.hrm.payroll.create', compact('employees', 'companies'));
+        // Log for debugging
+        \Log::info('Payroll Create - Employee Count: ' . $employees->count());
+        if ($employees->isEmpty()) {
+            \Log::warning('No active employees found for payroll generation');
+        }
+
+        // Check how many employees have salary configured
+        $employeesWithSalary = $employees->filter(fn($e) => $e->basic_salary_npr > 0)->count();
+        $employeesWithoutSalary = $employees->count() - $employeesWithSalary;
+
+        if ($employeesWithoutSalary > 0) {
+            \Log::warning("Payroll Create - {$employeesWithoutSalary} employees without salary configuration");
+        }
+
+        return view('admin.hrm.payroll.create', compact('employees', 'companies', 'employeesWithSalary', 'employeesWithoutSalary'));
     }
 
     /**
@@ -140,6 +154,12 @@ class HrmPayrollController extends Controller
         $monthTotalDays = $validated['month_total_days'] ?? null; // null means auto-detect
         $standardWorkingHours = $validated['standard_working_hours'] ?? 8.00;
 
+        // Log payroll generation attempt
+        \Log::info('Generating payroll', [
+            'employee_count' => count($validated['employee_ids']),
+            'period' => $periodStartBs . ' to ' . $periodEndBs,
+        ]);
+
         $result = $this->payrollService->generateBulkPayroll(
             $validated['employee_ids'],
             $periodStart,
@@ -153,13 +173,26 @@ class HrmPayrollController extends Controller
         $successCount = count($result['success']);
         $failedCount = count($result['failed']);
 
+        // Log results
+        \Log::info('Payroll generation completed', [
+            'success' => $successCount,
+            'failed' => $failedCount,
+        ]);
+
         if ($successCount > 0) {
             session()->flash('success', "Successfully generated {$successCount} payroll records.");
         }
 
         if ($failedCount > 0) {
             $failedNames = collect($result['failed'])->pluck('name')->join(', ');
+            $failedReasons = collect($result['failed'])->map(fn($f) => $f['name'] . ': ' . $f['reason'])->join(' | ');
+            \Log::warning('Payroll generation failures', ['failures' => $failedReasons]);
             session()->flash('warning', "Failed to generate for {$failedCount} employees: {$failedNames}");
+        }
+
+        if ($successCount === 0 && $failedCount === 0) {
+            \Log::error('Payroll generation returned no results');
+            session()->flash('error', 'No payroll records were generated. Please check the logs for details.');
         }
 
         return redirect()->route('admin.hrm.payroll.index');
