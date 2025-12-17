@@ -34,12 +34,189 @@ class PayrollAnomalyDetector
             ->with('timeEntries')
             ->get();
 
+        // Check for per-day anomalies
         foreach ($attendanceRecords as $attendance) {
             $dayAnomalies = $this->detectDayAnomalies($employee, $attendance);
             $anomalies = $anomalies->merge($dayAnomalies);
         }
 
+        // Check for period-level anomalies (attendance patterns)
+        $periodAnomalies = $this->detectPeriodAnomalies($employee, $startDate, $endDate, $attendanceRecords);
+        $anomalies = $anomalies->merge($periodAnomalies);
+
         return $anomalies;
+    }
+
+    /**
+     * Detect period-level anomalies (attendance patterns)
+     *
+     * @param HrmEmployee $employee
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @param Collection $attendanceRecords
+     * @return Collection
+     */
+    private function detectPeriodAnomalies(HrmEmployee $employee, Carbon $startDate, Carbon $endDate, Collection $attendanceRecords): Collection
+    {
+        $anomalies = collect();
+
+        // Calculate basic stats
+        $totalDays = $startDate->diffInDays($endDate) + 1;
+        $weekends = $this->countWeekends($startDate, $endDate);
+        $expectedWorkDays = $totalDays - $weekends;
+        $daysWorked = $attendanceRecords->where('tracked_hours', '>', 0)->count();
+        $absentDays = max(0, $expectedWorkDays - $daysWorked);
+
+        // 1. Check for excessive absences (>40% absent rate)
+        if ($expectedWorkDays > 0) {
+            $absentRate = ($absentDays / $expectedWorkDays) * 100;
+            if ($absentRate > 40) {
+                $anomalies->push([
+                    'type' => 'excessive_absences',
+                    'severity' => 'high',
+                    'description' => "Excessive absence rate: {$absentRate}% ({$absentDays} absent out of {$expectedWorkDays} expected work days).",
+                    'metadata' => [
+                        'absent_days' => $absentDays,
+                        'expected_work_days' => $expectedWorkDays,
+                        'absent_rate' => round($absentRate, 2),
+                    ],
+                ]);
+            } elseif ($absentRate > 25) {
+                $anomalies->push([
+                    'type' => 'high_absences',
+                    'severity' => 'medium',
+                    'description' => "High absence rate: {$absentRate}% ({$absentDays} absent out of {$expectedWorkDays} expected work days).",
+                    'metadata' => [
+                        'absent_days' => $absentDays,
+                        'expected_work_days' => $expectedWorkDays,
+                        'absent_rate' => round($absentRate, 2),
+                    ],
+                ]);
+            }
+        }
+
+        // 2. Check for low total hours (less than 50% of expected)
+        $totalHours = $attendanceRecords->sum('tracked_hours');
+        $expectedHours = $expectedWorkDays * 8; // Assuming 8 hours per day
+        if ($expectedHours > 0) {
+            $hoursRate = ($totalHours / $expectedHours) * 100;
+            if ($hoursRate < 50 && $hoursRate > 0) {
+                $anomalies->push([
+                    'type' => 'low_work_hours',
+                    'severity' => 'high',
+                    'description' => "Very low work hours: {$totalHours} hours tracked vs {$expectedHours} expected ({$hoursRate}%).",
+                    'metadata' => [
+                        'total_hours' => round($totalHours, 2),
+                        'expected_hours' => $expectedHours,
+                        'hours_rate' => round($hoursRate, 2),
+                    ],
+                ]);
+            }
+        }
+
+        // 3. Check for consecutive absent days (5+ days in a row without leave request)
+        $consecutiveAbsent = $this->findConsecutiveAbsentDays($employee, $startDate, $endDate, $attendanceRecords);
+        if ($consecutiveAbsent >= 5) {
+            $anomalies->push([
+                'type' => 'consecutive_absences',
+                'severity' => 'high',
+                'description' => "Consecutive absences detected: {$consecutiveAbsent} days in a row without approved leave.",
+                'metadata' => [
+                    'consecutive_days' => $consecutiveAbsent,
+                ],
+            ]);
+        }
+
+        // 4. Check for pattern of late arrivals (if time entries available)
+        $lateArrivals = $this->countLateArrivals($attendanceRecords);
+        if ($lateArrivals > 0 && $daysWorked > 0) {
+            $lateRate = ($lateArrivals / $daysWorked) * 100;
+            if ($lateRate > 50) {
+                $anomalies->push([
+                    'type' => 'frequent_late_arrivals',
+                    'severity' => 'medium',
+                    'description' => "Frequent late arrivals: {$lateArrivals} out of {$daysWorked} work days ({$lateRate}%).",
+                    'metadata' => [
+                        'late_days' => $lateArrivals,
+                        'work_days' => $daysWorked,
+                        'late_rate' => round($lateRate, 2),
+                    ],
+                ]);
+            }
+        }
+
+        return $anomalies;
+    }
+
+    /**
+     * Count weekends (Saturdays only) in period
+     */
+    private function countWeekends(Carbon $start, Carbon $end): int
+    {
+        $weekends = 0;
+        $current = $start->copy();
+        while ($current->lte($end)) {
+            if ($current->isSaturday()) {
+                $weekends++;
+            }
+            $current->addDay();
+        }
+        return $weekends;
+    }
+
+    /**
+     * Find longest consecutive absent days
+     */
+    private function findConsecutiveAbsentDays(HrmEmployee $employee, Carbon $startDate, Carbon $endDate, Collection $attendanceRecords): int
+    {
+        $current = $startDate->copy();
+        $maxConsecutive = 0;
+        $currentConsecutive = 0;
+
+        while ($current->lte($endDate)) {
+            // Skip Saturdays (weekends)
+            if ($current->isSaturday()) {
+                $current->addDay();
+                continue;
+            }
+
+            $dayRecord = $attendanceRecords->firstWhere('date', $current->format('Y-m-d'));
+
+            if (!$dayRecord || $dayRecord->tracked_hours == 0) {
+                $currentConsecutive++;
+                $maxConsecutive = max($maxConsecutive, $currentConsecutive);
+            } else {
+                $currentConsecutive = 0;
+            }
+
+            $current->addDay();
+        }
+
+        return $maxConsecutive;
+    }
+
+    /**
+     * Count late arrivals (clock in after 9:30 AM)
+     */
+    private function countLateArrivals(Collection $attendanceRecords): int
+    {
+        $lateCount = 0;
+
+        foreach ($attendanceRecords as $record) {
+            $entries = $record->timeEntries ?? collect();
+            $firstClockIn = $entries->where('type', 'In')->sortBy('time')->first();
+
+            if ($firstClockIn) {
+                $clockInTime = Carbon::parse($firstClockIn->time);
+                $lateThreshold = $clockInTime->copy()->setTime(9, 30, 0);
+
+                if ($clockInTime->gt($lateThreshold)) {
+                    $lateCount++;
+                }
+            }
+        }
+
+        return $lateCount;
     }
 
     /**
@@ -277,23 +454,69 @@ class PayrollAnomalyDetector
      *
      * @param Collection $anomalies Array of anomaly data
      * @param HrmEmployee $employee
-     * @param HrmAttendanceDay $attendance
+     * @param HrmAttendanceDay|null $attendance Optional attendance day for day-level anomalies
      * @return void
      */
-    public function saveAnomalies(Collection $anomalies, HrmEmployee $employee, HrmAttendanceDay $attendance): void
+    public function saveAnomalies(Collection $anomalies, HrmEmployee $employee, ?HrmAttendanceDay $attendance = null): void
     {
         foreach ($anomalies as $anomaly) {
-            // Check if this anomaly already exists
+            // For period-level anomalies, check without attendance_day_id
+            $query = HrmAttendanceAnomaly::where('employee_id', $employee->id)
+                ->where('anomaly_type', $anomaly['type']);
+
+            if ($attendance) {
+                $query->where('attendance_day_id', $attendance->id);
+            } else {
+                $query->whereNull('attendance_day_id');
+            }
+
+            $existing = $query->first();
+
+            if (!$existing) {
+                $dateValue = $attendance?->date;
+                if ($dateValue && $dateValue instanceof \Carbon\Carbon) {
+                    $dateValue = $dateValue->format('Y-m-d');
+                } elseif (!$dateValue) {
+                    $dateValue = now()->format('Y-m-d');
+                }
+
+                HrmAttendanceAnomaly::create([
+                    'employee_id' => $employee->id,
+                    'attendance_day_id' => $attendance?->id,
+                    'date' => $dateValue,
+                    'anomaly_type' => $anomaly['type'],
+                    'description' => $anomaly['description'],
+                    'metadata' => $anomaly['metadata'] ?? null,
+                    'severity' => $anomaly['severity'],
+                    'reviewed' => false,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Save period-level anomalies
+     *
+     * @param Collection $anomalies
+     * @param HrmEmployee $employee
+     * @param Carbon $periodDate
+     * @return void
+     */
+    public function savePeriodAnomalies(Collection $anomalies, HrmEmployee $employee, Carbon $periodDate): void
+    {
+        foreach ($anomalies as $anomaly) {
+            // Check if period anomaly already exists for this type and period
             $existing = HrmAttendanceAnomaly::where('employee_id', $employee->id)
-                ->where('attendance_day_id', $attendance->id)
                 ->where('anomaly_type', $anomaly['type'])
+                ->whereNull('attendance_day_id')
+                ->whereDate('date', $periodDate->format('Y-m-d'))
                 ->first();
 
             if (!$existing) {
                 HrmAttendanceAnomaly::create([
                     'employee_id' => $employee->id,
-                    'attendance_day_id' => $attendance->id,
-                    'date' => $attendance->date,
+                    'attendance_day_id' => null, // Period-level anomaly
+                    'date' => $periodDate->format('Y-m-d'),
                     'anomaly_type' => $anomaly['type'],
                     'description' => $anomaly['description'],
                     'metadata' => $anomaly['metadata'] ?? null,

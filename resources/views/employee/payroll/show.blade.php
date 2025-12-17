@@ -29,47 +29,135 @@
                     </div>
                 </div>
 
-                <!-- Earnings Section -->
-                <div class="p-6 border-b border-slate-700">
-                    <h3 class="text-lg font-bold text-white mb-4">Earnings</h3>
+                <!-- Salary Calculation Breakdown -->
+                <div class="p-6 border-b border-slate-700 bg-blue-500/5">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        Salary Calculation Breakdown
+                    </h3>
                     <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Monthly Contract Salary</span>
+                            <span class="text-white font-semibold">NPR {{
+                                number_format($payroll->employee->basic_salary_npr ?? 0, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Total Days in Month</span>
+                            <span class="text-slate-400 font-medium">{{ $payroll->month_total_days ?? 0 }} days</span>
+                        </div>
                         @if($payroll->per_day_rate > 0)
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-300">Per Day Amount</span>
-                            <span class="text-slate-400 font-semibold">NPR {{ number_format($payroll->per_day_rate, 2)
+                            <span class="text-slate-300">Per Day Rate</span>
+                            <span class="text-slate-400 font-medium">NPR {{ number_format($payroll->per_day_rate, 2)
                                 }}</span>
                         </div>
                         @endif
+
+                        <div class="h-px bg-slate-600 my-3"></div>
+
+                        <!-- Attendance Details -->
+                        <div class="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                            <p class="text-sm font-semibold text-blue-300 mb-3">Days Breakdown</p>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Days Worked:</span>
+                                    <span class="text-green-400 font-semibold">{{ $payroll->total_days_worked ?? 0 }}
+                                        days</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Absent Days:</span>
+                                    <span class="text-red-400 font-semibold">{{ $payroll->absent_days ?? 0 }}
+                                        days</span>
+                                </div>
+                                @if($payroll->paid_leave_days_used > 0)
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Paid Leave Days:</span>
+                                    <span class="text-blue-400 font-semibold">{{ $payroll->paid_leave_days_used }}
+                                        days</span>
+                                </div>
+                                @endif
+                                @if($payroll->unpaid_leave_days > 0)
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Unpaid Leave Days:</span>
+                                    <span class="text-orange-400 font-semibold">{{ $payroll->unpaid_leave_days }}
+                                        days</span>
+                                </div>
+                                @endif
+                                <!-- Calculate and show weekends -->
+                                @php
+                                $totalDaysWorked = ($payroll->total_days_worked ?? 0) + ($payroll->absent_days ?? 0) +
+                                ($payroll->paid_leave_days_used ?? 0) + ($payroll->unpaid_leave_days ?? 0);
+                                $weekendDays = max(0, ($payroll->month_total_days ?? 0) - $totalDaysWorked);
+                                @endphp
+                                @if($weekendDays > 0)
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Weekends/Saturdays (Paid):</span>
+                                    <span class="text-purple-400 font-semibold">{{ $weekendDays }} days</span>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="h-px bg-slate-600 my-3"></div>
+
                         @if($payroll->total_payable_days > 0)
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-300">Total Payable Days</span>
-                            <span class="text-slate-400 font-semibold">{{ $payroll->total_payable_days }} days</span>
+                            <span class="text-slate-300 font-medium">Total Payable Days</span>
+                            <span class="text-lime-400 font-semibold">{{ $payroll->total_payable_days }} days</span>
+                        </div>
+                        <div class="text-xs text-slate-500 italic px-3 py-2 bg-slate-900/50 rounded">
+                            = Days Worked ({{ $payroll->total_days_worked ?? 0 }})
+                            + Paid Leave ({{ $payroll->paid_leave_days_used ?? 0 }})
+                            + Weekends ({{ $weekendDays }})
+                            = {{ $payroll->total_payable_days }} days
                         </div>
                         @endif
+                        <div class="flex justify-between items-center py-2 bg-slate-900/50 rounded px-3">
+                            <span class="text-white font-semibold">Calculated Base Salary</span>
+                            <span class="text-white font-bold">NPR {{ number_format($payroll->basic_salary, 2) }}</span>
+                        </div>
+                        <div class="text-xs text-slate-500 italic px-3">
+                            Formula: {{ number_format($payroll->per_day_rate ?? 0, 2) }} × {{
+                            $payroll->total_payable_days ?? 0 }} days = NPR {{ number_format($payroll->basic_salary, 2)
+                            }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings Section -->
+                <div class="p-6 border-b border-slate-700">
+                    <h3 class="text-lg font-bold text-white mb-4">Additional Earnings</h3>
+                    <div class="space-y-3">
                         <div class="flex justify-between items-center">
                             <span class="text-slate-300">Base Salary</span>
-                            <span class="text-white font-semibold">NPR {{ number_format($payroll->gross_salary, 2)
+                            <span class="text-white font-semibold">NPR {{ number_format($payroll->basic_salary, 2)
                                 }}</span>
                         </div>
-                        @if($payroll->bonus_amount > 0)
+                        @if(is_array($payroll->allowances) && count($payroll->allowances) > 0)
+                        @foreach($payroll->allowances as $allowance)
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-300">Bonus</span>
-                            <span class="text-green-400 font-semibold">+ NPR {{ number_format($payroll->bonus_amount, 2)
+                            <span class="text-slate-300">{{ $allowance['description'] ?? $allowance['type'] }}</span>
+                            <span class="text-green-400 font-semibold">+ NPR {{ number_format($allowance['amount'], 2)
                                 }}</span>
                         </div>
+                        @endforeach
                         @endif
-                        @if($payroll->overtime_pay > 0)
+                        @if($payroll->overtime_payment > 0)
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-300">Overtime Pay</span>
-                            <span class="text-green-400 font-semibold">+ NPR {{ number_format($payroll->overtime_pay, 2)
-                                }}</span>
+                            <span class="text-slate-300">Overtime Payment ({{ $payroll->overtime_hours ?? 0 }}
+                                hrs)</span>
+                            <span class="text-green-400 font-semibold">+ NPR {{
+                                number_format($payroll->overtime_payment, 2) }}</span>
                         </div>
                         @endif
                         <div class="h-px bg-slate-600 my-2"></div>
                         <div class="flex justify-between items-center">
                             <span class="text-white font-bold">Gross Salary</span>
-                            <span class="text-lime-400 font-bold text-xl">NPR {{ number_format($payroll->gross_salary +
-                                $payroll->bonus_amount + $payroll->overtime_pay, 2) }}</span>
+                            <span class="text-lime-400 font-bold text-xl">NPR {{ number_format($payroll->gross_salary,
+                                2) }}</span>
                         </div>
                     </div>
                 </div>

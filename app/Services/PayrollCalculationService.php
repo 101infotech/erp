@@ -83,7 +83,9 @@ class PayrollCalculationService
             $paidLeaveData,
             $periodStart,
             $periodEnd,
-            $standardWorkingHours
+            $standardWorkingHours,
+            $monthTotalDays,
+            $totalPayableDays
         );
 
         // Get allowances
@@ -272,21 +274,19 @@ class PayrollCalculationService
         array $paidLeaveData,
         Carbon $periodStart,
         Carbon $periodEnd,
-        float $standardWorkingHours
+        float $standardWorkingHours,
+        int $monthTotalDays,
+        int $totalPayableDays
     ): array {
-        // Total expected working days (excluding weekends and paid leaves)
-        $expectedWorkDays = $attendanceData['expected_work_days'];
+        // IMPORTANT: Required hours should be based on PAYABLE DAYS, not expected work days
+        // Payable days = days worked + paid leave + weekends (already calculated in salary)
+        // This is what we're actually paying for, so this is what we should require hours for
+        // Absent days (non-leave absences) are NOT included in payable days
+        $requiredHours = $totalPayableDays * $standardWorkingHours;
 
-        // Required hours = expected work days × standard hours
-        $requiredHours = $expectedWorkDays * $standardWorkingHours;
-
-        // Paid leave days count as "worked" for hour calculation purposes
-        // So we reduce the required hours by paid leave hours
-        $paidLeaveHours = $paidLeaveData['paid_leave_days'] * $standardWorkingHours;
-        $adjustedRequiredHours = max(0, $requiredHours - $paidLeaveHours);
-
-        // Missing hours
-        $missingHours = max(0, $adjustedRequiredHours - $attendanceData['total_hours']);
+        // Missing hours = required hours - actual hours worked
+        // No need to subtract leaves again since payable days already accounts for them
+        $missingHours = max(0, $requiredHours - $attendanceData['total_hours']);
 
         // Calculate suggested hourly deduction (only for monthly salary employees)
         $suggestedDeduction = 0;
@@ -297,13 +297,13 @@ class PayrollCalculationService
             // We need month total days - but that's passed separately
             // For now, use a reasonable estimate (30 days)
             // This will be refined when we have the actual month_total_days
-            $dailyRate = $monthlySalary / 30;
+            $dailyRate = $monthlySalary / $monthTotalDays;
             $hourlyRate = $dailyRate / $standardWorkingHours;
             $suggestedDeduction = $hourlyRate * $missingHours;
         }
 
         return [
-            'required_hours' => round($adjustedRequiredHours, 2),
+            'required_hours' => round($requiredHours, 2),
             'missing_hours' => round($missingHours, 2),
             'suggested_deduction' => round($suggestedDeduction, 2),
         ];
@@ -349,20 +349,23 @@ class PayrollCalculationService
                 // Calculate daily rate based on BS month total days
                 $dailyRate = $basicSalaryNpr / $monthTotalDays;
 
-                // Days to pay = days worked + paid leave days (they get paid for paid leaves)
-                $daysToPay = $attendanceData['days_worked'] + $paidLeaveDays;
+                // Calculate payable days:
+                // Days worked + Paid leave days + Weekends/Saturdays (non-working paid days)
+                // Formula: Days in month - Absent days - Unpaid leave days = Payable days
+                $unpaidLeaveDays = $attendanceData['unpaid_leave_days'] ?? 0;
+                $absentDays = $attendanceData['absent_days'] ?? 0;
 
-                // If it's a partial period, only pay for actual days in the period
+                // Payable days = Month total days - Absent days - Unpaid leave days
+                // This automatically includes weekends/Saturdays as paid days
+                $daysToPay = max(0, $monthTotalDays - $absentDays);
+
+                // Don't pay more than the days in the period
                 $periodTotalDays = $periodStart->diffInDays($periodEnd) + 1;
-                $weekendsInPeriod = $this->countWeekends($periodStart, $periodEnd);
-                $workDaysInPeriod = $periodTotalDays - $weekendsInPeriod;
-
-                // Don't pay more than the work days in the period
-                $daysToPay = min($daysToPay, $workDaysInPeriod);
+                $daysToPay = min($daysToPay, $periodTotalDays);
 
                 return [
-                    'basic_salary' => $dailyRate * $daysToPay,
-                    'per_day_rate' => $dailyRate,
+                    'basic_salary' => round($dailyRate * $daysToPay, 2),
+                    'per_day_rate' => round($dailyRate, 2),
                     'total_payable_days' => (int) $daysToPay,
                 ];
 
@@ -370,8 +373,8 @@ class PayrollCalculationService
                 // For daily employees, pay only for days worked + paid leave days
                 $daysToPay = $attendanceData['days_worked'] + $paidLeaveDays;
                 return [
-                    'basic_salary' => $basicSalaryNpr * $daysToPay,
-                    'per_day_rate' => $basicSalaryNpr,
+                    'basic_salary' => round($basicSalaryNpr * $daysToPay, 2),
+                    'per_day_rate' => round($basicSalaryNpr, 2),
                     'total_payable_days' => (int) $daysToPay,
                 ];
 
@@ -385,15 +388,15 @@ class PayrollCalculationService
                 $daysToPay = floor($totalHoursForDays / $standardHours);
                 $perDayRate = $hourlyRate * $standardHours;
                 return [
-                    'basic_salary' => $hourlyRate * $totalHoursForDays,
-                    'per_day_rate' => $perDayRate,
+                    'basic_salary' => round($hourlyRate * $totalHoursForDays, 2),
+                    'per_day_rate' => round($perDayRate, 2),
                     'total_payable_days' => (int) $daysToPay,
                 ];
 
             default:
                 return [
                     'basic_salary' => $basicSalaryNpr,
-                    'per_day_rate' => $monthTotalDays > 0 ? ($basicSalaryNpr / $monthTotalDays) : $basicSalaryNpr,
+                    'per_day_rate' => $monthTotalDays > 0 ? round($basicSalaryNpr / $monthTotalDays, 2) : $basicSalaryNpr,
                     'total_payable_days' => 0,
                 ];
         }
@@ -551,9 +554,34 @@ class PayrollCalculationService
                         ->whereBetween('date', [$periodStart, $periodEnd])
                         ->get();
 
+                    // Save day-level anomalies (attached to specific attendance records)
+                    $dayLevelTypes = [
+                        'missing_clock_out',
+                        'excessive_hours',
+                        'weekend_work_no_ot',
+                        'location_inconsistency',
+                        'duplicate_entry',
+                        'negative_time'
+                    ];
+                    $dayLevelAnomalies = $anomalies->whereIn('type', $dayLevelTypes);
+
                     foreach ($attendances as $attendance) {
                         $dayAnomalies = $this->anomalyDetector->detectDayAnomalies($employee, $attendance);
                         $this->anomalyDetector->saveAnomalies($dayAnomalies, $employee, $attendance);
+                    }
+
+                    // Save period-level anomalies (not attached to specific days)
+                    $periodLevelTypes = [
+                        'excessive_absences',
+                        'high_absences',
+                        'low_work_hours',
+                        'consecutive_absences',
+                        'frequent_late_arrivals'
+                    ];
+                    $periodLevelAnomalies = $anomalies->whereIn('type', $periodLevelTypes);
+
+                    if ($periodLevelAnomalies->isNotEmpty()) {
+                        $this->anomalyDetector->savePeriodAnomalies($periodLevelAnomalies, $employee, $periodStart);
                     }
                 }
 

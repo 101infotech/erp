@@ -229,6 +229,7 @@ class HrmPayrollController extends Controller
             'advance_payment' => 'nullable|numeric|min:0',
             'advance_payment_reason' => 'nullable|string',
             'advance_payment_date' => 'nullable|date',
+            'verbal_leave_days' => 'nullable|integer|min:0',
         ]);
 
         DB::transaction(function () use ($payroll, $validated) {
@@ -275,6 +276,58 @@ class HrmPayrollController extends Controller
                 // Admin waived the hourly deduction
                 $payroll->hourly_deduction_amount = 0;
                 $payroll->hourly_deduction_approved = false;
+            }
+
+            // Handle verbal leave days and recalculate required/missing hours
+            if (isset($validated['verbal_leave_days'])) {
+                $verbalLeaveDays = (int) $validated['verbal_leave_days'];
+                $payroll->verbal_leave_days = $verbalLeaveDays;
+
+                // Recalculate total payable days (including verbal leave as paid days)
+                // Payable days = days worked + paid leave + verbal leave + weekends
+                $periodStart = \Carbon\Carbon::parse($payroll->period_start_ad);
+                $periodEnd = \Carbon\Carbon::parse($payroll->period_end_ad);
+                $totalDays = $periodStart->diffInDays($periodEnd) + 1;
+
+                // Count weekends
+                $weekends = 0;
+                $current = $periodStart->copy();
+                while ($current->lte($periodEnd)) {
+                    if ($current->isSaturday()) {
+                        $weekends++;
+                    }
+                    $current->addDay();
+                }
+
+                // Total payable days = worked days + paid leave + verbal leave + weekends
+                // (Absent days and unpaid leave are NOT payable)
+                $totalPayableDays = $payroll->total_days_worked
+                    + ($payroll->paid_leave_days_used ?? 0)
+                    + $verbalLeaveDays
+                    + $weekends;
+
+                // Update total payable days
+                $payroll->total_payable_days = $totalPayableDays;
+
+                // IMPORTANT: Required hours = Payable Days × Standard Hours
+                // This is the key fix - we require hours only for days we're paying for
+                $requiredHours = $totalPayableDays * $payroll->standard_working_hours_per_day;
+                $missingHours = max(0, $requiredHours - $payroll->total_hours_worked);
+
+                // Update payroll record
+                $payroll->total_working_hours_required = round($requiredHours, 2);
+                $payroll->total_working_hours_missing = round($missingHours, 2);
+
+                // Recalculate suggested hourly deduction
+                if ($missingHours > 0) {
+                    $dailyRate = ($payroll->employee->basic_salary_npr ?? 0) / $payroll->month_total_days;
+                    $hourlyRate = $dailyRate / $payroll->standard_working_hours_per_day;
+                    $payroll->hourly_deduction_suggested = round($hourlyRate * $missingHours, 2);
+                } else {
+                    $payroll->hourly_deduction_suggested = 0;
+                    $payroll->hourly_deduction_amount = 0;
+                    $payroll->hourly_deduction_approved = false;
+                }
             }
 
             // Handle advance payment
@@ -419,24 +472,24 @@ class HrmPayrollController extends Controller
             return back()->with('error', 'Employee email not found. Cannot send payslip.');
         }
 
-        DB::transaction(function () use ($payroll) {
-            $user = Auth::user();
+        try {
+            DB::transaction(function () use ($payroll) {
+                $user = Auth::user();
 
-            // If PDF doesn't exist, generate it
-            if (!$payroll->payslip_pdf_path || !file_exists($payroll->payslip_pdf_path)) {
-                $pdfPath = $this->pdfService->generatePayslipPdf($payroll);
-                $payroll->update(['payslip_pdf_path' => $pdfPath]);
-            }
+                // If PDF doesn't exist, generate it
+                if (!$payroll->payslip_pdf_path || !file_exists($payroll->payslip_pdf_path)) {
+                    $pdfPath = $this->pdfService->generatePayslipPdf($payroll);
+                    $payroll->update(['payslip_pdf_path' => $pdfPath]);
+                }
 
-            // Update payroll record
-            $payroll->update([
-                'sent_at' => now(),
-                'sent_by' => $user?->id,
-                'sent_by_name' => $user?->name ?? 'Admin',
-            ]);
+                // Update payroll record
+                $payroll->update([
+                    'sent_at' => now(),
+                    'sent_by' => $user?->id,
+                    'sent_by_name' => $user?->name ?? 'Admin',
+                ]);
 
-            // Send email notification to employee
-            try {
+                // Send email notification to employee
                 Mail::to($payroll->employee->email)
                     ->queue(new PayrollSentMail($payroll, $payroll->payslip_pdf_path));
 
@@ -450,13 +503,13 @@ class HrmPayrollController extends Controller
                         route('employee.payroll.show', $payroll->id)
                     );
                 }
-            } catch (\Exception $e) {
-                Log::error('Failed to send email for payroll #' . $payroll->id . ': ' . $e->getMessage());
-                throw $e; // Re-throw to rollback transaction
-            }
-        });
+            });
 
-        return back()->with('success', 'Payslip sent successfully to employee email.');
+            return back()->with('success', 'Payslip sent successfully to employee email.');
+        } catch (\Exception $e) {
+            Log::error('Failed to send payslip for payroll #' . $payroll->id . ': ' . $e->getMessage());
+            return back()->with('error', 'Failed to send payslip: ' . $e->getMessage());
+        }
     }
 
     /**

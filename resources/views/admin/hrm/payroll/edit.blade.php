@@ -153,12 +153,44 @@
         <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
             <h2 class="text-xl font-semibold text-white mb-4">Working Hours Review</h2>
             <div class="space-y-4">
+                <!-- Verbal Leave Days Adjustment -->
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+                    <label class="block text-sm font-medium text-blue-300 mb-2">
+                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Verbal/Informal Leave Days
+                    </label>
+                    <input type="number" min="0" name="verbal_leave_days"
+                        value="{{ old('verbal_leave_days', $payroll->verbal_leave_days ?? 0) }}"
+                        class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <p class="text-xs text-blue-200 mt-2">
+                        <strong>For leaves approved verbally but not formally recorded:</strong><br>
+                        Enter the number of days that were approved verbally. These days will be automatically excluded
+                        from required hours calculation and won't count as missing hours.
+                    </p>
+                    <div class="mt-2 text-xs text-blue-100 bg-blue-500/10 rounded p-2">
+                        <p><strong>Current Leave Status:</strong></p>
+                        <ul class="list-disc ml-4 mt-1 space-y-0.5">
+                            <li>Formally Recorded Paid Leave: {{ $payroll->paid_leave_days_used }} days</li>
+                            <li>Formally Recorded Unpaid Leave: {{ $payroll->unpaid_leave_days }} days</li>
+                            <li>Verbal/Informal Leave: {{ $payroll->verbal_leave_days ?? 0 }} days</li>
+                            <li class="font-semibold">Absent Days (no leave): {{ $payroll->absent_days }} days</li>
+                        </ul>
+                    </div>
+                    @error('verbal_leave_days')
+                    <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Hours Summary -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-slate-900 border border-slate-700 rounded-lg p-4">
                         <p class="text-sm text-slate-400">Required Hours</p>
                         <p class="text-xl font-semibold text-white">{{
                             number_format($payroll->total_working_hours_required, 1) }} hrs</p>
+                        <p class="text-xs text-slate-500 mt-1">Excludes all leaves & weekends</p>
                     </div>
                     <div class="bg-slate-900 border border-slate-700 rounded-lg p-4">
                         <p class="text-sm text-slate-400">Actual Hours Worked</p>

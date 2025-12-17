@@ -156,37 +156,3 @@
         @endif
     </div>
 </div>
-
-<script>
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.remove('hidden');
-            // Add any animations here if needed
-        }
-    }
-
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('hidden');
-        }
-    }
-
-    // Close modal on escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            const modals = document.querySelectorAll('[id*="modal"]:not(.hidden)');
-            modals.forEach(modal => {
-                modal.classList.add('hidden');
-            });
-        }
-    });
-
-    // Close modal when clicking outside
-    document.addEventListener('click', function(event) {
-        if (event.target.id && event.target.id.includes('modal') && event.target.classList.contains('fixed')) {
-            event.target.classList.add('hidden');
-        }
-    });
-</script>

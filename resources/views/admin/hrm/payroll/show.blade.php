@@ -138,37 +138,8 @@
     @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Left Column -->
+        <!-- Right Column -->
         <div class="space-y-6">
-            <!-- Employee & Period Info -->
-            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
-                <h2 class="text-xl font-semibold text-white mb-4">Employee Information</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-sm text-slate-400">Employee Name</p>
-                        <p class="text-white font-medium">{{ $payroll->employee->full_name }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-400">Employee Code</p>
-                        <p class="text-white font-medium">{{ $payroll->employee->employee_code }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-400">Company</p>
-                        <p class="text-white font-medium">{{ $payroll->employee->company->name ?? 'N/A' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-400">Department</p>
-                        <p class="text-white font-medium">{{ $payroll->employee->department->name ?? 'N/A' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-400">Period</p>
-                        <p class="text-white font-medium">{{ format_nepali_date($payroll->period_start_bs, 'j F Y') }} -
-                            {{
-                            format_nepali_date($payroll->period_end_bs, 'j F Y') }}</p>
-                    </div>
-                </div>
-            </div>
-
             <!-- Attendance Summary -->
             <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
                 <h2 class="text-xl font-semibold text-white mb-4">Attendance Summary</h2>
@@ -200,89 +171,146 @@
                         <p class="text-2xl font-bold text-blue-400">{{ $payroll->paid_leave_days_used ?? 0 }}</p>
                         <p class="text-sm text-slate-400">Paid Leave</p>
                     </div>
-                </div>
-                <!-- Excel-style fields -->
-                <div class="mt-4 pt-4 border-t border-slate-700">
-                    <h3 class="text-sm font-semibold text-slate-300 mb-3">Salary Calculation</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        @if($payroll->per_day_rate > 0)
-                        <div>
-                            <p class="text-sm text-slate-400">Per Day Amount</p>
-                            <p class="text-lg font-semibold text-white">NPR {{ number_format($payroll->per_day_rate, 2)
-                                }}</p>
-                        </div>
-                        @endif
-                        @if($payroll->total_payable_days > 0)
-                        <div>
-                            <p class="text-sm text-slate-400">Total Payable Days</p>
-                            <p class="text-lg font-semibold text-white">{{ $payroll->total_payable_days }}</p>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            <!-- Working Hours Review -->
-            @if($payroll->total_working_hours_required > 0)
-            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
-                <h2 class="text-xl font-semibold text-white mb-4">Working Hours Review</h2>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 text-center">
-                            <p class="text-sm text-slate-400">Required</p>
-                            <p class="text-lg font-bold text-white">{{
-                                number_format($payroll->total_working_hours_required, 1) }} hrs</p>
-                        </div>
-                        <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 text-center">
-                            <p class="text-sm text-slate-400">Actual</p>
-                            <p class="text-lg font-bold text-lime-400">{{ number_format($payroll->total_hours_worked, 1)
-                                }} hrs</p>
-                        </div>
-                        <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 text-center">
-                            <p class="text-sm text-slate-400">Missing</p>
-                            <p
-                                class="text-lg font-bold {{ $payroll->total_working_hours_missing > 0 ? 'text-red-400' : 'text-lime-400' }}">
-                                {{ number_format($payroll->total_working_hours_missing, 1) }} hrs
-                            </p>
-                        </div>
-                    </div>
-
-                    @if($payroll->hourly_deduction_approved && $payroll->hourly_deduction_amount > 0)
-                    <div class="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-sm text-orange-400">Hourly Deduction Applied</p>
-                                <p class="text-xs text-orange-300 mt-1">
-                                    Based on {{ number_format($payroll->total_working_hours_missing, 1) }} missing hours
-                                </p>
-                            </div>
-                            <p class="text-lg font-bold text-orange-400">NPR {{
-                                number_format($payroll->hourly_deduction_amount, 2) }}</p>
-                        </div>
-                    </div>
-                    @elseif($payroll->total_working_hours_missing > 0)
-                    <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-sm text-yellow-400">Suggested Deduction</p>
-                                <p class="text-xs text-yellow-300 mt-1">Not applied by admin</p>
-                            </div>
-                            <p class="text-lg font-bold text-yellow-400">NPR {{
-                                number_format($payroll->hourly_deduction_suggested, 2) }}</p>
-                        </div>
-                    </div>
-                    @else
-                    <div class="bg-lime-500/10 border border-lime-500/20 rounded-lg p-3 text-center">
-                        <p class="text-lime-400">✓ All required hours completed</p>
+                    @if(($payroll->verbal_leave_days ?? 0) > 0)
+                    <div class="text-center bg-slate-900/50 rounded-lg p-3 col-span-2 border border-cyan-500/30">
+                        <p class="text-2xl font-bold text-cyan-400">{{ $payroll->verbal_leave_days }}</p>
+                        <p class="text-sm text-cyan-300">Verbal/Informal Leave Days</p>
+                        <p class="text-xs text-cyan-200 mt-1">(Excluded from required hours)</p>
                     </div>
                     @endif
                 </div>
+                <!-- Salary Calculation Breakdown -->
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <h3 class="text-sm font-semibold text-slate-300 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        Salary Calculation Breakdown
+                    </h3>
+                    <div class="bg-blue-500/5 rounded-lg p-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-400">Monthly Contract Salary</span>
+                            <span class="text-white font-semibold">NPR {{
+                                number_format($payroll->employee->basic_salary_npr ?? 0, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-400">Days in Month</span>
+                            <span class="text-slate-300 font-medium">{{ $payroll->month_total_days ?? 0 }}</span>
+                        </div>
+                        @if($payroll->per_day_rate > 0)
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-400">Per Day Rate</span>
+                            <span class="text-slate-300 font-medium">NPR {{ number_format($payroll->per_day_rate, 2)
+                                }}</span>
+                        </div>
+                        @endif
+
+                        <div class="h-px bg-slate-600 my-2"></div>
+
+                        <!-- Days Breakdown -->
+                        <div class="bg-slate-900/50 rounded px-3 py-2 space-y-1 text-sm">
+                            <p class="font-semibold text-blue-300 mb-2">Days Breakdown:</p>
+                            @php
+                            $daysWorked = $payroll->total_days_worked ?? 0;
+                            $absentDays = $payroll->absent_days ?? 0;
+                            $paidLeaveDays = $payroll->paid_leave_days_used ?? 0;
+                            $unpaidLeaveDays = $payroll->unpaid_leave_days ?? 0;
+                            $totalAccountedDays = $daysWorked + $absentDays + $paidLeaveDays + $unpaidLeaveDays;
+                            $weekendDays = max(0, ($payroll->month_total_days ?? 0) - $totalAccountedDays);
+                            @endphp
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Days Worked:</span>
+                                <span class="text-green-400">{{ $daysWorked }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Absent Days:</span>
+                                <span class="text-red-400">{{ $absentDays }}</span>
+                            </div>
+                            @if($paidLeaveDays > 0)
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Paid Leave Days:</span>
+                                <span class="text-blue-400">{{ $paidLeaveDays }}</span>
+                            </div>
+                            @endif
+                            @if($unpaidLeaveDays > 0)
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Unpaid Leave Days:</span>
+                                <span class="text-orange-400">{{ $unpaidLeaveDays }}</span>
+                            </div>
+                            @endif
+                            @if(($payroll->verbal_leave_days ?? 0) > 0)
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Verbal Leave Days:</span>
+                                <span class="text-cyan-400 font-medium">{{ $payroll->verbal_leave_days }}</span>
+                            </div>
+                            @endif
+                            @if($weekendDays > 0)
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Weekends/Saturdays (Paid):</span>
+                                <span class="text-purple-400">{{ $weekendDays }}</span>
+                            </div>
+                            @endif
+                        </div>
+
+                        <div class="h-px bg-slate-600 my-2"></div>
+
+                        @if($payroll->total_payable_days > 0)
+                        <div class="flex justify-between items-center bg-slate-900/50 rounded px-3 py-2">
+                            <span class="text-sm font-semibold text-white">Total Payable Days</span>
+                            <span class="text-lime-400 font-bold">{{ $payroll->total_payable_days }} days</span>
+                        </div>
+                        <div class="text-xs text-slate-500 italic px-2 py-1">
+                            = {{ $daysWorked }} (worked) + {{ $paidLeaveDays }} (paid leave) + {{ $weekendDays }}
+                            (weekends) = {{ $payroll->total_payable_days }} days
+                        </div>
+                        @endif
+                        <div class="h-px bg-slate-600 my-2"></div>
+                        <div class="flex justify-between items-center bg-slate-900/50 rounded px-3 py-2">
+                            <span class="text-white font-semibold">Calculated Base Salary</span>
+                            <span class="text-lime-400 font-bold">NPR {{ number_format($payroll->basic_salary, 2)
+                                }}</span>
+                        </div>
+                        <div class="text-xs text-slate-500 italic px-2">
+                            Formula: {{ number_format($payroll->per_day_rate ?? 0, 2) }} × {{
+                            $payroll->total_payable_days ?? 0 }} = NPR {{ number_format($payroll->basic_salary, 2) }}
+                        </div>
+                    </div>
+                </div>
             </div>
-            @endif
         </div>
 
-        <!-- Right Column -->
+        <!-- Left Column -->
         <div class="space-y-6">
+            <!-- Employee & Period Info -->
+            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+                <h2 class="text-xl font-semibold text-white mb-4">Employee Information</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-slate-400">Employee Name</p>
+                        <p class="text-white font-medium">{{ $payroll->employee->full_name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-400">Employee Code</p>
+                        <p class="text-white font-medium">{{ $payroll->employee->employee_code }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-400">Company</p>
+                        <p class="text-white font-medium">{{ $payroll->employee->company->name ?? 'N/A' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-400">Department</p>
+                        <p class="text-white font-medium">{{ $payroll->employee->department->name ?? 'N/A' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-400">Period</p>
+                        <p class="text-white font-medium">{{ format_nepali_date($payroll->period_start_bs, 'j F Y') }} -
+                            {{
+                            format_nepali_date($payroll->period_end_bs, 'j F Y') }}</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Salary Breakdown -->
             <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
                 <h2 class="text-xl font-semibold text-white mb-4">Salary Breakdown</h2>
@@ -353,10 +381,15 @@
                     @if($payroll->unpaid_leave_deduction > 0)
                     <div class="border-b border-slate-700 pb-3">
                         <div class="flex justify-between text-slate-300">
-                            <span>Unpaid Leave Deduction</span>
+                            <span>Unpaid Leave Deduction ({{ $payroll->unpaid_leave_days }} days)</span>
                             <span class="font-medium text-red-400">- NPR {{
                                 number_format($payroll->unpaid_leave_deduction, 2) }}</span>
                         </div>
+                        @if($payroll->per_day_rate > 0 && $payroll->unpaid_leave_days > 0)
+                        <p class="text-xs text-slate-500 mt-1 ml-4">
+                            {{ number_format($payroll->per_day_rate, 2) }} × {{ $payroll->unpaid_leave_days }} days
+                        </p>
+                        @endif
                     </div>
                     @endif
 
@@ -394,6 +427,92 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Working Hours Review -->
+            @if($payroll->total_working_hours_required > 0)
+            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+                <h2 class="text-xl font-semibold text-white mb-4">Working Hours Review</h2>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 text-center">
+                            <p class="text-sm text-slate-400">Required</p>
+                            <p class="text-lg font-bold text-white">{{
+                                number_format($payroll->total_working_hours_required, 1) }} hrs</p>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 text-center">
+                            <p class="text-sm text-slate-400">Actual</p>
+                            <p class="text-lg font-bold text-lime-400">{{ number_format($payroll->total_hours_worked, 1)
+                                }} hrs</p>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 text-center">
+                            <p class="text-sm text-slate-400">Missing</p>
+                            <p
+                                class="text-lg font-bold {{ $payroll->total_working_hours_missing > 0 ? 'text-red-400' : 'text-lime-400' }}">
+                                {{ number_format($payroll->total_working_hours_missing, 1) }} hrs
+                            </p>
+                        </div>
+                    </div>
+
+                    @if($payroll->hourly_deduction_approved && $payroll->hourly_deduction_amount > 0)
+                    <div class="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-orange-400">Hourly Deduction Applied</p>
+                                <p class="text-xs text-orange-300 mt-1">
+                                    Based on {{ number_format($payroll->total_working_hours_missing, 1) }} missing hours
+                                </p>
+                            </div>
+                            <p class="text-lg font-bold text-orange-400">NPR {{
+                                number_format($payroll->hourly_deduction_amount, 2) }}</p>
+                        </div>
+                    </div>
+                    @elseif($payroll->total_working_hours_missing > 0)
+                    <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
+                        <div class="flex flex-col gap-3">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-yellow-400">Suggested Deduction</p>
+                                    <p class="text-xs text-yellow-300 mt-1">Not applied by admin</p>
+                                </div>
+                                <p class="text-lg font-bold text-yellow-400">NPR {{
+                                    number_format($payroll->hourly_deduction_suggested, 2) }}</p>
+                            </div>
+
+                            @if($payroll->status === 'draft')
+                            <div class="flex flex-wrap gap-2">
+                                <form method="POST" action="{{ route('admin.hrm.payroll.update', $payroll->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="hourly_deduction_amount"
+                                        value="{{ $payroll->hourly_deduction_suggested }}">
+                                    <input type="hidden" name="hourly_deduction_approved" value="1">
+                                    <button type="submit"
+                                        class="px-3 py-2 bg-yellow-500 text-slate-900 font-semibold rounded hover:bg-yellow-400 transition">
+                                        Apply suggested deduction
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="{{ route('admin.hrm.payroll.update', $payroll->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="hourly_deduction_approved" value="0">
+                                    <button type="submit"
+                                        class="px-3 py-2 bg-slate-700 text-slate-100 font-semibold rounded hover:bg-slate-600 transition">
+                                        Keep deduction at 0
+                                    </button>
+                                </form>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    @else
+                    <div class="bg-lime-500/10 border border-lime-500/20 rounded-lg p-3 text-center">
+                        <p class="text-lime-400">✓ All required hours completed</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
 
             <!-- Anomalies List -->
             @if(!empty($anomalies) && $anomalies->count() > 0)
