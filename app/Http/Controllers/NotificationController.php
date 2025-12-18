@@ -16,23 +16,9 @@ class NotificationController extends Controller
     }
 
     /**
-     * Get notifications for current user
-     */
-    public function index()
-    {
-        $notifications = $this->notificationService->getRecentNotifications(Auth::id(), 50);
-        $unreadCount = $this->notificationService->getUnreadCount(Auth::id());
-
-        return response()->json([
-            'notifications' => $notifications,
-            'unread_count' => $unreadCount,
-        ]);
-    }
-
-    /**
      * Show all notifications page
      */
-    public function all()
+    public function index()
     {
         $notifications = $this->notificationService->getAllNotifications(Auth::id());
         $unreadCount = $this->notificationService->getUnreadCount(Auth::id());
@@ -43,6 +29,20 @@ class NotificationController extends Controller
         }
 
         return view('employee.notifications.index', compact('notifications', 'unreadCount'));
+    }
+
+    /**
+     * Get notifications for current user (API endpoint)
+     */
+    public function all()
+    {
+        $notifications = $this->notificationService->getRecentNotifications(Auth::id(), 50);
+        $unreadCount = $this->notificationService->getUnreadCount(Auth::id());
+
+        return response()->json([
+            'notifications' => $notifications,
+            'unread_count' => $unreadCount,
+        ]);
     }
 
     /**

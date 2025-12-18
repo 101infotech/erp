@@ -40,10 +40,11 @@
                 <label class="block text-slate-400 text-sm mb-1">Finance Company</label>
                 <p class="text-white font-medium">
                     @if($company->financeCompany)
-                        <a class="text-lime-400 hover:text-lime-300 underline"
-                           href="{{ route('admin.finance.companies.show', $company->financeCompany) }}">{{ $company->financeCompany->name }}</a>
+                    <a class="text-lime-400 hover:text-lime-300 underline"
+                        href="{{ route('admin.finance.companies.show', $company->financeCompany) }}">{{
+                        $company->financeCompany->name }}</a>
                     @else
-                        Not linked
+                    Not linked
                     @endif
                 </p>
             </div>

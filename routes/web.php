@@ -108,6 +108,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Announcements
         Route::get('/announcements', [EmployeeAnnouncementController::class, 'index'])->name('announcements.index');
         Route::get('/announcements/{announcement}', [EmployeeAnnouncementController::class, 'show'])->name('announcements.show');
+
+        // Notifications
+        Route::prefix('notifications')->name('notifications.')->group(function () {
+            Route::get('/', [NotificationController::class, 'index'])->name('index');
+            Route::get('/all', [NotificationController::class, 'all'])->name('all');
+            Route::get('/unread-count', [NotificationController::class, 'unreadCount'])->name('unread-count');
+            Route::post('/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
+            Route::post('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-as-read');
+            Route::delete('/{id}', [NotificationController::class, 'destroy'])->name('destroy');
+        });
     });
 
     // Admin Routes without workspace
@@ -316,16 +326,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Notifications (accessible by all authenticated users)
-    Route::prefix('notifications')->name('notifications.')->group(function () {
-        Route::get('/', [NotificationController::class, 'index'])->name('index');
-        Route::get('/all', [NotificationController::class, 'all'])->name('all');
-        Route::get('/unread-count', [NotificationController::class, 'unreadCount'])->name('unread-count');
-        Route::post('/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
-        Route::post('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-as-read');
-        Route::delete('/{id}', [NotificationController::class, 'destroy'])->name('destroy');
-    });
 });
 
 require __DIR__ . '/auth.php';

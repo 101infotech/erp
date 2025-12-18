@@ -28,9 +28,11 @@
             <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">HRM Company</h3>
             <p class="mt-1 text-lg">
                 @if($company->hrmCompany)
-                    <a class="text-blue-600 dark:text-lime-400 hover:underline" href="{{ route('admin.hrm.companies.show', $company->hrmCompany) }}">{{ $company->hrmCompany->name }}</a>
+                <a class="text-blue-600 dark:text-lime-400 hover:underline"
+                    href="{{ route('admin.hrm.companies.show', $company->hrmCompany) }}">{{ $company->hrmCompany->name
+                    }}</a>
                 @else
-                    Not linked
+                Not linked
                 @endif
             </p>
         </div>

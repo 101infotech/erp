@@ -118,7 +118,7 @@
 
         <!-- Footer -->
         <div x-show="notifications.length > 0" class="px-5 py-3 bg-slate-900/30 border-t border-slate-700 text-center">
-            <a href="{{ route('notifications.all') }}"
+            <a href="{{ route('employee.notifications.index') }}"
                 class="text-sm text-lime-400 hover:text-lime-300 font-medium">View all notifications</a>
         </div>
     </div>
@@ -141,14 +141,14 @@
 
         // Navigate to the full notifications page (server route)
         goToAll() {
-            window.location.href = '{{ route('notifications.all') }}';
+            window.location.href = '{{ route('employee.notifications.index') }}';
         },
 
         // Hover handlers removed - click redirects to full notifications page
 
         async loadNotifications() {
             try {
-                const response = await fetch('/notifications');
+                const response = await fetch('{{ route('employee.notifications.all') }}');
                 const data = await response.json();
                 this.notifications = data.notifications;
                 this.unreadCount = data.unread_count;
@@ -159,7 +159,7 @@
 
         async loadUnreadCount() {
             try {
-                const response = await fetch('/notifications/unread-count');
+                const response = await fetch('{{ route('employee.notifications.unread-count') }}');
                 const data = await response.json();
                 this.unreadCount = data.count;
             } catch (error) {
@@ -169,7 +169,7 @@
 
         async markAsRead(id) {
             // Mark as read in background, don't wait for response
-            fetch(`/notifications/${id}/mark-as-read`, {
+            fetch(`{{ route('employee.notifications.mark-as-read', ':id') }}`.replace(':id', id), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -190,7 +190,7 @@
 
         async markAllAsRead() {
             try {
-                await fetch('/notifications/mark-all-as-read', {
+                await fetch('{{ route('employee.notifications.mark-all-as-read') }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

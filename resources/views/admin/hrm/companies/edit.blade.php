@@ -36,7 +36,8 @@
                 class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-lime-500">
                 <option value="">Select Finance Company</option>
                 @foreach($financeCompanies as $f)
-                <option value="{{ $f->id }}" {{ (int) old('finance_company_id', $company->finance_company_id) === (int) $f->id ? 'selected' : '' }}>
+                <option value="{{ $f->id }}" {{ (int) old('finance_company_id', $company->finance_company_id) === (int)
+                    $f->id ? 'selected' : '' }}>
                     {{ $f->name }}
                 </option>
                 @endforeach
