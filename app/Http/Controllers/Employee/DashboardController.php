@@ -45,10 +45,10 @@ class DashboardController extends Controller
             ->whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()])
             ->get();
 
-        // Get recent attendance (last 7 days)
+        // Get recent attendance (last 3 days)
         $recentAttendance = HrmAttendanceDay::where('employee_id', $employee->id)
             ->orderBy('date', 'desc')
-            ->limit(7)
+            ->limit(3)
             ->get();
 
         // Get recent payrolls (last 3)

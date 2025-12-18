@@ -15,10 +15,41 @@ use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::latest()->paginate(15);
-        return view('admin.users.index', compact('users'));
+        $query = User::with('hrmEmployee.company', 'hrmEmployee.department')->latest();
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Role filter
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+
+        // Company filter (via HrmEmployee)
+        if ($request->filled('company_id')) {
+            $companyId = $request->company_id;
+            $query->whereHas('hrmEmployee', function ($q) use ($companyId) {
+                $q->where('company_id', $companyId);
+            });
+        }
+
+        $users = $query->paginate(15);
+        $companies = \App\Models\HrmCompany::orderBy('name')->get();
+
+        return view('admin.users.index', compact('users', 'companies'));
     }
 
     public function create()
@@ -71,6 +102,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'role' => ['required', 'in:user,admin'],
+            'status' => ['required', 'in:active,inactive,suspended'],
         ]);
 
         $user->update($validated);

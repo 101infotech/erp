@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\HrmAttendanceDay;
 use App\Models\HrmEmployee;
+use App\Models\Holiday;
 use App\Services\JibblePeopleService;
 use App\Services\JibbleTimesheetService;
 use App\Services\JibbleTimeTrackingService;
@@ -27,17 +28,21 @@ class HrmAttendanceController extends Controller
     {
         $query = HrmAttendanceDay::with('employee');
 
+        $defaultStart = now()->startOfMonth()->toDateString();
+        $defaultEnd = now()->endOfMonth()->toDateString();
+
+        $startDate = $request->input('start_date', $defaultStart);
+        $endDate = $request->input('end_date', $defaultEnd);
+
+        if (Carbon::parse($endDate)->lt(Carbon::parse($startDate))) {
+            $endDate = $startDate;
+        }
+
         if ($request->filled('employee_id')) {
             $query->where('employee_id', $request->employee_id);
         }
 
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('date', [$request->start_date, $request->end_date]);
-        } else {
-            // Default to current month
-            $query->whereMonth('date', now()->month)
-                ->whereYear('date', now()->year);
-        }
+        $query->whereBetween('date', [$startDate, $endDate]);
 
         if ($request->filled('source')) {
             $query->where('source', $request->source);
@@ -46,7 +51,7 @@ class HrmAttendanceController extends Controller
         $attendances = $query->orderBy('date', 'desc')->paginate(30);
         $employees = HrmEmployee::active()->orderBy('name')->get();
 
-        return view('admin.hrm.attendance.index', compact('attendances', 'employees'));
+        return view('admin.hrm.attendance.index', compact('attendances', 'employees', 'startDate', 'endDate'));
     }
 
     public function show(HrmAttendanceDay $attendance)
@@ -93,12 +98,13 @@ class HrmAttendanceController extends Controller
 
     public function calendar(Request $request)
     {
-        $month = $request->input('month', now()->month);
-        $year = $request->input('year', now()->year);
+        $monthInput = $request->input('month', now()->format('Y-m'));
         $employeeId = $request->input('employee_id');
 
-        $startDate = Carbon::create($year, $month, 1)->startOfMonth();
-        $endDate = Carbon::create($year, $month, 1)->endOfMonth();
+        $startDate = Carbon::parse($monthInput . '-01')->startOfMonth();
+        $endDate = $startDate->copy()->endOfMonth();
+        $month = (int) $startDate->format('m');
+        $year = (int) $startDate->format('Y');
 
         $query = HrmAttendanceDay::with('employee')
             ->whereBetween('date', [$startDate, $endDate]);
@@ -110,13 +116,20 @@ class HrmAttendanceController extends Controller
         $attendances = $query->get()->groupBy('date');
         $employees = HrmEmployee::active()->orderBy('name')->get();
 
+        $holidays = Holiday::where('is_active', true)
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->orderBy('date')
+            ->get()
+            ->groupBy(fn($holiday) => $holiday->date->toDateString());
+
         return view('admin.hrm.attendance.calendar', compact(
             'attendances',
             'employees',
             'month',
             'year',
             'startDate',
-            'endDate'
+            'endDate',
+            'holidays'
         ));
     }
 
@@ -199,6 +212,27 @@ class HrmAttendanceController extends Controller
     public function syncForm()
     {
         return view('admin.hrm.attendance.sync');
+    }
+
+    /**
+     * Sync employees from Jibble
+     */
+    public function syncEmployees()
+    {
+        set_time_limit(300); // 5 minutes
+        ini_set('max_execution_time', 300);
+
+        try {
+            $employeeCount = $this->peopleService->syncEmployees();
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', "Successfully synced {$employeeCount} employees from Jibble.");
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.users.index')
+                ->with('error', 'Failed to sync employees from Jibble: ' . $e->getMessage());
+        }
     }
 
     /**

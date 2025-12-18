@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        $employee = Auth::user()->employee;
+        $employee = Auth::user()->hrmEmployee;
 
         if (!$employee) {
             return redirect()->route('employee.dashboard')
@@ -24,7 +24,7 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        $employee = Auth::user()->employee;
+        $employee = Auth::user()->hrmEmployee;
 
         if (!$employee) {
             return redirect()->route('employee.dashboard')
@@ -36,7 +36,7 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $employee = Auth::user()->employee;
+        $employee = Auth::user()->hrmEmployee;
 
         if (!$employee) {
             return redirect()->route('employee.dashboard')

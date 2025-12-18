@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HrmCompany;
+use App\Models\FinanceCompany;
 use Illuminate\Http\Request;
 
 class HrmCompanyController extends Controller
@@ -19,7 +20,8 @@ class HrmCompanyController extends Controller
 
     public function create()
     {
-        return view('admin.hrm.companies.create');
+        $financeCompanies = FinanceCompany::orderBy('name')->get();
+        return view('admin.hrm.companies.create', compact('financeCompanies'));
     }
 
     public function store(Request $request)
@@ -28,6 +30,7 @@ class HrmCompanyController extends Controller
             'name' => 'required|string|max:255',
             'contact_email' => 'nullable|email|max:255',
             'address' => 'nullable|string',
+            'finance_company_id' => 'required|exists:finance_companies,id|unique:hrm_companies,finance_company_id',
         ]);
 
         HrmCompany::create($validated);
@@ -45,7 +48,8 @@ class HrmCompanyController extends Controller
 
     public function edit(HrmCompany $company)
     {
-        return view('admin.hrm.companies.edit', compact('company'));
+        $financeCompanies = FinanceCompany::orderBy('name')->get();
+        return view('admin.hrm.companies.edit', compact('company', 'financeCompanies'));
     }
 
     public function update(Request $request, HrmCompany $company)
@@ -54,6 +58,7 @@ class HrmCompanyController extends Controller
             'name' => 'required|string|max:255',
             'contact_email' => 'nullable|email|max:255',
             'address' => 'nullable|string',
+            'finance_company_id' => 'required|exists:finance_companies,id|unique:hrm_companies,finance_company_id,' . $company->id,
         ]);
 
         $company->update($validated);

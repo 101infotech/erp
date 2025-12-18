@@ -33,6 +33,8 @@ class HrmPayrollRecord extends Model
         'overtime_payment',
         'allowances',
         'allowances_total',
+        'expense_claims',
+        'expense_claims_total',
         'gross_salary',
         'tax_amount',
         'tax_overridden',
@@ -62,6 +64,7 @@ class HrmPayrollRecord extends Model
     protected $casts = [
         'allowances' => 'array',
         'deductions' => 'array',
+        'expense_claims' => 'array',
         'anomalies' => 'array',
         'advance_payment_details' => 'array',
         'tax_overridden' => 'boolean',
@@ -89,6 +92,14 @@ class HrmPayrollRecord extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Get the expense claims included in this payroll
+     */
+    public function expenseClaims()
+    {
+        return $this->hasMany(HrmExpenseClaim::class, 'payroll_record_id');
     }
 
     public function scopeDraft($query)

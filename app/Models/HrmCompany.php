@@ -14,6 +14,7 @@ class HrmCompany extends Model
         'name',
         'contact_email',
         'address',
+        'finance_company_id',
     ];
 
     /**
@@ -30,5 +31,13 @@ class HrmCompany extends Model
     public function employees(): HasMany
     {
         return $this->hasMany(HrmEmployee::class, 'company_id');
+    }
+
+    /**
+     * Linked Finance company (1:1)
+     */
+    public function financeCompany(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(FinanceCompany::class, 'finance_company_id');
     }
 }

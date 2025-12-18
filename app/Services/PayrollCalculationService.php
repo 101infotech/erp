@@ -97,8 +97,12 @@ class PayrollCalculationService
         $allowances = $employee->allowances ?? [];
         $allowancesTotal = $this->calculateAllowancesTotal($allowances);
 
-        // Calculate gross salary
-        $grossSalary = $basicSalary + $overtimePayment + $allowancesTotal;
+        // Get approved expense claims for this period
+        $expenseClaimsData = $this->getExpenseClaimsForPeriod($employee, $periodStart, $periodEnd);
+        $expenseClaimsTotal = $expenseClaimsData['total_amount'];
+
+        // Calculate gross salary (including expense claims)
+        $grossSalary = $basicSalary + $overtimePayment + $allowancesTotal + $expenseClaimsTotal;
 
         // Calculate tax
         $monthsInPeriod = $periodStart->diffInMonths($periodEnd) + 1;
@@ -147,6 +151,8 @@ class PayrollCalculationService
             'overtime_payment' => round($overtimePayment, 2),
             'allowances' => $allowances,
             'allowances_total' => round($allowancesTotal, 2),
+            'expense_claims' => $expenseClaimsData['claims'],
+            'expense_claims_total' => round($expenseClaimsTotal, 2),
             'gross_salary' => round($grossSalary, 2),
             'tax_amount' => round($taxAmount, 2),
             'tax_overridden' => false,
@@ -446,6 +452,39 @@ class PayrollCalculationService
     }
 
     /**
+     * Get approved expense claims for the payroll period
+     *
+     * @param HrmEmployee $employee
+     * @param Carbon $periodStart
+     * @param Carbon $periodEnd
+     * @return array
+     */
+    protected function getExpenseClaimsForPeriod(HrmEmployee $employee, Carbon $periodStart, Carbon $periodEnd): array
+    {
+        $claims = \App\Models\HrmExpenseClaim::where('employee_id', $employee->id)
+            ->where('status', 'approved')
+            ->where('included_in_payroll', false)
+            ->whereBetween('expense_date', [$periodStart->format('Y-m-d'), $periodEnd->format('Y-m-d')])
+            ->get();
+
+        $claimsArray = $claims->map(function ($claim) {
+            return [
+                'id' => $claim->id,
+                'claim_number' => $claim->claim_number,
+                'expense_type' => $claim->expense_type,
+                'title' => $claim->title,
+                'amount' => $claim->amount,
+                'expense_date' => $claim->expense_date->format('Y-m-d'),
+            ];
+        })->toArray();
+
+        return [
+            'claims' => $claimsArray,
+            'total_amount' => $claims->sum('amount'),
+        ];
+    }
+
+    /**
      * Calculate unpaid leave deduction
      *
      * @param HrmEmployee $employee
@@ -551,6 +590,17 @@ class PayrollCalculationService
 
                 // Create payroll record
                 $payroll = HrmPayrollRecord::create($calculation);
+
+                // Link expense claims to this payroll record
+                if (!empty($calculation['expense_claims'])) {
+                    $claimIds = collect($calculation['expense_claims'])->pluck('id')->toArray();
+                    \App\Models\HrmExpenseClaim::whereIn('id', $claimIds)->update([
+                        'payroll_record_id' => $payroll->id,
+                        'included_in_payroll' => true,
+                        'payroll_period_start' => $periodStart->format('Y-m-d'),
+                        'payroll_period_end' => $periodEnd->format('Y-m-d'),
+                    ]);
+                }
 
                 // Save anomalies to database
                 $anomalies = collect($calculation['anomalies']);

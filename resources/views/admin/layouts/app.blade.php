@@ -109,26 +109,15 @@
                         Who is Clocked In
                     </a>
 
-                    <!-- Team Management -->
-                    <a href="{{ route('admin.hrm.employees.index') }}"
-                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.hrm.employees.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                    <!-- Team & Users (Merged) -->
+                    <a href="{{ route('admin.users.index') }}"
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.hrm.employees.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                             </path>
                         </svg>
-                        Team Management
-                    </a>
-
-                    <!-- Users -->
-                    <a href="{{ route('admin.users.index') }}"
-                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.users.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                            </path>
-                        </svg>
-                        Users
+                        Team & Users
                     </a>
 
                     <!-- Organization (Companies & Departments) -->
@@ -142,6 +131,16 @@
                         Organization
                     </a>
 
+                    <!-- Holidays -->
+                    <a href="{{ route('admin.hrm.holidays.index') }}"
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.hrm.holidays.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Holidays
+                    </a>
+
                     <!-- Payroll -->
                     <a href="{{ route('admin.hrm.payroll.index') }}"
                         class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.hrm.payroll.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
@@ -151,6 +150,28 @@
                             </path>
                         </svg>
                         Payroll
+                    </a>
+
+                    <!-- Resource Requests -->
+                    <a href="{{ route('admin.hrm.resource-requests.index') }}"
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.hrm.resource-requests.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4">
+                            </path>
+                        </svg>
+                        Resource Requests
+                    </a>
+
+                    <!-- Expense Claims -->
+                    <a href="{{ route('admin.hrm.expense-claims.index') }}"
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.hrm.expense-claims.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z">
+                            </path>
+                        </svg>
+                        Expense Claims
                     </a>
 
                     <div class="pt-2 pb-1">

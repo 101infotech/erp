@@ -12,17 +12,6 @@
             <p class="text-slate-400 mt-1">Manage your team members and their information</p>
         </div>
         <div class="flex flex-wrap gap-2">
-            <form method="POST" action="{{ route('admin.hrm.employees.sync-from-jibble') }}">
-                @csrf
-                <button type="submit"
-                    class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-1.5">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                    <span>Sync</span>
-                </button>
-            </form>
             <a href="{{ route('admin.hrm.employees.create') }}"
                 class="px-3 py-1.5 text-sm bg-lime-500 text-slate-950 font-semibold rounded-lg hover:bg-lime-400 transition flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,8 +66,6 @@
                         Department</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Status
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Jibble
-                    </th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">Actions
                     </th>
                 </tr>
@@ -118,22 +105,7 @@
                             {{ ucfirst($employee->status) }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        @if($employee->jibble_person_id)
-                        <span
-                            class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400 flex items-center space-x-1 w-fit">
-                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span>Synced</span>
-                        </span>
-                        @else
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-400">Not
-                            Synced</span>
-                        @endif
-                    </td>
+                    <!-- Jibble sync status removed -->
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                         <a href="{{ route('admin.hrm.attendance.employee', $employee) }}"
                             class="text-teal-400 hover:text-teal-300">Timesheet</a>

@@ -1,16 +1,18 @@
 # Jibble Implementation Status Report
 
+> Important: As of December 17, 2025, Jibble syncing for the HRM Employees module has been disabled. Organization & staff management are now fully internal and linked to Finance (per-company), while Attendance features remain available without automated Jibble pulls.
+
 **Date:** December 2, 2024  
 **Project:** Saubhagya Group ERP  
 **Module:** HRM with Jibble Integration
 
 ## Executive Summary
 
-The Jibble time-tracking API integration is **FULLY IMPLEMENTED** and ready for use. All core components including authentication, employee sync, attendance tracking, and administrative interfaces are in place and functional.
+Jibble time-tracking API integration was fully implemented. Following the latest requirement, employee sync to Jibble is now turned off. HRM Employees are managed internally with company/department assignment and tied to Finance workflows. Attendance views remain, but automated Jibble sync routes and schedules have been disabled.
 
 ---
 
-## ✅ Implementation Status: COMPLETE
+## ✅ Implementation Status: COMPLETE (Employees sync now DISABLED)
 
 ### 1. Configuration ✅
 
@@ -129,9 +131,9 @@ JIBBLE_DEFAULT_COMPANY_ID=
 
 ---
 
-### 4. Console Commands ✅
+### 4. Console Commands ✅ (Scheduler disabled)
 
-**Status:** Both commands registered and functional
+**Status:** Both commands remain available for manual use if needed, but the scheduled job has been disabled.
 
 #### hrm:sync-jibble-employees ✅
 

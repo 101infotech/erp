@@ -21,6 +21,7 @@ Core module documentation covering major system modules.
 -   Announcement Module
 -   Complaint Box Module
 -   HRM (Human Resource Management) Module
+-   **Resource Requests & Expense Claims Module** ⭐ NEW
 -   Notification System
 -   Weekly Feedback Module
 
@@ -52,6 +53,7 @@ Detailed implementation guides, checklists, and technical specifications.
 -   Modal system implementation
 -   Employee navigation and portal implementation
 -   Content management system implementation
+-   **Resource Requests & Expense Claims Implementation** ⭐ NEW
 -   Implementation checklists and progress tracking
 
 ### 📚 [GUIDES/](GUIDES/)
@@ -78,11 +80,44 @@ Comprehensive guides, quick starts, and visual documentation.
 ## 📊 File Statistics
 
 -   **SETUP**: Environment and configuration files
--   **MODULES**: Core system modules (7 modules)
+-   **MODULES**: Core system modules (8 modules)
 -   **FEATURES**: Feature implementations (18 features)
 -   **FIXES**: Bug fixes and optimizations (15+ documents)
--   **IMPLEMENTATION**: Technical implementation details
+-   **IMPLEMENTATION**: Technical implementation details (including Resource Requests & Expense Claims)
 -   **GUIDES**: Comprehensive guides and specifications
+
+## 🆕 Latest Updates (December 17, 2025)
+
+### Resource Requests & Expense Claims Module
+
+Complete implementation of two new features for staff resource management and expense reimbursement:
+
+#### 🔹 Resource Request System
+
+-   Staff can request items (office supplies, equipment, pantry items, etc.)
+-   Admin approval workflow with fulfillment tracking
+-   Priority levels and category classification
+-   Cost tracking and vendor management
+
+#### 🔹 Expense Claims System
+
+-   Staff can submit expense claims with receipts
+-   Automatic payroll integration for approved claims
+-   Multiple expense types (travel, accommodation, meals, transportation, etc.)
+-   Auto-generated claim numbers
+-   File upload support for receipts
+
+#### 🔹 Payroll Integration
+
+-   Approved expense claims automatically included in payroll calculations
+-   Claims added to gross salary
+-   Automatic linking and tracking
+-   No manual intervention required
+
+**Documentation:**
+
+-   [Full Module Documentation](MODULES/RESOURCE_REQUESTS_AND_EXPENSE_CLAIMS.md)
+-   [Implementation Guide](IMPLEMENTATION/RESOURCE_REQUESTS_EXPENSE_CLAIMS_IMPLEMENTATION.md)
 
 ## 📝 Notes
 

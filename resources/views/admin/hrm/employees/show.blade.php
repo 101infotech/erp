@@ -9,8 +9,7 @@
     <div class="flex justify-between items-start">
         <div>
             <h1 class="text-3xl font-bold text-white">{{ $employee->name }}</h1>
-            <p class="text-slate-400 mt-1">{{ $employee->position ?? 'Employee' }} • {{ $employee->jibble_person_id ??
-                'N/A' }}</p>
+            <p class="text-slate-400 mt-1">{{ $employee->position ?? 'Employee' }}</p>
         </div>
         <div class="flex gap-2">
             <a href="{{ route('admin.hrm.attendance.employee', $employee) }}"
@@ -58,8 +57,6 @@
                         <p class="text-xs text-slate-400 mb-1">Employee</p>
                         <p class="text-white font-semibold">
                             {{ $employee->full_name ?? $employee->name }}
-                            <span class="text-xs text-slate-400 ml-2">({{ $employee->jibble_person_id ?? 'N/A'
-                                }})</span>
                         </p>
                     </div>
                     <div>

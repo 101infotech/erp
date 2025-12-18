@@ -8,9 +8,9 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// Schedule Jibble data sync twice daily
-Schedule::command('jibble:sync --all')
-    ->twiceDaily(8, 18) // Run at 8:00 AM and 6:00 PM
-    ->timezone('Asia/Kathmandu') // Adjust to your timezone
-    ->withoutOverlapping()
-    ->runInBackground();
+// Jibble sync disabled for HRM module; attendance remains manual/internal
+// Schedule::command('jibble:sync --all')
+//     ->twiceDaily(8, 18)
+//     ->timezone('Asia/Kathmandu')
+//     ->withoutOverlapping()
+//     ->runInBackground();

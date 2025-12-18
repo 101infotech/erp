@@ -258,6 +258,13 @@ Handles attendance/timesheet synchronization.
 -   Duplicate prevention (unique constraint)
 -   Raw data storage for audit trail
 
+### Holidays
+
+-   Holidays are stored in the `holidays` table with `name`, `date`, `description`, `is_company_wide`, and `is_active` fields.
+-   Admin UI: Manage at Admin → HRM → Holidays (`admin.hrm.holidays.*`). Supports add/edit/delete.
+-   Employee UI: View-only list at Employee → Holidays (`employee.holidays.index`).
+-   Attendance calendar overlays holidays for the selected month and highlights them in amber.
+
 ### Console Commands
 
 #### sync:jibble-employees

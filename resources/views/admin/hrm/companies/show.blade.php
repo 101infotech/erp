@@ -37,6 +37,17 @@
                 <p class="text-white font-medium">{{ $company->name }}</p>
             </div>
             <div>
+                <label class="block text-slate-400 text-sm mb-1">Finance Company</label>
+                <p class="text-white font-medium">
+                    @if($company->financeCompany)
+                        <a class="text-lime-400 hover:text-lime-300 underline"
+                           href="{{ route('admin.finance.companies.show', $company->financeCompany) }}">{{ $company->financeCompany->name }}</a>
+                    @else
+                        Not linked
+                    @endif
+                </p>
+            </div>
+            <div>
                 <label class="block text-slate-400 text-sm mb-1">Contact Email</label>
                 <p class="text-white font-medium">{{ $company->contact_email ?? 'N/A' }}</p>
             </div>

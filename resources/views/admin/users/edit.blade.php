@@ -49,6 +49,22 @@
                 @enderror
             </div>
 
+            <div>
+                <label for="status" class="block text-sm font-medium text-slate-300 mb-2">Status</label>
+                <select name="status" id="status" required
+                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    <option value="active" {{ old('status', $user->status ?? 'active') === 'active' ? 'selected' : ''
+                        }}>Active</option>
+                    <option value="inactive" {{ old('status', $user->status) === 'inactive' ? 'selected' : ''
+                        }}>Inactive</option>
+                    <option value="suspended" {{ old('status', $user->status) === 'suspended' ? 'selected' : ''
+                        }}>Suspended</option>
+                </select>
+                @error('status')
+                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                 <p class="text-blue-300 text-sm">
                     <strong>Note:</strong> To change the password, use the "Reset Password" button on the user profile

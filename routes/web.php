@@ -18,15 +18,21 @@ use App\Http\Controllers\Admin\HrmCompanyController;
 use App\Http\Controllers\Admin\HrmDepartmentController;
 use App\Http\Controllers\Admin\HrmEmployeeController;
 use App\Http\Controllers\Admin\HrmAttendanceController;
+use App\Http\Controllers\Admin\HrmHolidayController;
 use App\Http\Controllers\Admin\HrmPayrollController;
 use App\Http\Controllers\Admin\HrmLeaveController;
 use App\Http\Controllers\Admin\HrmLeavePolicyController;
 use App\Http\Controllers\Admin\HrmOrganizationController;
+use App\Http\Controllers\Admin\HrmResourceRequestController;
+use App\Http\Controllers\Admin\HrmExpenseClaimController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Employee\DashboardController as EmployeeDashboardController;
 use App\Http\Controllers\Employee\AttendanceController as EmployeeAttendanceController;
 use App\Http\Controllers\Employee\PayrollController as EmployeePayrollController;
 use App\Http\Controllers\Employee\LeaveController as EmployeeLeaveController;
+use App\Http\Controllers\Employee\EmployeeHolidayController;
+use App\Http\Controllers\Employee\ResourceRequestController as EmployeeResourceRequestController;
+use App\Http\Controllers\Employee\ExpenseClaimController as EmployeeExpenseClaimController;
 use App\Http\Controllers\Employee\ProfileController as EmployeeProfileController;
 use App\Http\Controllers\Employee\ComplaintController as EmployeeComplaintController;
 use App\Http\Controllers\Employee\FeedbackController as EmployeeFeedbackController;
@@ -72,6 +78,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/leave/{id}', [EmployeeLeaveController::class, 'show'])->name('leave.show');
         Route::post('/leave/{id}/cancel', [EmployeeLeaveController::class, 'cancel'])->name('leave.cancel');
         Route::get('/leave-data', [EmployeeLeaveController::class, 'data'])->name('leave.data');
+
+        // Resource Requests (employee self-service)
+        Route::get('/resource-requests', [EmployeeResourceRequestController::class, 'index'])->name('resource-requests.index');
+        Route::get('/resource-requests/create', [EmployeeResourceRequestController::class, 'create'])->name('resource-requests.create');
+        Route::post('/resource-requests', [EmployeeResourceRequestController::class, 'store'])->name('resource-requests.store');
+
+        // Expense Claims (employee self-service)
+        Route::get('/expense-claims', [EmployeeExpenseClaimController::class, 'index'])->name('expense-claims.index');
+        Route::get('/expense-claims/create', [EmployeeExpenseClaimController::class, 'create'])->name('expense-claims.create');
+        Route::post('/expense-claims', [EmployeeExpenseClaimController::class, 'store'])->name('expense-claims.store');
+
+        // Holidays
+        Route::get('/holidays', [EmployeeHolidayController::class, 'index'])->name('holidays.index');
 
         // Complaints/Feedback
         Route::get('/complaints', [EmployeeComplaintController::class, 'index'])->name('complaints.index');
@@ -136,8 +155,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             // Employees
             Route::resource('employees', HrmEmployeeController::class);
-            Route::post('employees/sync-from-jibble', [HrmEmployeeController::class, 'syncFromJibble'])
-                ->name('employees.sync-from-jibble');
+            // Jibble sync disabled: employees are managed internally and linked to Finance
 
             // Attendance
             Route::get('attendance', [HrmAttendanceController::class, 'index'])->name('attendance.index');
@@ -146,9 +164,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('attendance/active-users/json', [HrmAttendanceController::class, 'activeUsersJson'])->name('attendance.active-users.json');
             Route::get('attendance/sync', [HrmAttendanceController::class, 'syncForm'])->name('attendance.sync-form');
             Route::post('attendance/sync', [HrmAttendanceController::class, 'syncFromJibble'])->name('attendance.sync');
+            Route::get('attendance/sync-employees', [HrmAttendanceController::class, 'syncEmployees'])->name('attendance.sync-employees');
             Route::post('attendance/sync-all', [HrmAttendanceController::class, 'syncAll'])->name('attendance.sync-all');
             Route::get('attendance/employee/{employee}', [HrmAttendanceController::class, 'employee'])->name('attendance.employee');
             Route::get('attendance/{attendance}', [HrmAttendanceController::class, 'show'])->name('attendance.show');
+
+            // Holidays
+            Route::resource('holidays', HrmHolidayController::class)->except(['show', 'create']);
 
             // Payroll Management
             Route::get('payroll', [HrmPayrollController::class, 'index'])->name('payroll.index');
@@ -163,6 +185,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('payroll/{payroll}/mark-as-paid', [HrmPayrollController::class, 'markAsPaid'])->name('payroll.mark-as-paid');
             Route::post('payroll/{payroll}/mark-as-sent', [HrmPayrollController::class, 'markAsSent'])->name('payroll.mark-as-sent');
             Route::get('payroll/{payroll}/download-pdf', [HrmPayrollController::class, 'downloadPdf'])->name('payroll.download-pdf');
+
+            // Resource Requests
+            Route::resource('resource-requests', HrmResourceRequestController::class);
+            Route::post('resource-requests/{resourceRequest}/approve', [HrmResourceRequestController::class, 'approve'])->name('resource-requests.approve');
+            Route::post('resource-requests/{resourceRequest}/reject', [HrmResourceRequestController::class, 'reject'])->name('resource-requests.reject');
+            Route::post('resource-requests/{resourceRequest}/fulfill', [HrmResourceRequestController::class, 'fulfill'])->name('resource-requests.fulfill');
+
+            // Expense Claims
+            Route::resource('expense-claims', HrmExpenseClaimController::class);
+            Route::post('expense-claims/{expenseClaim}/approve', [HrmExpenseClaimController::class, 'approve'])->name('expense-claims.approve');
+            Route::post('expense-claims/{expenseClaim}/reject', [HrmExpenseClaimController::class, 'reject'])->name('expense-claims.reject');
+            Route::get('expense-claims/ready-for-payroll', [HrmExpenseClaimController::class, 'getReadyForPayroll'])->name('expense-claims.ready-for-payroll');
 
             // Leave Management
             Route::get('leaves', [HrmLeaveController::class, 'index'])->name('leaves.index');

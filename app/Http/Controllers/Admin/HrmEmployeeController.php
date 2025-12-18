@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\HrmEmployee;
 use App\Models\HrmCompany;
 use App\Models\HrmDepartment;
-use App\Services\JibblePeopleService;
 use App\Services\LeavePolicyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 
 class HrmEmployeeController extends Controller
 {
-    public function __construct(private readonly JibblePeopleService $jibblePeopleService) {}
 
     public function index(Request $request)
     {
@@ -91,18 +89,7 @@ class HrmEmployeeController extends Controller
         $policyService = new LeavePolicyService();
         $policyService->applyPoliciesToEmployee($employee);
 
-        // Sync to Jibble if requested
-        if ($request->boolean('sync_to_jibble') && $employee->email) {
-            try {
-                $jibbleId = $this->jibblePeopleService->createPerson($employee);
-                if ($jibbleId) {
-                    $employee->update(['jibble_person_id' => $jibbleId]);
-                }
-            } catch (\Exception $e) {
-                // Log but don't fail the request
-                Log::error('Failed to sync employee to Jibble', ['error' => $e->getMessage()]);
-            }
-        }
+        // External sync (Jibble) disabled; employee created locally only
 
         return redirect()
             ->route('admin.hrm.employees.index')
@@ -207,14 +194,7 @@ class HrmEmployeeController extends Controller
 
         $employee->update($validated);
 
-        // Sync to Jibble if requested
-        if ($request->boolean('sync_to_jibble')) {
-            try {
-                $this->jibblePeopleService->updatePerson($employee);
-            } catch (\Exception $e) {
-                Log::error('Failed to sync employee to Jibble', ['error' => $e->getMessage()]);
-            }
-        }
+        // External sync (Jibble) disabled; updates remain internal
 
         return redirect()
             ->route('admin.hrm.employees.show', $employee)
@@ -228,14 +208,7 @@ class HrmEmployeeController extends Controller
             Storage::disk('public')->delete($employee->avatar);
         }
 
-        // Delete from Jibble if requested
-        if ($employee->jibble_person_id) {
-            try {
-                $this->jibblePeopleService->deletePerson($employee);
-            } catch (\Exception $e) {
-                Log::error('Failed to delete employee from Jibble', ['error' => $e->getMessage()]);
-            }
-        }
+        // External deletion (Jibble) disabled
 
         $employee->delete();
 
@@ -244,20 +217,5 @@ class HrmEmployeeController extends Controller
             ->with('success', 'Employee deleted successfully.');
     }
 
-    /**
-     * Sync employees from Jibble
-     */
-    public function syncFromJibble()
-    {
-        try {
-            $count = $this->jibblePeopleService->syncEmployees();
-            return redirect()
-                ->route('admin.hrm.employees.index')
-                ->with('success', "Successfully synced {$count} employees from Jibble.");
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('admin.hrm.employees.index')
-                ->with('error', 'Failed to sync from Jibble: ' . $e->getMessage());
-        }
-    }
+    // Jibble sync removed: employees are managed within ERP and Finance
 }

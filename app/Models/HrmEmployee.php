@@ -166,6 +166,22 @@ class HrmEmployee extends Model
     }
 
     /**
+     * Get resource requests for this employee
+     */
+    public function resourceRequests(): HasMany
+    {
+        return $this->hasMany(HrmResourceRequest::class, 'employee_id');
+    }
+
+    /**
+     * Get expense claims for this employee
+     */
+    public function expenseClaims(): HasMany
+    {
+        return $this->hasMany(HrmExpenseClaim::class, 'employee_id');
+    }
+
+    /**
      * Get contract expiry days (negative if expired, positive if future, null if permanent)
      * Note: Converts BS date to AD for calculation
      */

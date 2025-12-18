@@ -1,4 +1,4 @@
-<nav class="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800">
+<nav class="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800 relative z-30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <!-- Logo -->
@@ -58,7 +58,7 @@
                     </button>
                     <!-- Dropdown Menu -->
                     <div x-show="open" x-transition
-                        class="absolute right-0 mt-2 w-56 bg-slate-800 rounded-lg shadow-xl border border-slate-700 py-2 z-50">
+                        class="absolute right-0 mt-2 w-56 bg-slate-800 rounded-lg shadow-2xl border border-slate-700 py-2 z-50">
                         <a href="{{ route('employee.profile.show') }}"
                             class="flex items-center space-x-3 px-4 py-2 text-slate-300 hover:bg-slate-700 hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

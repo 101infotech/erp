@@ -77,6 +77,11 @@ class FinanceCompany extends Model
         return $this->hasMany(\App\Models\HrmDepartment::class, 'finance_company_id');
     }
 
+    public function hrmCompany(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Models\HrmCompany::class, 'finance_company_id');
+    }
+
     // Scopes
     public function scopeActive($query)
     {
