@@ -73,6 +73,25 @@ Route::prefix('v1')->group(function () {
         Route::get('attendance', [HrmAttendanceController::class, 'index']);
     });
 
+    // AI Feedback API Routes (Authenticated)
+    Route::prefix('ai')->middleware('auth:sanctum')->group(function () {
+        Route::prefix('feedback')->group(function () {
+            // Question generation
+            Route::get('questions', [\App\Http\Controllers\Api\AiFeedbackController::class, 'generateQuestions']);
+
+            // Sentiment analysis
+            Route::post('analyze-sentiment', [\App\Http\Controllers\Api\AiFeedbackController::class, 'analyzeSentiment']);
+
+            // Weekly prompts
+            Route::get('weekly-prompt', [\App\Http\Controllers\Api\AiFeedbackController::class, 'getWeeklyPrompt']);
+            Route::post('submit-answer', [\App\Http\Controllers\Api\AiFeedbackController::class, 'submitAnswer']);
+
+            // Analytics
+            Route::get('sentiment-trends', [\App\Http\Controllers\Api\AiFeedbackController::class, 'getSentimentTrends']);
+            Route::get('performance-insights', [\App\Http\Controllers\Api\AiFeedbackController::class, 'getPerformanceInsights']);
+        });
+    });
+
     // Dashboard API Routes
     Route::prefix('dashboard')->group(function () {
         Route::get('stats', [DashboardController::class, 'stats']);

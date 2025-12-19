@@ -16,6 +16,37 @@
                 </a>
             </div>
 
+            <!-- Sentiment Trend Chart (if available) -->
+            @if($sentimentTrend && $sentimentTrend->count() > 0)
+            <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg overflow-hidden mb-8 p-6">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                    </svg>
+                    Your Sentiment Trend
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    @foreach($sentimentTrend as $trend)
+                    <div class="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
+                        <p class="text-slate-400 text-xs font-semibold mb-2">{{ $trend->created_at->format('M d') }}</p>
+                        <div class="flex items-end justify-between mb-2">
+                            <div>
+                                <p class="text-2xl font-bold text-white">{{ round($trend->overall_sentiment * 100) }}%
+                                </p>
+                                <p class="text-xs text-slate-400 mt-1">{{ $trend->getSentimentLabel() }}</p>
+                            </div>
+                            <span class="text-2xl">{{ $trend->getTrendIcon() }}</span>
+                        </div>
+                        @if($trend->needs_manager_attention)
+                        <div class="text-amber-300 text-xs font-semibold">⚠️ Manager Review</div>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             @if($feedbacks->count() > 0)
             <!-- Feedback Table -->
             <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg overflow-hidden">

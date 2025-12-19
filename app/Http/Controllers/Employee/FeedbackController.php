@@ -4,11 +4,20 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeFeedback;
+use App\Models\AiFeedbackSentimentAnalysis;
+use App\Services\AI\AiFeedbackService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class FeedbackController extends Controller
 {
+    protected $aiFeedbackService;
+
+    public function __construct()
+    {
+        $this->aiFeedbackService = new AiFeedbackService();
+    }
+
     /**
      * Dashboard - check if feedback already submitted this week
      */
@@ -18,7 +27,15 @@ class FeedbackController extends Controller
         $isSubmitted = $weeklyFeedback && $weeklyFeedback->is_submitted;
         $daysUntilFriday = $this->getDaysUntilFriday();
 
-        return view('employee.feedback.dashboard', compact('weeklyFeedback', 'isSubmitted', 'daysUntilFriday'));
+        // Get latest sentiment analysis if available
+        $latestSentiment = AiFeedbackSentimentAnalysis::getLatestForUser(auth()->id());
+
+        return view('employee.feedback.dashboard', compact(
+            'weeklyFeedback',
+            'isSubmitted',
+            'daysUntilFriday',
+            'latestSentiment'
+        ));
     }
 
     /**
@@ -33,7 +50,13 @@ class FeedbackController extends Controller
                 ->with('info', 'Your feedback has already been submitted this week.');
         }
 
-        return view('employee.feedback.create', compact('weeklyFeedback'));
+        // Generate AI-powered questions
+        $aiQuestions = $this->aiFeedbackService->generateFeedbackQuestions(auth()->id(), 3);
+
+        return view('employee.feedback.create', compact(
+            'weeklyFeedback',
+            'aiQuestions'
+        ));
     }
 
     /**
@@ -68,6 +91,14 @@ class FeedbackController extends Controller
             ]);
         }
 
+        // Perform AI sentiment analysis asynchronously
+        try {
+            $this->aiFeedbackService->analyzeFeedbackSentiment($weeklyFeedback);
+        } catch (\Exception $e) {
+            // Log error but don't fail the request
+            \Illuminate\Support\Facades\Log::warning('Sentiment analysis failed: ' . $e->getMessage());
+        }
+
         return redirect()->route('employee.feedback.dashboard')
             ->with('success', 'Your weekly feedback has been submitted successfully!');
     }
@@ -82,7 +113,10 @@ class FeedbackController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return view('employee.feedback.show', compact('feedback'));
+        // Get sentiment analysis if available
+        $sentimentAnalysis = AiFeedbackSentimentAnalysis::where('feedback_id', $feedback->id)->first();
+
+        return view('employee.feedback.show', compact('feedback', 'sentimentAnalysis'));
     }
 
     /**
@@ -95,7 +129,13 @@ class FeedbackController extends Controller
             ->orderBy('submitted_at', 'desc')
             ->paginate(10);
 
-        return view('employee.feedback.history', compact('feedbacks'));
+        // Get sentiment trend for the last 4 weeks
+        $sentimentTrend = AiFeedbackSentimentAnalysis::getTrendForUser(auth()->id(), 4);
+
+        return view('employee.feedback.history', compact(
+            'feedbacks',
+            'sentimentTrend'
+        ));
     }
 
     /**

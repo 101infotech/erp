@@ -42,9 +42,46 @@
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <div>
+                    <div class="flex-1">
                         <h3 class="text-lg font-semibold text-green-400">Feedback Submitted</h3>
                         <p class="text-slate-300 mt-1">You've already submitted your feedback for this week.</p>
+
+                        <!-- AI Sentiment Analysis Display -->
+                        @if($latestSentiment)
+                        <div class="mt-4 p-4 bg-slate-900/50 border border-slate-700 rounded-lg">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-slate-400 text-xs font-semibold mb-1">SENTIMENT ANALYSIS</p>
+                                    <p class="text-2xl font-bold text-white">{{ $latestSentiment->getSentimentLabel() }}
+                                    </p>
+                                    <p class="text-slate-400 text-xs mt-1">Overall: {{
+                                        round($latestSentiment->overall_sentiment * 100) }}%</p>
+                                </div>
+                                <div>
+                                    <p class="text-slate-400 text-xs font-semibold mb-1">TREND</p>
+                                    <p class="text-2xl font-bold text-white">{{ $latestSentiment->getTrendIcon() }} {{
+                                        ucfirst($latestSentiment->trend_direction) }}</p>
+                                    @if($latestSentiment->trend_change)
+                                    <p class="text-slate-400 text-xs mt-1">{{ $latestSentiment->trend_change > 0 ? '+' :
+                                        '' }}{{ round($latestSentiment->trend_change * 100) }}% from last week</p>
+                                    @endif
+                                </div>
+                            </div>
+                            @if($latestSentiment->alert_reason)
+                            <div class="mt-3 pt-3 border-t border-slate-700">
+                                <p class="text-amber-300 text-sm flex items-start gap-2">
+                                    <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>{{ $latestSentiment->alert_reason }}</span>
+                                </p>
+                            </div>
+                            @endif
+                        </div>
+                        @endif
+
                         <div class="mt-4 flex gap-3">
                             <a href="{{ route('employee.feedback.show', $weeklyFeedback) }}"
                                 class="px-4 py-2 bg-green-500/20 text-green-300 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition text-sm font-medium">
