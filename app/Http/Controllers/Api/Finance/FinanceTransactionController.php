@@ -11,6 +11,7 @@ use App\Models\FinanceTransaction;
 use App\Services\Finance\FinanceTransactionService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 
 class FinanceTransactionController extends Controller
 {
@@ -30,6 +31,13 @@ class FinanceTransactionController extends Controller
             $companyId = $request->input('company_id');
             $fromDate = $request->input('from_date');
             $toDate = $request->input('to_date');
+
+            // Provide safe defaults if dates are not provided
+            if (is_null($fromDate) || is_null($toDate)) {
+                // default to last 30 days
+                $toDate = $toDate ?? now()->format('Y-m-d');
+                $fromDate = $fromDate ?? now()->subDays(30)->format('Y-m-d');
+            }
 
             $filters = [
                 'transaction_type' => $request->input('transaction_type'),

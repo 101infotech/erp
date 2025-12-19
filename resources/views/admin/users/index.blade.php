@@ -137,8 +137,14 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs uppercase tracking-wider">Active</p>
-                    <p class="text-2xl font-bold text-lime-400 mt-1">{{ \App\Models\User::where('status',
-                        'active')->count() }}</p>
+                    @php
+                    if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'status')) {
+                    $activeCount = \App\Models\User::where('status', 'active')->count();
+                    } else {
+                    $activeCount = \App\Models\User::count();
+                    }
+                    @endphp
+                    <p class="text-2xl font-bold text-lime-400 mt-1">{{ $activeCount }}</p>
                 </div>
                 <div class="w-10 h-10 bg-lime-500/20 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
