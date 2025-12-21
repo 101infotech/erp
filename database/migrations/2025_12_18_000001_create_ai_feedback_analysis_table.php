@@ -15,7 +15,7 @@ return new class extends Migration
             Schema::create('ai_feedback_analysis', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('feedback_id')->constrained('employee_feedback')->onDelete('cascade');
-                $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+                $table->foreignId('employee_id')->constrained('hrm_employees')->onDelete('cascade');
 
                 // Sentiment Analysis
                 $table->enum('sentiment', ['positive', 'neutral', 'negative'])->default('neutral');

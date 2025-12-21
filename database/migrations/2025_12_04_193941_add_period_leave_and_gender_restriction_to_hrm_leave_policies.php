@@ -13,10 +13,16 @@ return new class extends Migration
     public function up(): void
     {
         // First, modify the enum to include 'period'
-        DB::statement("ALTER TABLE hrm_leave_policies MODIFY COLUMN leave_type ENUM('annual', 'sick', 'casual', 'period', 'unpaid')");
+        try {
+            DB::statement("ALTER TABLE hrm_leave_policies MODIFY COLUMN leave_type ENUM('annual', 'sick', 'casual', 'period', 'unpaid')");
+        } catch (\Throwable $e) {
+            // Ignore if enum already includes desired values
+        }
 
         Schema::table('hrm_leave_policies', function (Blueprint $table) {
-            $table->enum('gender_restriction', ['none', 'male', 'female'])->default('none')->after('leave_type');
+            if (!Schema::hasColumn('hrm_leave_policies', 'gender_restriction')) {
+                $table->enum('gender_restriction', ['none', 'male', 'female'])->default('none')->after('leave_type');
+            }
         });
     }
 
@@ -26,9 +32,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hrm_leave_policies', function (Blueprint $table) {
-            $table->dropColumn('gender_restriction');
+            if (Schema::hasColumn('hrm_leave_policies', 'gender_restriction')) {
+                $table->dropColumn('gender_restriction');
+            }
         });
 
-        DB::statement("ALTER TABLE hrm_leave_policies MODIFY COLUMN leave_type ENUM('annual', 'sick', 'casual')");
+        try {
+            DB::statement("ALTER TABLE hrm_leave_policies MODIFY COLUMN leave_type ENUM('annual', 'sick', 'casual')");
+        } catch (\Throwable $e) {
+            // Ignore if enum already matches or cannot be reverted safely
+        }
     }
 };

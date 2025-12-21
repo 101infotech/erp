@@ -13,41 +13,79 @@ return new class extends Migration
     {
         Schema::table('hrm_employees', function (Blueprint $table) {
             // Rename and add personal information fields
-            $table->renameColumn('full_name', 'name');
-            $table->renameColumn('birth_date', 'date_of_birth');
-            $table->renameColumn('join_date', 'hire_date');
+            if (Schema::hasColumn('hrm_employees', 'full_name') && !Schema::hasColumn('hrm_employees', 'name')) {
+                $table->renameColumn('full_name', 'name');
+            }
+            if (Schema::hasColumn('hrm_employees', 'birth_date') && !Schema::hasColumn('hrm_employees', 'date_of_birth')) {
+                $table->renameColumn('birth_date', 'date_of_birth');
+            }
+            if (Schema::hasColumn('hrm_employees', 'join_date') && !Schema::hasColumn('hrm_employees', 'hire_date')) {
+                $table->renameColumn('join_date', 'hire_date');
+            }
 
             // Personal details
-            $table->enum('gender', ['male', 'female', 'other'])->nullable()->after('date_of_birth');
-            $table->string('blood_group', 10)->nullable()->after('gender');
-            $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable()->after('blood_group');
+            if (!Schema::hasColumn('hrm_employees', 'gender')) {
+                $table->enum('gender', ['male', 'female', 'other'])->nullable()->after('date_of_birth');
+            }
+            if (!Schema::hasColumn('hrm_employees', 'blood_group')) {
+                $table->string('blood_group', 10)->nullable()->after('gender');
+            }
+            if (!Schema::hasColumn('hrm_employees', 'marital_status')) {
+                $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable()->after('blood_group');
+            }
 
             // Emergency contact (update existing fields)
-            $table->renameColumn('emergency_contact', 'emergency_contact_name');
-            $table->renameColumn('emergency_phone', 'emergency_contact_phone');
-            $table->string('emergency_contact_relationship')->nullable()->after('emergency_contact_phone');
+            if (Schema::hasColumn('hrm_employees', 'emergency_contact') && !Schema::hasColumn('hrm_employees', 'emergency_contact_name')) {
+                $table->renameColumn('emergency_contact', 'emergency_contact_name');
+            }
+            if (Schema::hasColumn('hrm_employees', 'emergency_phone') && !Schema::hasColumn('hrm_employees', 'emergency_contact_phone')) {
+                $table->renameColumn('emergency_phone', 'emergency_contact_phone');
+            }
+            if (!Schema::hasColumn('hrm_employees', 'emergency_contact_relationship')) {
+                $table->string('emergency_contact_relationship')->nullable()->after('emergency_contact_phone');
+            }
 
             // Employment details
-            $table->enum('employment_type', ['full-time', 'part-time', 'contract', 'intern'])->default('full-time')->after('employment_status');
-            $table->integer('working_days_per_week')->default(5)->after('employment_type');
+            if (!Schema::hasColumn('hrm_employees', 'employment_type')) {
+                $table->enum('employment_type', ['full-time', 'part-time', 'contract', 'intern'])->default('full-time')->after('employment_status');
+            }
+            if (!Schema::hasColumn('hrm_employees', 'working_days_per_week')) {
+                $table->integer('working_days_per_week')->default(5)->after('employment_type');
+            }
 
             // Contract details (additional)
-            $table->integer('probation_period_months')->nullable()->after('probation_end_date');
+            if (!Schema::hasColumn('hrm_employees', 'probation_period_months')) {
+                $table->integer('probation_period_months')->nullable()->after('probation_end_date');
+            }
 
             // Salary details (additional)
-            $table->decimal('salary_amount', 10, 2)->nullable()->after('basic_salary_npr')->comment('Alias for basic_salary_npr');
-            $table->decimal('allowances_amount', 10, 2)->nullable()->after('allowances')->comment('Total allowances amount');
+            if (!Schema::hasColumn('hrm_employees', 'salary_amount')) {
+                $table->decimal('salary_amount', 10, 2)->nullable()->after('basic_salary_npr')->comment('Alias for basic_salary_npr');
+            }
+            if (!Schema::hasColumn('hrm_employees', 'allowances_amount')) {
+                $table->decimal('allowances_amount', 10, 2)->nullable()->after('allowances')->comment('Total allowances amount');
+            }
 
             // Tax information
-            $table->string('tax_regime')->nullable()->after('pan_number')->comment('Old or New tax regime');
+            if (!Schema::hasColumn('hrm_employees', 'tax_regime')) {
+                $table->string('tax_regime')->nullable()->after('pan_number')->comment('Old or New tax regime');
+            }
 
             // Avatar/profile
-            $table->string('avatar_url')->nullable()->after('avatar');
+            if (!Schema::hasColumn('hrm_employees', 'avatar_url')) {
+                $table->string('avatar_url')->nullable()->after('avatar');
+            }
 
             // Additional leave balances
-            $table->decimal('sick_leave_balance', 4, 1)->default(0)->after('paid_leave_sick');
-            $table->decimal('casual_leave_balance', 4, 1)->default(0)->after('paid_leave_casual');
-            $table->decimal('annual_leave_balance', 4, 1)->default(0)->after('paid_leave_annual');
+            if (!Schema::hasColumn('hrm_employees', 'sick_leave_balance')) {
+                $table->decimal('sick_leave_balance', 4, 1)->default(0)->after('paid_leave_sick');
+            }
+            if (!Schema::hasColumn('hrm_employees', 'casual_leave_balance')) {
+                $table->decimal('casual_leave_balance', 4, 1)->default(0)->after('paid_leave_casual');
+            }
+            if (!Schema::hasColumn('hrm_employees', 'annual_leave_balance')) {
+                $table->decimal('annual_leave_balance', 4, 1)->default(0)->after('paid_leave_annual');
+            }
         });
     }
 
@@ -58,14 +96,24 @@ return new class extends Migration
     {
         Schema::table('hrm_employees', function (Blueprint $table) {
             // Rename back
-            $table->renameColumn('name', 'full_name');
-            $table->renameColumn('date_of_birth', 'birth_date');
-            $table->renameColumn('hire_date', 'join_date');
-            $table->renameColumn('emergency_contact_name', 'emergency_contact');
-            $table->renameColumn('emergency_contact_phone', 'emergency_phone');
+            if (Schema::hasColumn('hrm_employees', 'name')) {
+                $table->renameColumn('name', 'full_name');
+            }
+            if (Schema::hasColumn('hrm_employees', 'date_of_birth')) {
+                $table->renameColumn('date_of_birth', 'birth_date');
+            }
+            if (Schema::hasColumn('hrm_employees', 'hire_date')) {
+                $table->renameColumn('hire_date', 'join_date');
+            }
+            if (Schema::hasColumn('hrm_employees', 'emergency_contact_name')) {
+                $table->renameColumn('emergency_contact_name', 'emergency_contact');
+            }
+            if (Schema::hasColumn('hrm_employees', 'emergency_contact_phone')) {
+                $table->renameColumn('emergency_contact_phone', 'emergency_phone');
+            }
 
             // Drop added columns
-            $table->dropColumn([
+            $columns = [
                 'gender',
                 'blood_group',
                 'marital_status',
@@ -80,7 +128,11 @@ return new class extends Migration
                 'sick_leave_balance',
                 'casual_leave_balance',
                 'annual_leave_balance',
-            ]);
+            ];
+            $existing = collect($columns)->filter(fn($c) => Schema::hasColumn('hrm_employees', $c))->all();
+            if (!empty($existing)) {
+                $table->dropColumn($existing);
+            }
         });
     }
 };

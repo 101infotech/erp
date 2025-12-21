@@ -12,9 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hrm_payroll_records', function (Blueprint $table) {
-            $table->timestamp('sent_at')->nullable()->after('paid_at');
-            $table->unsignedBigInteger('sent_by')->nullable()->after('sent_at');
-            $table->string('sent_by_name')->nullable()->after('sent_by');
+            if (!Schema::hasColumn('hrm_payroll_records', 'sent_at')) {
+                $table->timestamp('sent_at')->nullable()->after('paid_at');
+            }
+            if (!Schema::hasColumn('hrm_payroll_records', 'sent_by')) {
+                $table->unsignedBigInteger('sent_by')->nullable()->after('sent_at');
+            }
+            if (!Schema::hasColumn('hrm_payroll_records', 'sent_by_name')) {
+                $table->string('sent_by_name')->nullable()->after('sent_by');
+            }
         });
     }
 
@@ -24,7 +30,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hrm_payroll_records', function (Blueprint $table) {
-            $table->dropColumn(['sent_at', 'sent_by', 'sent_by_name']);
+            $columns = collect(['sent_at', 'sent_by', 'sent_by_name'])
+                ->filter(fn($c) => Schema::hasColumn('hrm_payroll_records', $c))
+                ->all();
+            if (!empty($columns)) {
+                $table->dropColumn($columns);
+            }
         });
     }
 };

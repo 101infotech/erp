@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hrm_employees', function (Blueprint $table) {
-            $table->decimal('period_leave_balance', 5, 2)->nullable()->after('casual_leave_balance');
+            if (!Schema::hasColumn('hrm_employees', 'period_leave_balance')) {
+                $table->decimal('period_leave_balance', 5, 2)->nullable()->after('casual_leave_balance');
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hrm_employees', function (Blueprint $table) {
-            $table->dropColumn('period_leave_balance');
+            if (Schema::hasColumn('hrm_employees', 'period_leave_balance')) {
+                $table->dropColumn('period_leave_balance');
+            }
         });
     }
 };

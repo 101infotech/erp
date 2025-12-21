@@ -14,7 +14,7 @@ return new class extends Migration
         if (!Schema::hasTable('ai_performance_insights')) {
             Schema::create('ai_performance_insights', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+                $table->foreignId('employee_id')->constrained('hrm_employees')->onDelete('cascade');
 
                 // Performance Metrics
                 $table->date('analysis_date');

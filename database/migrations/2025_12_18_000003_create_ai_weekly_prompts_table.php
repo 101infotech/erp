@@ -14,7 +14,7 @@ return new class extends Migration
         if (!Schema::hasTable('ai_weekly_prompts')) {
             Schema::create('ai_weekly_prompts', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+                $table->foreignId('employee_id')->constrained('hrm_employees')->onDelete('cascade');
 
                 // Prompt Details
                 $table->string('title');

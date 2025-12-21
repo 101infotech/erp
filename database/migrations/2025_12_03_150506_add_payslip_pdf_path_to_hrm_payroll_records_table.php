@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hrm_payroll_records', function (Blueprint $table) {
-            $table->string('payslip_pdf_path')->nullable()->after('transaction_reference');
-            $table->string('approved_by_name')->nullable()->after('approved_by');
+            if (!Schema::hasColumn('hrm_payroll_records', 'payslip_pdf_path')) {
+                $table->string('payslip_pdf_path')->nullable()->after('transaction_reference');
+            }
+            if (!Schema::hasColumn('hrm_payroll_records', 'approved_by_name')) {
+                $table->string('approved_by_name')->nullable()->after('approved_by');
+            }
         });
     }
 
@@ -23,7 +27,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hrm_payroll_records', function (Blueprint $table) {
-            $table->dropColumn(['payslip_pdf_path', 'approved_by_name']);
+            $columns = collect(['payslip_pdf_path', 'approved_by_name'])
+                ->filter(fn($c) => Schema::hasColumn('hrm_payroll_records', $c))
+                ->all();
+            if (!empty($columns)) {
+                $table->dropColumn($columns);
+            }
         });
     }
 };

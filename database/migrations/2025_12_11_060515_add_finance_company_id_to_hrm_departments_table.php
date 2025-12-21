@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hrm_departments', function (Blueprint $table) {
-            $table->foreignId('finance_company_id')->nullable()->after('company_id')->constrained('finance_companies')->onDelete('set null')->comment('Links department to finance company for salary allocation');
+            if (!Schema::hasColumn('hrm_departments', 'finance_company_id')) {
+                $table->foreignId('finance_company_id')->nullable()->after('company_id')->constrained('finance_companies')->nullOnDelete()->comment('Links department to finance company for salary allocation');
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hrm_departments', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('hrm_departments', 'finance_company_id')) {
+                $table->dropConstrainedForeignId('finance_company_id');
+            }
         });
     }
 };

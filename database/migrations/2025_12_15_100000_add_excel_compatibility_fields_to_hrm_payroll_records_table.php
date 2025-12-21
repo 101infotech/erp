@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::table('hrm_payroll_records', function (Blueprint $table) {
             // Excel-compatible fields for transparency
-            $table->decimal('per_day_rate', 10, 2)->default(0)->after('basic_salary')
-                ->comment('Per day rate (basic_salary / month_total_days)');
-            $table->integer('total_payable_days')->default(0)->after('per_day_rate')
-                ->comment('Days to pay (days_worked + paid_leave_days)');
+            if (!Schema::hasColumn('hrm_payroll_records', 'per_day_rate')) {
+                $table->decimal('per_day_rate', 10, 2)->default(0)->after('basic_salary')
+                    ->comment('Per day rate (basic_salary / month_total_days)');
+            }
+            if (!Schema::hasColumn('hrm_payroll_records', 'total_payable_days')) {
+                $table->integer('total_payable_days')->default(0)->after('per_day_rate')
+                    ->comment('Days to pay (days_worked + paid_leave_days)');
+            }
         });
     }
 
@@ -26,10 +30,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hrm_payroll_records', function (Blueprint $table) {
-            $table->dropColumn([
-                'per_day_rate',
-                'total_payable_days',
-            ]);
+            $columns = collect(['per_day_rate', 'total_payable_days'])
+                ->filter(fn($c) => Schema::hasColumn('hrm_payroll_records', $c))
+                ->all();
+            if (!empty($columns)) {
+                $table->dropColumn($columns);
+            }
         });
     }
 };

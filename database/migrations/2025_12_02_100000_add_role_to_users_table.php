@@ -10,8 +10,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user')->after('password');
-            $table->index('role');
+            if (!Schema::hasColumn('users', 'role')) {
+                $table->string('role')->default('user')->after('password');
+                $table->index('role');
+            }
         });
 
         // Optionally promote a known admin email if present
@@ -22,8 +24,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['role']);
-            $table->dropColumn('role');
+            if (Schema::hasColumn('users', 'role')) {
+                $table->dropIndex(['role']);
+                $table->dropColumn('role');
+            }
         });
     }
 };
