@@ -40,9 +40,10 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index(['user_id', 'created_at']);
-            $table->index(['overall_classification', 'created_at']);
-            $table->index(['needs_manager_attention', 'created_at']);
+            // Use short, explicit index names to avoid MySQL 64-char limit
+            $table->index(['user_id', 'created_at'], 'afsa_user_created_idx');
+            $table->index(['overall_classification', 'created_at'], 'afsa_class_created_idx');
+            $table->index(['needs_manager_attention', 'created_at'], 'afsa_attention_created_idx');
         });
     }
 
