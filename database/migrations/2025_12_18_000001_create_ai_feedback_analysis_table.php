@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ai_feedback_analysis', function (Blueprint $table) {
+        if (!Schema::hasTable('ai_feedback_analysis')) {
+            Schema::create('ai_feedback_analysis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('feedback_id')->constrained('feedback')->onDelete('cascade');
+                $table->foreignId('feedback_id')->constrained('employee_feedback')->onDelete('cascade');
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
 
             // Sentiment Analysis
@@ -46,12 +47,13 @@ return new class extends Migration
             $table->softDeletes();
 
             // Indexes
-            $table->index('feedback_id');
-            $table->index('employee_id');
-            $table->index('sentiment');
-            $table->index('requires_manager_attention');
-            $table->index('created_at');
-        });
+                $table->index('feedback_id');
+                $table->index('employee_id');
+                $table->index('sentiment');
+                $table->index('requires_manager_attention');
+                $table->index('created_at');
+            });
+        }
     }
 
     /**

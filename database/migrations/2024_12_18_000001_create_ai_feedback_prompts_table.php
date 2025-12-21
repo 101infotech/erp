@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ai_feedback_prompts', function (Blueprint $table) {
+        if (!Schema::hasTable('ai_feedback_prompts')) {
+            Schema::create('ai_feedback_prompts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('feedback_id')->nullable()->constrained('employee_feedback')->nullOnDelete();
@@ -25,7 +26,8 @@ return new class extends Migration
 
             $table->index(['user_id', 'created_at']);
             $table->index(['is_used', 'created_at']);
-        });
+            });
+        }
     }
 
     /**

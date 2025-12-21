@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ai_weekly_prompts', function (Blueprint $table) {
+        if (!Schema::hasTable('ai_weekly_prompts')) {
+            Schema::create('ai_weekly_prompts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
 
@@ -46,12 +47,13 @@ return new class extends Migration
             $table->softDeletes();
 
             // Indexes
-            $table->index('employee_id');
-            $table->index('prompt_date');
-            $table->index(['year', 'week_number']);
-            $table->index('category');
-            $table->index('answered');
-        });
+                $table->index('employee_id');
+                $table->index('prompt_date');
+                $table->index(['year', 'week_number']);
+                $table->index('category');
+                $table->index('answered');
+            });
+        }
     }
 
     /**

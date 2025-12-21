@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_feedback', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('feelings')->comment('How the employee is feeling');
-            $table->text('work_progress')->comment('Progress made this week');
-            $table->text('self_improvements')->comment('Areas for self-improvement');
-            $table->text('admin_notes')->nullable()->comment('Admin feedback/notes');
-            $table->boolean('is_submitted')->default(false);
-            $table->timestamp('submitted_at')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('employee_feedback')) {
+            Schema::create('employee_feedback', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                $table->text('feelings')->comment('How the employee is feeling');
+                $table->text('work_progress')->comment('Progress made this week');
+                $table->text('self_improvements')->comment('Areas for self-improvement');
+                $table->text('admin_notes')->nullable()->comment('Admin feedback/notes');
+                $table->boolean('is_submitted')->default(false);
+                $table->timestamp('submitted_at')->nullable();
+                $table->timestamps();
 
-            // Index for weekly submission tracking
-            $table->index(['user_id', 'submitted_at']);
-        });
+                // Index for weekly submission tracking
+                $table->index(['user_id', 'submitted_at']);
+            });
+        }
     }
 
     /**

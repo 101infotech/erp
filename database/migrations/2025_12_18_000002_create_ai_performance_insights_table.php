@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ai_performance_insights', function (Blueprint $table) {
+        if (!Schema::hasTable('ai_performance_insights')) {
+            Schema::create('ai_performance_insights', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
 
@@ -60,12 +61,13 @@ return new class extends Migration
             $table->softDeletes();
 
             // Indexes
-            $table->index('employee_id');
-            $table->index('analysis_date');
-            $table->index('period_type');
-            $table->index('employee_mood');
-            $table->index(['employee_id', 'analysis_date']);
-        });
+                $table->index('employee_id');
+                $table->index('analysis_date');
+                $table->index('period_type');
+                $table->index('employee_mood');
+                $table->index(['employee_id', 'analysis_date']);
+            });
+        }
     }
 
     /**
