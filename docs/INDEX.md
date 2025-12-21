@@ -86,7 +86,58 @@ Comprehensive guides, quick starts, and visual documentation.
 -   **IMPLEMENTATION**: Technical implementation details (including Resource Requests & Expense Claims)
 -   **GUIDES**: Comprehensive guides and specifications
 
-## 🆕 Latest Updates (December 17, 2025)
+## 🆕 Latest Updates (December 21, 2025)
+
+### Brand Bird Agency Booking Form API (Enhanced)
+
+Complete REST API with multi-step form support for Brand Flight Consultation bookings:
+
+#### 🔹 Public Submission Endpoint
+- Multi-step form handling (3 steps: Details, Business & Services, Goals & Vision)
+- Rate limited (10 requests/minute) to prevent abuse
+- Support for 10+ industry types
+- Support for 10+ service selection options
+- All form fields from the images implemented
+- Automatic IP tracking and validation
+
+#### 🔹 Protected Admin Endpoints
+- View all booking submissions with filtering
+- Search by name, email, or company
+- Update booking status (new → contacted → scheduled → completed)
+- Delete bookings
+- Pagination support
+- Authentication via Laravel Sanctum
+
+**Documentation:**
+- [Full API Documentation](API_BOOKING_FORM.md)
+- [Quick Reference Guide](../BOOKING_FORM_API_QUICK_REFERENCE.md)
+- [Postman Collection](POSTMAN_BOOKING_FORM.json)
+
+---
+
+### Saubhagya Group Meeting Scheduling API
+
+Complete REST API implementation for scheduling meetings with Saubhagya Group:
+
+#### 🔹 Public Submission Endpoint
+- Form submission for scheduling meetings
+- Rate limited (5 requests/minute) to prevent abuse
+- Support for multiple meeting types (Partnership, Investment, Franchise, etc.)
+- Automatic email and phone validation
+- IP tracking and user agent logging
+
+#### 🔹 Protected Admin Endpoints
+- View all meeting requests with filtering
+- Update meeting status (pending → confirmed → completed)
+- Delete meeting requests
+- Pagination support
+- Authentication via Laravel Sanctum
+
+**Documentation:**
+- [Full API Documentation](API_SCHEDULE_MEETING.md)
+- [Postman Collection](POSTMAN_SCHEDULE_MEETING.json)
+
+---
 
 ### Resource Requests & Expense Claims Module
 
@@ -125,4 +176,4 @@ All documentation is organized by purpose and category for easy discovery. Each 
 
 ---
 
-_Last Updated: December 17, 2025_
+_Last Updated: December 21, 2025_

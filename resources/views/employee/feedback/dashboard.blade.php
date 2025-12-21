@@ -9,6 +9,7 @@
             </div>
 
             <!-- Mandatory Reminder -->
+            @if(!$isSubmitted)
             <div
                 class="bg-gradient-to-r from-lime-500/10 to-green-500/10 border border-lime-500/30 rounded-lg p-6 mb-8">
                 <div class="flex items-start gap-4">
@@ -31,6 +32,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             <!-- Status Message -->
             @if($isSubmitted)

@@ -22,6 +22,7 @@ class BookingForm extends Model
         'services_interested',
         'investment_range',
         'flight_timeline',
+        'current_marketing_efforts',
         'marketing_goals',
         'current_challenges',
         'ip_address',

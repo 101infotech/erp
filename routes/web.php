@@ -91,6 +91,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Holidays
         Route::get('/holidays', [EmployeeHolidayController::class, 'index'])->name('holidays.index');
+        // Calendar (merged view: holidays + events)
+        Route::get('/calendar', [\App\Http\Controllers\Employee\EmployeeCalendarController::class, 'index'])->name('calendar.index');
 
         // Complaints/Feedback
         Route::get('/complaints', [EmployeeComplaintController::class, 'index'])->name('complaints.index');

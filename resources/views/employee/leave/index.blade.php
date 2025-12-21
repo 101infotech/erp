@@ -124,10 +124,10 @@
                                     <span class="capitalize text-white font-medium">{{ $leave->leave_type }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                                    {{ $leave->start_date->format('M d, Y') }}
+                                    {{ \Carbon\Carbon::parse($leave->start_date)->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                                    {{ $leave->end_date->format('M d, Y') }}
+                                    {{ \Carbon\Carbon::parse($leave->end_date)->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <span class="text-white font-semibold">{{ $leave->total_days }}</span>

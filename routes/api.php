@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\CaseStudyController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\ContactFormController;
 use App\Http\Controllers\Api\BookingFormController;
+use App\Http\Controllers\Api\ScheduleMeetingController;
 use App\Http\Controllers\Api\HrmEmployeeController;
 use App\Http\Controllers\Api\HrmAttendanceController;
 use App\Http\Controllers\DashboardController;
@@ -60,8 +61,33 @@ Route::prefix('v1')->group(function () {
     // Contact Form Submission
     Route::post('contact', [ContactFormController::class, 'store']);
 
-    // Booking Form Submission
-    Route::post('booking', [BookingFormController::class, 'store']);
+    // Booking Form Submission (Brand Bird Agency) - Public & Protected Routes
+    Route::prefix('booking')->group(function () {
+        // Public endpoint to submit booking form (rate limited)
+        Route::post('/', [BookingFormController::class, 'store'])->middleware('throttle:10,1');
+
+        // Protected endpoints (require authentication)
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/', [BookingFormController::class, 'index']);
+            Route::get('/{id}', [BookingFormController::class, 'show']);
+            Route::patch('/{id}/status', [BookingFormController::class, 'updateStatus']);
+            Route::delete('/{id}', [BookingFormController::class, 'destroy']);
+        });
+    });
+
+    // Schedule Meeting API (Saubhagya Group) - Protected Routes
+    Route::prefix('schedule-meeting')->group(function () {
+        // Public endpoint to submit a meeting request (rate limited)
+        Route::post('/', [ScheduleMeetingController::class, 'store'])->middleware('throttle:5,1');
+
+        // Protected endpoints (require authentication)
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/', [ScheduleMeetingController::class, 'index']);
+            Route::get('/{id}', [ScheduleMeetingController::class, 'show']);
+            Route::patch('/{id}/status', [ScheduleMeetingController::class, 'updateStatus']);
+            Route::delete('/{id}', [ScheduleMeetingController::class, 'destroy']);
+        });
+    });
 
     // HRM API Routes
     Route::prefix('hrm')->group(function () {

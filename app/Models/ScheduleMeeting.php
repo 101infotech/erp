@@ -13,9 +13,11 @@ class ScheduleMeeting extends Model
     protected $fillable = [
         'site_id',
         'name',
+        'full_name',
         'email',
         'phone',
         'company',
+        'meeting_type',
         'subject',
         'message',
         'preferred_date',
