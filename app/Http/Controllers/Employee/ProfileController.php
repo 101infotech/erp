@@ -59,14 +59,14 @@ class ProfileController extends Controller
 
     public function uploadAvatar(Request $request)
     {
-        $employee = Auth::user()->employee;
+        $employee = Auth::user()->hrmEmployee;
 
         if (!$employee) {
             return response()->json(['error' => 'Employee profile not found.'], 404);
         }
 
         $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], // 2MB max
+            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'], // 2MB max
         ]);
 
         // Delete old avatar if exists
@@ -75,9 +75,13 @@ class ProfileController extends Controller
         }
 
         // Store new avatar
-        $path = $request->file('avatar')->store('avatars', 'public');
+        $path = $request->file('avatar')->store('hrm/avatars', 'public');
+        $avatarUrl = Storage::url($path);
 
-        $employee->update(['avatar' => $path]);
+        $employee->update([
+            'avatar' => $path,
+            'avatar_url' => $avatarUrl
+        ]);
 
         return response()->json([
             'success' => true,
@@ -88,7 +92,7 @@ class ProfileController extends Controller
 
     public function deleteAvatar()
     {
-        $employee = Auth::user()->employee;
+        $employee = Auth::user()->hrmEmployee;
 
         if (!$employee) {
             return response()->json(['error' => 'Employee profile not found.'], 404);
@@ -96,7 +100,10 @@ class ProfileController extends Controller
 
         if ($employee->avatar) {
             Storage::disk('public')->delete($employee->avatar);
-            $employee->update(['avatar' => null]);
+            $employee->update([
+                'avatar' => null,
+                'avatar_url' => null
+            ]);
         }
 
         return response()->json([

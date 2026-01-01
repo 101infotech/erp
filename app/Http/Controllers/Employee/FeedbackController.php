@@ -65,30 +65,44 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'feelings' => 'required|string|min:10',
-            'work_progress' => 'required|string|min:10',
-            'self_improvements' => 'required|string|min:10',
+            // Old format (optional for backward compatibility)
+            'feelings' => 'nullable|string|min:10',
+            'work_progress' => 'nullable|string|min:10',
+            'self_improvements' => 'nullable|string|min:10',
+
+            // New questionnaire format
+            'stress_level' => 'required|integer|min:1|max:5',
+            'workload_level' => 'required|integer|min:1|max:5',
+            'work_satisfaction' => 'required|integer|min:1|max:5',
+            'team_collaboration' => 'required|integer|min:1|max:5',
+            'mental_wellbeing' => 'required|integer|min:1|max:5',
+            'challenges_faced' => 'nullable|string',
+            'achievements' => 'nullable|string',
+            'support_needed' => 'nullable|string',
+            'complaints' => 'nullable|string',
         ]);
 
         $weeklyFeedback = EmployeeFeedback::getWeeklyFeedback(auth()->id());
 
+        $feedbackData = [
+            'user_id' => auth()->id(),
+            'stress_level' => $request->stress_level,
+            'workload_level' => $request->workload_level,
+            'work_satisfaction' => $request->work_satisfaction,
+            'team_collaboration' => $request->team_collaboration,
+            'mental_wellbeing' => $request->mental_wellbeing,
+            'challenges_faced' => $request->challenges_faced,
+            'achievements' => $request->achievements,
+            'support_needed' => $request->support_needed,
+            'complaints' => $request->complaints,
+            'is_submitted' => true,
+            'submitted_at' => now(),
+        ];
+
         if (!$weeklyFeedback) {
-            $weeklyFeedback = EmployeeFeedback::create([
-                'user_id' => auth()->id(),
-                'feelings' => $request->feelings,
-                'work_progress' => $request->work_progress,
-                'self_improvements' => $request->self_improvements,
-                'is_submitted' => true,
-                'submitted_at' => now(),
-            ]);
+            $weeklyFeedback = EmployeeFeedback::create($feedbackData);
         } else {
-            $weeklyFeedback->update([
-                'feelings' => $request->feelings,
-                'work_progress' => $request->work_progress,
-                'self_improvements' => $request->self_improvements,
-                'is_submitted' => true,
-                'submitted_at' => now(),
-            ]);
+            $weeklyFeedback->update($feedbackData);
         }
 
         // Perform AI sentiment analysis asynchronously
@@ -140,21 +154,30 @@ class FeedbackController extends Controller
 
     /**
      * Calculate days until Friday (integer only, no decimal points)
+     * Fixed to correctly calculate days remaining
      */
     private function getDaysUntilFriday()
     {
         $today = Carbon::now();
-        $friday = $today->copy()->endOfWeek(); // Friday is endOfWeek
+        $todayDayOfWeek = $today->dayOfWeek; // 0 = Sunday, 5 = Friday
 
-        // If today is after Friday, get next week's Friday
-        if ($today->dayOfWeek > Carbon::FRIDAY) {
-            $friday = $friday->addWeek();
-        }
-        // If today IS Friday, return 0
-        elseif ($today->dayOfWeek === Carbon::FRIDAY) {
+        // If today is Friday (5), return 0
+        if ($todayDayOfWeek === Carbon::FRIDAY) {
             return 0;
         }
 
-        return (int) $today->diffInDays($friday);
+        // If today is Saturday (6), next Friday is 6 days away
+        if ($todayDayOfWeek === Carbon::SATURDAY) {
+            return 6;
+        }
+
+        // If today is Sunday (0), next Friday is 5 days away
+        if ($todayDayOfWeek === Carbon::SUNDAY) {
+            return 5;
+        }
+
+        // For Monday-Thursday, calculate days until Friday
+        // Monday (1) -> 4 days, Tuesday (2) -> 3 days, Wednesday (3) -> 2 days, Thursday (4) -> 1 day
+        return Carbon::FRIDAY - $todayDayOfWeek;
     }
 }

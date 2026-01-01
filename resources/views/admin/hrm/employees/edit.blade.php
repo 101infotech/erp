@@ -18,21 +18,21 @@
         @method('PUT')
 
         <!-- Tabbed Navigation -->
-        <div class="bg-slate-800 rounded-lg border border-slate-700">
-            <div class="border-b border-slate-700">
+        <div class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+            <div class="border-b border-slate-200 dark:border-slate-700">
                 <nav class="flex space-x-1 px-6" aria-label="Tabs">
                     <button type="button" @click="activeTab = 'basic'"
-                        :class="activeTab === 'basic' ? 'border-lime-500 text-lime-500' : 'border-transparent text-slate-400 hover:text-slate-300'"
+                        :class="activeTab === 'basic' ? 'border-lime-500 text-lime-500' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300'"
                         class="py-4 px-4 border-b-2 font-medium text-sm transition">
                         Basic Info
                     </button>
                     <button type="button" @click="activeTab = 'personal'"
-                        :class="activeTab === 'personal' ? 'border-lime-500 text-lime-500' : 'border-transparent text-slate-400 hover:text-slate-300'"
+                        :class="activeTab === 'personal' ? 'border-lime-500 text-lime-500' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300'"
                         class="py-4 px-4 border-b-2 font-medium text-sm transition">
                         Personal & Emergency
                     </button>
                     <button type="button" @click="activeTab = 'employment'"
-                        :class="activeTab === 'employment' ? 'border-lime-500 text-lime-500' : 'border-transparent text-slate-400 hover:text-slate-300'"
+                        :class="activeTab === 'employment' ? 'border-lime-500 text-lime-500' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300'"
                         class="py-4 px-4 border-b-2 font-medium text-sm transition">
                         Employment Details
                     </button>

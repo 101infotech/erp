@@ -7,22 +7,22 @@
 <div class="space-y-6 max-w-4xl">
     <!-- Header -->
     <div>
-        <h1 class="text-3xl font-bold text-white">New Leave Request</h1>
-        <p class="text-slate-400 mt-1">Submit a leave request for an employee</p>
+        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">New Leave Request</h1>
+        <p class="text-slate-600 dark:text-slate-400 mt-1">Submit a leave request for an employee</p>
     </div>
 
     <!-- Leave Request Form -->
     <form method="POST" action="{{ route('admin.hrm.leaves.store') }}" class="space-y-6">
         @csrf
 
-        <div class="bg-slate-800 rounded-lg p-6 border border-slate-700 space-y-6">
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 space-y-6">
             <!-- Employee Selection -->
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                     Employee <span class="text-red-400">*</span>
                 </label>
                 <select name="employee_id" id="employee_id" onchange="updateLeaveBalances()" required
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
                     <option value="">Select Employee</option>
                     @foreach($employees as $employee)
                     <option value="{{ $employee->id }}" data-annual="{{ $employee->paid_leave_annual ?? 0 }}"
@@ -39,12 +39,13 @@
             </div>
 
             <!-- Leave Balance Display -->
-            <div id="leave-balances" class="hidden bg-slate-900 border border-slate-700 rounded-lg p-4">
-                <h3 class="text-sm font-semibold text-white mb-3">Available Leave Balance</h3>
+            <div id="leave-balances"
+                class="hidden bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+                <h3 class="text-sm font-semibold text-slate-900 dark:text-white mb-3">Available Leave Balance</h3>
                 <div class="grid grid-cols-3 gap-4">
                     <div class="text-center">
                         <p class="text-2xl font-bold text-blue-400" id="balance-annual">0</p>
-                        <p class="text-xs text-slate-400">Annual</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">Annual</p>
                     </div>
                     <div class="text-center">
                         <p class="text-2xl font-bold text-red-400" id="balance-sick">0</p>

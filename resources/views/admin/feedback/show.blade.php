@@ -41,51 +41,130 @@
 
         <!-- Feedback Content -->
         <div class="p-6 space-y-8">
-            <!-- How They're Feeling -->
-            <div>
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="bg-blue-500/20 p-2 rounded-lg">
-                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Rating Scales Section -->
+            <div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/30 rounded-xl p-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="bg-purple-500/20 p-2 rounded-lg">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-semibold text-white">How They're Feeling</h3>
+                    <h3 class="text-lg font-semibold text-white">Weekly Ratings</h3>
                 </div>
-                <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
-                    <p class="text-slate-300 whitespace-pre-wrap">{{ $feedback->feelings }}</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Stress Level -->
+                    <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
+                        <p class="text-slate-400 text-sm font-medium mb-2">Stress Level</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-xl font-bold text-purple-400">{{ $feedback->stress_level ?? '-'
+                                    }}</span>
+                            </div>
+                            <p class="text-slate-300 text-sm">
+                                @if($feedback->stress_level == 1) None
+                                @elseif($feedback->stress_level == 2) Low
+                                @elseif($feedback->stress_level == 3) Medium
+                                @elseif($feedback->stress_level == 4) High
+                                @elseif($feedback->stress_level == 5) Very High
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mental Wellbeing -->
+                    <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
+                        <p class="text-slate-400 text-sm font-medium mb-2">Mental Wellbeing</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-xl font-bold text-green-400">{{ $feedback->mental_wellbeing ?? '-'
+                                    }}</span>
+                            </div>
+                            <p class="text-slate-300 text-sm">
+                                @if($feedback->mental_wellbeing == 1) Poor
+                                @elseif($feedback->mental_wellbeing == 2) Fair
+                                @elseif($feedback->mental_wellbeing == 3) Good
+                                @elseif($feedback->mental_wellbeing == 4) Very Good
+                                @elseif($feedback->mental_wellbeing == 5) Excellent
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Workload Level -->
+                    <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
+                        <p class="text-slate-400 text-sm font-medium mb-2">Workload</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-xl font-bold text-blue-400">{{ $feedback->workload_level ?? '-'
+                                    }}</span>
+                            </div>
+                            <p class="text-slate-300 text-sm">
+                                @if($feedback->workload_level == 1) Very Light
+                                @elseif($feedback->workload_level == 2) Light
+                                @elseif($feedback->workload_level == 3) Moderate
+                                @elseif($feedback->workload_level == 4) Heavy
+                                @elseif($feedback->workload_level == 5) Overwhelming
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Job Satisfaction -->
+                    <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
+                        <p class="text-slate-400 text-sm font-medium mb-2">Job Satisfaction</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-xl font-bold text-cyan-400">{{ $feedback->work_satisfaction ?? '-'
+                                    }}</span>
+                            </div>
+                            <p class="text-slate-300 text-sm">
+                                @if($feedback->work_satisfaction == 1) Very Low
+                                @elseif($feedback->work_satisfaction == 2) Low
+                                @elseif($feedback->work_satisfaction == 3) Moderate
+                                @elseif($feedback->work_satisfaction == 4) High
+                                @elseif($feedback->work_satisfaction == 5) Very High
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Team Collaboration -->
+                    <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
+                        <p class="text-slate-400 text-sm font-medium mb-2">Team Collaboration</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-12 h-12 bg-lime-500/20 rounded-lg flex items-center justify-center">
+                                <span class="text-xl font-bold text-lime-400">{{ $feedback->team_collaboration ?? '-'
+                                    }}</span>
+                            </div>
+                            <p class="text-slate-300 text-sm">
+                                @if($feedback->team_collaboration == 1) Poor
+                                @elseif($feedback->team_collaboration == 2) Fair
+                                @elseif($feedback->team_collaboration == 3) Good
+                                @elseif($feedback->team_collaboration == 4) Very Good
+                                @elseif($feedback->team_collaboration == 5) Excellent
+                                @endif
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Work Progress -->
+            <!-- Weekly Feedback Section -->
             <div>
                 <div class="flex items-center gap-2 mb-3">
                     <div class="bg-green-500/20 p-2 rounded-lg">
                         <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-semibold text-white">Work Progress This Week</h3>
+                    <h3 class="text-lg font-semibold text-white">Employee Feedback</h3>
                 </div>
                 <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
-                    <p class="text-slate-300 whitespace-pre-wrap">{{ $feedback->work_progress }}</p>
-                </div>
-            </div>
-
-            <!-- Self-Improvement -->
-            <div>
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="bg-purple-500/20 p-2 rounded-lg">
-                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-white">Areas for Self-Improvement</h3>
-                </div>
-                <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
-                    <p class="text-slate-300 whitespace-pre-wrap">{{ $feedback->self_improvements }}</p>
+                    <p class="text-slate-300 whitespace-pre-wrap">{{ $feedback->achievements ?? 'No feedback provided'
+                        }}</p>
                 </div>
             </div>
 

@@ -8,8 +8,8 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
         <div>
-            <h1 class="text-3xl font-bold text-white">Payroll Management</h1>
-            <p class="text-slate-400 mt-1">Generate and manage employee payroll records</p>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Payroll Management</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-1">Generate and manage employee payroll records</p>
         </div>
         <a href="{{ route('admin.hrm.payroll.create') }}"
             class="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition">
@@ -18,14 +18,14 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-700">
+    <div class="bg-white dark:bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-200 dark:border-slate-700">
         <form method="GET" action="{{ route('admin.hrm.payroll.index') }}"
             class="flex flex-nowrap items-end gap-3 md:gap-4 overflow-x-auto pb-2">
             <!-- Status Filter -->
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-slate-300 mb-2">Status</label>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Status</label>
                 <select name="status"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
                     <option value="">All Statuses</option>
                     <option value="draft" {{ request('status')==='draft' ? 'selected' : '' }}>Draft</option>
                     <option value="approved" {{ request('status')==='approved' ? 'selected' : '' }}>Approved
@@ -36,9 +36,9 @@
 
             <!-- Employee Filter -->
             <div class="flex-1 min-w-[220px]">
-                <label class="block text-sm font-medium text-slate-300 mb-2">Employee</label>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Employee</label>
                 <select name="employee_id"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
                     <option value="">All Employees</option>
                     @foreach($employees as $employee)
                     <option value="{{ $employee->id }}" {{ request('employee_id')==$employee->id ? 'selected' : ''
@@ -51,9 +51,9 @@
 
             <!-- Company Filter -->
             <div class="flex-1 min-w-[220px]">
-                <label class="block text-sm font-medium text-slate-300 mb-2">Company</label>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Company</label>
                 <select name="company_id"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
                     <option value="">All Companies</option>
                     @foreach($companies as $company)
                     <option value="{{ $company->id }}" {{ request('company_id')==$company->id ? 'selected' : '' }}>
@@ -65,9 +65,9 @@
 
             <!-- Period Filter -->
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-slate-300 mb-2">Period From</label>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Period From</label>
                 <input type="date" name="period_start" value="{{ request('period_start') }}"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent h-11">
             </div>
 
             <div class="flex-none min-w-[160px] flex items-end">
@@ -80,41 +80,50 @@
     </div>
 
     <!-- Payroll Records Table -->
-    <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
         <!-- Desktop Table View (hidden on mobile) -->
         <div class="hidden lg:block overflow-x-auto">
             <table class="w-full min-w-[1000px]">
-                <thead class="bg-slate-900 sticky top-0 z-10">
+                <thead class="bg-slate-100 dark:bg-slate-900 sticky top-0 z-10">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-6 py-3 text-left text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                             Employee</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-4 py-3 text-left text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                             Period</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-4 py-3 text-right text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                             Gross Salary</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-4 py-3 text-right text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                             Net Salary</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-4 py-3 text-center text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                             Status</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-4 py-3 text-center text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                             Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-700">
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                     @forelse($payrolls as $payroll)
-                    <tr class="hover:bg-slate-750">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-750">
                         <td class="px-6 py-4">
-                            <div class="text-sm font-medium text-white whitespace-nowrap">{{ $payroll->employee->name ??
+                            <div class="text-sm font-medium text-slate-900 dark:text-white whitespace-nowrap">{{
+                                $payroll->employee->name ??
                                 $payroll->employee->full_name }}</div>
-                            <div class="text-xs text-slate-400 whitespace-nowrap">{{ $payroll->employee->code }}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{{
+                                $payroll->employee->code }}</div>
                         </td>
-                        <td class="px-4 py-4 text-sm text-slate-300">
+                        <td class="px-4 py-4 text-sm text-slate-700 dark:text-slate-300">
                             <div class="whitespace-nowrap">{{ format_nepali_date($payroll->period_start_bs, 'j M Y') }}
                             </div>
-                            <div class="whitespace-nowrap text-xs text-slate-400">to {{
+                            <div class="whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">to {{
                                 format_nepali_date($payroll->period_end_bs, 'j M Y') }}</div>
                         </td>
-                        <td class="px-4 py-4 text-right text-sm font-medium text-white whitespace-nowrap">
+                        <td
+                            class="px-4 py-4 text-right text-sm font-medium text-slate-900 dark:text-white whitespace-nowrap">
                             NPR {{ number_format($payroll->gross_salary, 2) }}
                         </td>
                         <td class="px-4 py-4 text-right text-sm font-medium text-lime-400 whitespace-nowrap">

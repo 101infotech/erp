@@ -21,6 +21,16 @@ class EmployeeFeedback extends Model
         'admin_notes',
         'is_submitted',
         'submitted_at',
+        // Questionnaire fields
+        'stress_level',
+        'workload_level',
+        'work_satisfaction',
+        'team_collaboration',
+        'mental_wellbeing',
+        'challenges_faced',
+        'achievements',
+        'support_needed',
+        'complaints',
     ];
 
     protected $casts = [

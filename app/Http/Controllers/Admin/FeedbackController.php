@@ -99,10 +99,17 @@ class FeedbackController extends Controller
         // Get feedbacks for analysis
         $feedbacks = EmployeeFeedback::thisWeek()->submitted()->with('user')->get();
 
-        // Count keywords (simple analysis)
-        $allFeelings = $feedbacks->pluck('feelings')->implode(' ');
-        $allProgress = $feedbacks->pluck('work_progress')->implode(' ');
-        $allImprovements = $feedbacks->pluck('self_improvements')->implode(' ');
+        // Calculate average ratings
+        $avgStress = $feedbacks->avg('stress_level') ?? 0;
+        $avgWellbeing = $feedbacks->avg('mental_wellbeing') ?? 0;
+        $avgWorkload = $feedbacks->avg('workload_level') ?? 0;
+        $avgSatisfaction = $feedbacks->avg('work_satisfaction') ?? 0;
+        $avgCollaboration = $feedbacks->avg('team_collaboration') ?? 0;
+
+        // Get feedback summaries
+        $allFeelings = $feedbacks->pluck('feelings')->filter()->implode(', ') ?: 'No specific feelings recorded';
+        $allProgress = $feedbacks->pluck('achievements')->filter()->implode(', ') ?: 'No feedback provided';
+        $allImprovements = $feedbacks->pluck('challenges_faced')->filter()->implode(', ') ?: 'No improvements noted';
 
         return view('admin.feedback.analytics', compact(
             'submissionRate',
@@ -111,7 +118,12 @@ class FeedbackController extends Controller
             'feedbacks',
             'allFeelings',
             'allProgress',
-            'allImprovements'
+            'allImprovements',
+            'avgStress',
+            'avgWellbeing',
+            'avgWorkload',
+            'avgSatisfaction',
+            'avgCollaboration'
         ));
     }
 }

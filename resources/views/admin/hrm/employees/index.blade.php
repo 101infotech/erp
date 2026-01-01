@@ -23,13 +23,14 @@
     </div>
 
     <!-- Filters -->
-    <form method="GET" class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
+    <form method="GET"
+        class="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg p-4">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search employees..."
-                class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white placeholder-slate-400 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
 
             <select name="company_id"
-                class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 <option value="">All Companies</option>
                 @foreach($companies as $company)
                 <option value="{{ $company->id }}" {{ request('company_id')==$company->id ? 'selected' : '' }}>
@@ -39,7 +40,7 @@
             </select>
 
             <select name="status"
-                class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 <option value="">All Status</option>
                 <option value="active" {{ request('status')=='active' ? 'selected' : '' }}>Active</option>
                 <option value="inactive" {{ request('status')=='inactive' ? 'selected' : '' }}>Inactive</option>

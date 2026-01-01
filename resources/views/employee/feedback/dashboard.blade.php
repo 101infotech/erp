@@ -98,81 +98,73 @@
                 </div>
             </div>
             @else
-            <!-- Submit Form -->
+            <!-- Submit Form - Redirect to Create Page -->
             <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg overflow-hidden">
-                <div class="p-6">
-                    <h2 class="text-xl font-bold text-white mb-6">Submit Your Weekly Feedback</h2>
-
-                    <form method="POST" action="{{ route('employee.feedback.store') }}" class="space-y-6">
-                        @csrf
-
-                        <!-- How are you feeling? -->
-                        <div>
-                            <label class="block text-sm font-medium text-white mb-2">
-                                How Are You Feeling This Week? <span class="text-red-400">*</span>
-                            </label>
-                            <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mb-3">
-                                <p class="text-blue-300 text-sm">Share your emotional state, stress level, morale, and
-                                    overall well-being at work.</p>
-                            </div>
-                            <textarea name="feelings" rows="4" required
-                                class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500"
-                                placeholder="e.g., I'm feeling energized this week. The team collaboration has been great, though I'm a bit stressed about the upcoming deadline...">{{ old('feelings', $weeklyFeedback?->feelings ?? '') }}</textarea>
-                            @error('feelings')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                            @enderror
+                <div class="p-8 text-center">
+                    <div class="mb-6">
+                        <div
+                            class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-full mb-4">
+                            <svg class="w-10 h-10 text-purple-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
                         </div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Ready to Share Your Weekly Feedback?</h2>
+                        <p class="text-slate-400">Complete our wellness & performance questionnaire to help us support
+                            your growth.</p>
+                    </div>
 
-                        <!-- Work Progress -->
-                        <div>
-                            <label class="block text-sm font-medium text-white mb-2">
-                                What Progress Did You Make This Week? <span class="text-red-400">*</span>
-                            </label>
-                            <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-3">
-                                <p class="text-green-300 text-sm">Share accomplishments, milestones, completed tasks, or
-                                    projects you worked on (not a detailed report).</p>
-                            </div>
-                            <textarea name="work_progress" rows="4" required
-                                class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500"
-                                placeholder="e.g., Completed the UI design for feature X, helped resolve 5 customer issues, attended team sync meetings...">{{ old('work_progress', $weeklyFeedback?->work_progress ?? '') }}</textarea>
-                            @error('work_progress')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="flex gap-3 justify-center">
+                        <a href="{{ route('employee.feedback.create') }}"
+                            class="px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:from-purple-600 hover:to-blue-600 font-semibold transition flex items-center gap-2 shadow-lg shadow-purple-500/30">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Start Questionnaire
+                        </a>
+                    </div>
 
-                        <!-- Self-Improvement -->
-                        <div>
-                            <label class="block text-sm font-medium text-white mb-2">
-                                What Areas Can You Improve? <span class="text-red-400">*</span>
-                            </label>
-                            <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 mb-3">
-                                <p class="text-purple-300 text-sm">Share skills you want to develop, challenges you
-                                    faced, or personal growth goals.</p>
-                            </div>
-                            <textarea name="self_improvements" rows="4" required
-                                class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500"
-                                placeholder="e.g., I want to improve my communication skills, need to work on time management, would like to learn more about X technology...">{{ old('self_improvements', $weeklyFeedback?->self_improvements ?? '') }}</textarea>
-                            @error('self_improvements')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="flex gap-3 justify-end pt-4 border-t border-slate-700">
-                            <a href="{{ route('employee.dashboard') }}"
-                                class="px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-600 font-medium transition">
-                                Cancel
-                            </a>
-                            <button type="submit"
-                                class="px-6 py-3 bg-lime-500 text-slate-950 rounded-lg hover:bg-lime-400 font-semibold transition flex items-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <!-- Preview Features -->
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+                            <div
+                                class="inline-flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-3">
+                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
-                                Submit Feedback
-                            </button>
+                            </div>
+                            <h4 class="text-white font-semibold mb-1">Mental Wellbeing</h4>
+                            <p class="text-slate-400 text-sm">Share your stress levels and emotional state</p>
                         </div>
-                    </form>
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                            <div
+                                class="inline-flex items-center justify-center w-12 h-12 bg-blue-500/20 rounded-lg mb-3">
+                                <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h4 class="text-white font-semibold mb-1">Work Performance</h4>
+                            <p class="text-slate-400 text-sm">Reflect on workload and job satisfaction</p>
+                        </div>
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                            <div
+                                class="inline-flex items-center justify-center w-12 h-12 bg-green-500/20 rounded-lg mb-3">
+                                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h4 class="text-white font-semibold mb-1">Weekly Reflection</h4>
+                            <p class="text-slate-400 text-sm">Document achievements and challenges</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             @endif

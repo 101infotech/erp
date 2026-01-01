@@ -8,8 +8,8 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
         <div>
-            <h1 class="text-3xl font-bold text-white">Expense Claims</h1>
-            <p class="text-slate-400 mt-1">Manage staff expense reimbursement claims</p>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Expense Claims</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-1">Manage staff expense reimbursement claims</p>
         </div>
         <a href="{{ route('admin.hrm.expense-claims.create') }}"
             class="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition">
@@ -19,32 +19,33 @@
 
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Pending</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Pending</div>
             <div class="text-2xl font-bold text-yellow-500">{{ $stats['pending'] }}</div>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Approved</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Approved</div>
             <div class="text-2xl font-bold text-green-500">{{ $stats['approved'] }}</div>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Paid</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Paid</div>
             <div class="text-2xl font-bold text-blue-500">{{ $stats['paid'] }}</div>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Total Pending</div>
-            <div class="text-2xl font-bold text-white">NPR {{ number_format($stats['total_pending_amount'], 2) }}</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Total Pending</div>
+            <div class="text-2xl font-bold text-slate-900 dark:text-white">NPR {{
+                number_format($stats['total_pending_amount'], 2) }}</div>
         </div>
     </div>
 
     <!-- Filters -->
-    <div class="bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-700">
+    <div class="bg-white dark:bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-200 dark:border-slate-700">
         <form method="GET" action="{{ route('admin.hrm.expense-claims.index') }}"
             class="flex flex-wrap items-end gap-4">
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-slate-300 mb-2">Status</label>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Status</label>
                 <select name="status"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500">
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500">
                     <option value="">All Statuses</option>
                     <option value="pending" {{ request('status')==='pending' ? 'selected' : '' }}>Pending</option>
                     <option value="approved" {{ request('status')==='approved' ? 'selected' : '' }}>Approved</option>
@@ -54,9 +55,9 @@
             </div>
 
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-slate-300 mb-2">Expense Type</label>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Expense Type</label>
                 <select name="expense_type"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500">
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500">
                     <option value="">All Types</option>
                     <option value="travel" {{ request('expense_type')==='travel' ? 'selected' : '' }}>Travel</option>
                     <option value="accommodation" {{ request('expense_type')==='accommodation' ? 'selected' : '' }}>

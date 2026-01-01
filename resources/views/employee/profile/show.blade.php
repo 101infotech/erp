@@ -30,18 +30,53 @@
                 class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl border border-slate-700 overflow-hidden mb-8">
                 <div class="p-8">
                     <div class="flex items-start gap-8">
-                        <!-- Avatar -->
-                        <div class="flex-shrink-0">
-                            @if($employee->avatar)
-                            <img src="{{ asset('storage/' . $employee->avatar) }}" alt="{{ $employee->name }}"
-                                class="w-32 h-32 rounded-2xl border-4 border-slate-600 object-cover shadow-lg">
-                            @else
-                            <div
-                                class="w-32 h-32 rounded-2xl bg-gradient-to-br from-lime-500 to-green-600 flex items-center justify-center border-4 border-slate-600 shadow-lg">
-                                <span class="text-5xl font-bold text-white">{{ substr($employee->full_name ??
-                                    $employee->name, 0, 1) }}</span>
+                        <!-- Avatar with Upload -->
+                        <div class="flex-shrink-0 relative group" x-data="{ uploading: false }">
+                            <div class="relative">
+                                @if($employee->avatar)
+                                <img id="profileAvatar" src="{{ asset('storage/' . $employee->avatar) }}"
+                                    alt="{{ $employee->name }}"
+                                    class="w-32 h-32 rounded-2xl border-4 border-slate-600 object-cover shadow-lg">
+                                @else
+                                <div id="profileAvatar"
+                                    class="w-32 h-32 rounded-2xl bg-gradient-to-br from-lime-500 to-green-600 flex items-center justify-center border-4 border-slate-600 shadow-lg">
+                                    <span class="text-5xl font-bold text-white">{{ substr($employee->full_name ??
+                                        $employee->name, 0, 1) }}</span>
+                                </div>
+                                @endif
+
+                                <!-- Upload Overlay -->
+                                <div class="absolute inset-0 bg-black bg-opacity-60 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                    onclick="document.getElementById('avatarInput').click()">
+                                    <div class="text-center">
+                                        <svg class="w-8 h-8 text-white mx-auto mb-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <p class="text-white text-xs font-medium">Upload Photo</p>
+                                    </div>
+                                </div>
+
+                                <!-- Loading Spinner -->
+                                <div x-show="uploading"
+                                    class="absolute inset-0 bg-black bg-opacity-75 rounded-2xl flex items-center justify-center">
+                                    <svg class="animate-spin h-10 w-10 text-lime-400" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
+                                </div>
                             </div>
-                            @endif
+
+                            <!-- Hidden File Input -->
+                            <input type="file" id="avatarInput" accept="image/*" class="hidden"
+                                onchange="uploadAvatar(this)" @change="uploading = true">
                         </div>
 
                         <!-- Key Info Grid -->
@@ -428,4 +463,74 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function uploadAvatar(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('avatar', file);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                fetch('{{ route("employee.profile.avatar.upload") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update avatar image
+                        const avatarEl = document.getElementById('profileAvatar');
+                        if (avatarEl.tagName === 'IMG') {
+                            avatarEl.src = data.avatar_url;
+                        } else {
+                            // Replace div with img
+                            const newImg = document.createElement('img');
+                            newImg.id = 'profileAvatar';
+                            newImg.src = data.avatar_url;
+                            newImg.alt = '{{ $employee->name }}';
+                            newImg.className = 'w-32 h-32 rounded-2xl border-4 border-slate-600 object-cover shadow-lg';
+                            avatarEl.parentNode.replaceChild(newImg, avatarEl);
+                        }
+                        
+                        // Update all avatar instances in the page (sidebar, etc.)
+                        document.querySelectorAll('.user-avatar-img').forEach(img => {
+                            img.src = data.avatar_url;
+                        });
+                        
+                        // Show success message
+                        showNotification('success', data.message);
+                    } else {
+                        showNotification('error', data.error || 'Failed to upload image');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('error', 'An error occurred while uploading the image');
+                })
+                .finally(() => {
+                    input.value = ''; // Reset input
+                });
+            }
+        }
+
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            } text-white font-medium transform transition-all duration-300 ease-in-out`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
 </x-app-layout>

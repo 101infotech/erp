@@ -8,8 +8,9 @@
     <!-- Header -->
     <div class="flex justify-between items-start gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-white">Payslip Details</h1>
-            <p class="text-slate-400 mt-1">{{ $payroll->employee->full_name }} - {{ $payroll->period_start_bs }} to
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Payslip Details</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-1">{{ $payroll->employee->full_name }} - {{
+                $payroll->period_start_bs }} to
                 {{ $payroll->period_end_bs }}</p>
         </div>
         <div class="flex flex-wrap gap-2 items-start">
@@ -141,13 +142,13 @@
         <!-- Right Column -->
         <div class="space-y-6">
             <!-- Attendance Summary -->
-            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
-                <h2 class="text-xl font-semibold text-white mb-4">Attendance Summary</h2>
+            <div class="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Attendance Summary</h2>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="text-center bg-slate-900/50 rounded-lg p-3">
+                    <div class="text-center bg-slate-50 dark:bg-slate-900/50 rounded-lg p-3">
                         <p class="text-2xl font-bold text-lime-400">{{ number_format($payroll->total_hours_worked, 1) }}
                         </p>
-                        <p class="text-sm text-slate-400">Total Hours</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Total Hours</p>
                     </div>
                     <div class="text-center bg-slate-900/50 rounded-lg p-3">
                         <p class="text-2xl font-bold text-lime-400">{{ $payroll->total_days_worked }}</p>

@@ -36,12 +36,12 @@
                     <button @click="open = !open" @click.away="open = false"
                         class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-slate-800/50 transition">
                         @php
-                        $employee = Auth::user()->employee;
+                        $employee = Auth::user()->hrmEmployee;
                         $avatarUrl = $employee && $employee->avatar ? asset('storage/' . $employee->avatar) : null;
                         @endphp
                         @if($avatarUrl)
                         <img src="{{ $avatarUrl }}" alt="{{ Auth::user()->name }}"
-                            class="w-8 h-8 rounded-full object-cover border-2 border-lime-400">
+                            class="w-8 h-8 rounded-full object-cover border-2 border-lime-400 user-avatar-img">
                         @else
                         <div class="w-8 h-8 bg-lime-400 rounded-full flex items-center justify-center">
                             <span class="text-slate-900 font-bold text-sm">{{ substr(Auth::user()->name, 0, 2) }}</span>

@@ -7,8 +7,8 @@
 <div class="space-y-6 max-w-4xl">
     <!-- Header -->
     <div>
-        <h1 class="text-3xl font-bold text-white">Generate Payroll</h1>
-        <p class="text-slate-400 mt-1">Create payroll records for selected employees and period</p>
+        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Generate Payroll</h1>
+        <p class="text-slate-600 dark:text-slate-400 mt-1">Create payroll records for selected employees and period</p>
     </div>
 
     <!-- Collision Warning -->
@@ -27,10 +27,10 @@
 
                 <div class="space-y-4">
                     @foreach(session('collisions') as $collision)
-                    <div class="bg-slate-800/50 border border-red-500/20 rounded-lg p-4">
+                    <div class="bg-white/5 dark:bg-slate-800/50 border border-red-500/20 rounded-lg p-4">
                         <div class="flex items-start justify-between mb-3">
                             <div>
-                                <h4 class="font-semibold text-white">
+                                <h4 class="font-semibold text-slate-900 dark:text-white">
                                     {{ $collision['employee_name'] }}
                                     @if($collision['employee_code'])
                                     <span class="text-slate-400 text-sm">({{ $collision['employee_code'] }})</span>
@@ -82,9 +82,10 @@
                     @endforeach
                 </div>
 
-                <div class="mt-4 p-3 bg-slate-900/50 rounded border border-slate-700">
-                    <p class="text-sm text-slate-300">
-                        <span class="font-medium text-white">Solution:</span>
+                <div
+                    class="mt-4 p-3 bg-slate-50 dark:bg-slate-900/50 rounded border border-slate-200 dark:border-slate-700">
+                    <p class="text-sm text-slate-700 dark:text-slate-300">
+                        <span class="font-medium text-slate-900 dark:text-white">Solution:</span>
                         You can either delete the existing draft payroll records, or select a different date range that
                         doesn't overlap.
                     </p>
@@ -98,12 +99,13 @@
     <form method="POST" action="{{ route('admin.hrm.payroll.store') }}" class="space-y-6">
         @csrf
 
-        <div class="bg-slate-800 rounded-lg p-6 border border-slate-700 space-y-6">
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 space-y-6">
             <!-- Employee Selection -->
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                     Select Employees <span class="text-red-400">*</span>
-                    <span class="text-slate-400 text-xs ml-2">({{ count($employees) }} active employees)</span>
+                    <span class="text-slate-500 dark:text-slate-400 text-xs ml-2">({{ count($employees) }} active
+                        employees)</span>
                 </label>
 
                 @if(isset($employeesWithoutSalary) && $employeesWithoutSalary > 0)
@@ -141,20 +143,21 @@
                         Deselect All
                     </button>
                 </div>
-                <div class="bg-slate-900 border border-slate-700 rounded-lg p-4 max-h-64 overflow-y-auto">
+                <div
+                    class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 max-h-64 overflow-y-auto">
                     @forelse($employees as $employee)
                     @php
                     $hasSalary = isset($employee->basic_salary_npr) && $employee->basic_salary_npr > 0;
                     @endphp
                     <label
-                        class="flex items-center py-2 hover:bg-slate-800 px-2 rounded cursor-pointer {{ !$hasSalary ? 'opacity-60' : '' }}"
+                        class="flex items-center py-2 hover:bg-slate-100 dark:hover:bg-slate-800 px-2 rounded cursor-pointer {{ !$hasSalary ? 'opacity-60' : '' }}">
                         data-has-salary="{{ $hasSalary ? 'true' : 'false' }}">
                         <input type="checkbox" name="employee_ids[]" value="{{ $employee->id }}"
-                            class="w-4 h-4 text-lime-500 bg-slate-900 border-slate-600 rounded focus:ring-lime-500 focus:ring-2">
-                        <span class="ml-3 text-sm text-white">
+                            class="w-4 h-4 text-lime-500 bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-600 rounded focus:ring-lime-500 focus:ring-2">
+                        <span class="ml-3 text-sm text-slate-900 dark:text-white">
                             {{ $employee->name ?? ($employee->full_name ?? 'Unnamed Employee') }}
                             @if($employee->company)
-                            <span class="text-slate-400">- {{ $employee->company->name }}</span>
+                            <span class="text-slate-500 dark:text-slate-400">- {{ $employee->company->name }}</span>
                             @endif
                             @if(!$hasSalary)
                             <span class="text-yellow-400 text-xs ml-2" title="No basic salary configured">⚠️ No
@@ -186,25 +189,25 @@
 
             <!-- Period Selection -->
             <div>
-                <h3 class="text-lg font-semibold text-white mb-4">Period</h3>
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Period</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                             Start Date (AD) <span class="text-red-400">*</span>
                         </label>
                         <input type="date" name="period_start" value="{{ old('period_start') }}"
-                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                            class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
                             required>
                         @error('period_start')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                             End Date (AD) <span class="text-red-400">*</span>
                         </label>
                         <input type="date" name="period_end" value="{{ old('period_end') }}"
-                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+                            class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent"
                             required>
                         @error('period_end')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
@@ -215,29 +218,31 @@
 
             <!-- Payroll Configuration -->
             <div>
-                <h3 class="text-lg font-semibold text-white mb-4">Payroll Configuration</h3>
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Payroll Configuration</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                             Month Total Days (BS Calendar)
                         </label>
                         <input type="number" name="month_total_days" value="{{ old('month_total_days') }}" min="29"
                             max="32" placeholder="Leave empty to auto-detect"
-                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
-                        <p class="text-xs text-slate-400 mt-1">Nepali months have 29, 30, or 31 days. System will
+                            class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Nepali months have 29, 30, or 31
+                            days. System will
                             auto-detect if not provided.</p>
                         @error('month_total_days')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                             Standard Working Hours per Day
                         </label>
                         <input type="number" step="0.5" name="standard_working_hours"
                             value="{{ old('standard_working_hours', '8.00') }}" min="1" max="24"
-                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
-                        <p class="text-xs text-slate-400 mt-1">Default is 8 hours. Used to calculate hourly deductions.
+                            class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Default is 8 hours. Used to calculate
+                            hourly deductions.
                         </p>
                         @error('standard_working_hours')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>

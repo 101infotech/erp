@@ -40,67 +40,72 @@
     </div>
 
     <!-- Leave Details -->
-    <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
-        <h2 class="text-xl font-semibold text-white mb-4">Leave Information</h2>
+    <div class="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Leave Information</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <p class="text-sm text-slate-400">Employee</p>
-                <p class="text-white font-medium">{{ $leave->employee->full_name }} ({{
+                <p class="text-sm text-slate-600 dark:text-slate-400">Employee</p>
+                <p class="text-slate-900 dark:text-white font-medium">{{ $leave->employee->full_name }} ({{
                     $leave->employee->employee_code }})</p>
             </div>
             <div>
-                <p class="text-sm text-slate-400">Leave Type</p>
-                <p class="text-white font-medium">{{ ucfirst($leave->leave_type) }} Leave</p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Leave Type</p>
+                <p class="text-slate-900 dark:text-white font-medium">{{ ucfirst($leave->leave_type) }} Leave</p>
             </div>
             <div>
-                <p class="text-sm text-slate-400">Start Date</p>
-                <p class="text-white font-medium">{{ \Carbon\Carbon::parse($leave->start_date)->format('d M Y, l')
+                <p class="text-sm text-slate-600 dark:text-slate-400">Start Date</p>
+                <p class="text-slate-900 dark:text-white font-medium">{{
+                    \Carbon\Carbon::parse($leave->start_date)->format('d M Y, l')
                     }}</p>
             </div>
             <div>
-                <p class="text-sm text-slate-400">End Date</p>
-                <p class="text-white font-medium">{{ \Carbon\Carbon::parse($leave->end_date)->format('d M Y, l') }}
+                <p class="text-sm text-slate-600 dark:text-slate-400">End Date</p>
+                <p class="text-slate-900 dark:text-white font-medium">{{
+                    \Carbon\Carbon::parse($leave->end_date)->format('d M Y, l') }}
                 </p>
             </div>
             <div>
-                <p class="text-sm text-slate-400">Total Days</p>
-                <p class="text-white font-medium text-lg">{{ number_format($leave->total_days, 1) }} days</p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Total Days</p>
+                <p class="text-slate-900 dark:text-white font-medium text-lg">{{ number_format($leave->total_days, 1) }}
+                    days</p>
             </div>
             <div>
-                <p class="text-sm text-slate-400">Requested On</p>
-                <p class="text-white font-medium">{{ $leave->created_at->format('d M Y, h:i A') }}</p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Requested On</p>
+                <p class="text-slate-900 dark:text-white font-medium">{{ $leave->created_at->format('d M Y, h:i A') }}
+                </p>
             </div>
         </div>
 
-        <div class="mt-6 pt-6 border-t border-slate-700">
-            <p class="text-sm text-slate-400 mb-2">Reason</p>
-            <p class="text-white">{{ $leave->reason }}</p>
+        <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">Reason</p>
+            <p class="text-slate-900 dark:text-white">{{ $leave->reason }}</p>
         </div>
     </div>
 
     <!-- Approval Information -->
     @if($leave->status !== 'pending')
-    <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
-        <h2 class="text-xl font-semibold text-white mb-4">
+    <div class="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
             @if($leave->status === 'approved') Approval @else {{ ucfirst($leave->status) }} @endif Information
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <p class="text-sm text-slate-400">{{ $leave->status === 'approved' ? 'Approved' :
+                <p class="text-sm text-slate-600 dark:text-slate-400">{{ $leave->status === 'approved' ? 'Approved' :
                     ucfirst($leave->status) }} By</p>
-                <p class="text-white font-medium">{{ $leave->approver->name ?? 'N/A' }}</p>
+                <p class="text-slate-900 dark:text-white font-medium">{{ $leave->approver->name ?? 'N/A' }}</p>
             </div>
             <div>
-                <p class="text-sm text-slate-400">{{ $leave->status === 'approved' ? 'Approved' :
+                <p class="text-sm text-slate-600 dark:text-slate-400">{{ $leave->status === 'approved' ? 'Approved' :
                     ucfirst($leave->status) }} At</p>
-                <p class="text-white font-medium">{{ $leave->approved_at ? $leave->approved_at->format('d M Y, h:i
+                <p class="text-slate-900 dark:text-white font-medium">{{ $leave->approved_at ?
+                    $leave->approved_at->format('d M Y, h:i
                     A') : 'N/A' }}</p>
             </div>
         </div>
 
         @if($leave->status === 'rejected' && $leave->rejection_reason)
-        <div class="mt-6 pt-6 border-t border-slate-700">
-            <p class="text-sm text-slate-400 mb-2">Rejection Reason</p>
+        <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">Rejection Reason</p>
             <p class="text-red-400">{{ $leave->rejection_reason }}</p>
         </div>
         @endif
@@ -109,8 +114,8 @@
 
     <!-- Action Buttons -->
     @if($leave->status === 'pending')
-    <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
-        <h2 class="text-xl font-semibold text-white mb-4">Actions</h2>
+    <div class="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Actions</h2>
         <div class="flex gap-4">
             <!-- Approve Button -->
             <button type="button" onclick="openModal('approveLeaveModal')"
@@ -176,8 +181,8 @@
             <p class="text-sm text-white"><span class="font-medium">Employee:</span> {{ $leave->employee->full_name }}
             </p>
             <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Leave Type:</span> {{
-                $leave->leaveType->name }}</p>
-            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Days:</span> {{ $leave->days }}</p>
+                ucfirst(str_replace('_', ' ', $leave->leave_type)) }}</p>
+            <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Days:</span> {{ $leave->total_days }}</p>
         </div>
     </div>
     <x-slot name="footer">

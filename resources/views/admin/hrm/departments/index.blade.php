@@ -8,8 +8,8 @@
 <div class="mb-6">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
-            <h2 class="text-2xl font-bold text-white">Departments</h2>
-            <p class="text-slate-400 mt-1">Manage organizational departments</p>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Departments</h2>
+            <p class="text-slate-600 dark:text-slate-400 mt-1">Manage organizational departments</p>
         </div>
         <a href="{{ route('admin.hrm.departments.create') }}"
             class="px-4 py-2 bg-lime-500 text-slate-950 font-semibold rounded-lg hover:bg-lime-400 transition flex items-center space-x-2 w-fit">
@@ -21,10 +21,11 @@
     </div>
 
     <!-- Filters -->
-    <form method="GET" class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
+    <form method="GET"
+        class="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg p-4">
         <div class="flex gap-3">
             <select name="company_id"
-                class="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="flex-1 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 <option value="">All Companies</option>
                 @foreach($companies as $company)
                 <option value="{{ $company->id }}" {{ request('company_id')==$company->id ? 'selected' : '' }}>
@@ -41,12 +42,14 @@
 </div>
 
 <!-- Desktop Table View -->
-<div class="hidden md:block bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg overflow-hidden">
+<div
+    class="hidden md:block bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-700">
-            <thead class="bg-slate-900">
+        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+            <thead class="bg-slate-100 dark:bg-slate-900">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th
+                        class="px-6 py-3 text-left text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                         Department</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Company
                     </th>

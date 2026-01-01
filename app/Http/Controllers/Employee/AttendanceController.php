@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\HrmAttendanceDay;
+use App\Models\AiAttendanceInsight;
+use App\Services\AI\AiAttendanceAnalysisService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +27,7 @@ class AttendanceController extends Controller
                     'total_hours' => 0,
                     'average_hours' => 0,
                 ],
+                'aiInsight' => null,
                 'message' => 'You are not linked to an employee record.'
             ]);
         }
@@ -49,7 +52,20 @@ class AttendanceController extends Controller
             'average_hours' => $attendances->count() > 0 ? round($attendances->avg('payroll_hours'), 2) : 0,
         ];
 
-        return view('employee.attendance.index', compact('attendances', 'stats', 'startDate', 'endDate'));
+        // Get or generate AI attendance insight
+        $aiInsight = AiAttendanceInsight::getLatestForEmployee($employee->id);
+
+        // If no recent insight (or older than 7 days), generate new one
+        if (!$aiInsight || $aiInsight->analysis_date->lt(now()->subDays(7))) {
+            try {
+                $analysisService = new AiAttendanceAnalysisService();
+                $aiInsight = $analysisService->analyzeAttendanceBehavior($employee);
+            } catch (\Exception $e) {
+                \Log::error('AI Attendance Analysis failed: ' . $e->getMessage());
+            }
+        }
+
+        return view('employee.attendance.index', compact('attendances', 'stats', 'startDate', 'endDate', 'aiInsight'));
     }
 
     /**

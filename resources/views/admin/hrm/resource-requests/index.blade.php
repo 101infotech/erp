@@ -19,30 +19,30 @@
 
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Pending</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Pending</div>
             <div class="text-2xl font-bold text-yellow-500">{{ $stats['pending'] }}</div>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Approved</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Approved</div>
             <div class="text-2xl font-bold text-blue-500">{{ $stats['approved'] }}</div>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Fulfilled</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Fulfilled</div>
             <div class="text-2xl font-bold text-green-500">{{ $stats['fulfilled'] }}</div>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div class="text-sm text-slate-400">Rejected</div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+            <div class="text-sm text-slate-500 dark:text-slate-400">Rejected</div>
             <div class="text-2xl font-bold text-red-500">{{ $stats['rejected'] }}</div>
         </div>
     </div>
 
     <!-- Filters -->
-    <div class="bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-700">
+    <div class="bg-white dark:bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-200 dark:border-slate-700">
         <form method="GET" action="{{ route('admin.hrm.resource-requests.index') }}"
             class="flex flex-wrap items-end gap-4">
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-sm font-medium text-slate-300 mb-2">Status</label>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Status</label>
                 <select name="status"
                     class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500">
                     <option value="">All Statuses</option>
@@ -95,7 +95,7 @@
     </div>
 
     <!-- Requests Table -->
-    <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead class="bg-slate-900 border-b border-slate-700">

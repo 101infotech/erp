@@ -44,13 +44,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <p class="text-slate-400 text-sm mb-1">Start Date</p>
-                            <p class="text-white font-semibold text-lg">{{ $leave->start_date->format('M d, Y') }}</p>
-                            <p class="text-slate-500 text-sm">{{ $leave->start_date->format('l') }}</p>
+                            <p class="text-white font-semibold text-lg">{{ $leave->start_date }}</p>
+                            <p class="text-slate-500 text-sm">{{ $leave->start_date_formatted }}</p>
                         </div>
                         <div>
                             <p class="text-slate-400 text-sm mb-1">End Date</p>
-                            <p class="text-white font-semibold text-lg">{{ $leave->end_date->format('M d, Y') }}</p>
-                            <p class="text-slate-500 text-sm">{{ $leave->end_date->format('l') }}</p>
+                            <p class="text-white font-semibold text-lg">{{ $leave->end_date }}</p>
+                            <p class="text-slate-500 text-sm">{{ $leave->end_date_formatted }}</p>
                         </div>
                         <div>
                             <p class="text-slate-400 text-sm mb-1">Total Days</p>
@@ -128,7 +128,8 @@
         <div class="space-y-4">
             <p class="text-slate-300">Are you sure you want to cancel this leave request?</p>
             <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-                <p class="text-sm text-white"><span class="font-medium">Leave Type:</span> {{ $leave->leaveType->name }}
+                <p class="text-sm text-white"><span class="font-medium">Leave Type:</span> {{
+                    ucfirst($leave->leave_type) }}
                 </p>
                 <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Status:</span> {{
                     ucfirst($leave->status) }}</p>

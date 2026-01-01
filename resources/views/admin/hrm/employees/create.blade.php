@@ -16,23 +16,23 @@
     <form method="POST" action="{{ route('admin.hrm.employees.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">Basic Information</h3>
+        <div class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Basic Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-slate-400 mb-2">Full Name *</label>
+                    <label class="block text-slate-700 dark:text-slate-400 mb-2">Full Name *</label>
                     <input type="text" name="name" value="{{ old('name') }}" required
-                        class="w-full rounded-lg bg-slate-900 text-white border border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
+                        class="w-full rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
                     @error('name') <p class="text-red-400 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-slate-400 mb-2">Email</label>
+                    <label class="block text-slate-700 dark:text-slate-400 mb-2">Email</label>
                     <input type="email" name="email" value="{{ old('email') }}"
-                        class="w-full rounded-lg bg-slate-900 text-white border border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
+                        class="w-full rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
                     @error('email') <p class="text-red-400 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-slate-400 mb-2">Phone</label>
+                    <label class="block text-slate-700 dark:text-slate-400 mb-2">Phone</label>
                     <input type="text" name="phone" value="{{ old('phone') }}"
                         class="w-full rounded-lg bg-slate-900 text-white border border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
                 </div>

@@ -18,6 +18,107 @@
                 <p class="text-yellow-400">{{ $message }}</p>
             </div>
             @else
+
+            <!-- AI Attendance Insights -->
+            @if($aiInsight)
+            <div
+                class="bg-gradient-to-br from-purple-500/10 via-blue-500/10 to-cyan-500/10 border border-purple-500/30 rounded-2xl p-6 mb-8 shadow-lg shadow-purple-500/5">
+                <div class="flex items-start gap-4">
+                    <div class="bg-gradient-to-br from-purple-500 to-blue-600 p-3 rounded-xl flex-shrink-0 shadow-lg">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-3 flex-wrap">
+                            <span class="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">AI
+                                Attendance Insights</span>
+                            <span
+                                class="text-sm font-semibold px-3 py-1 bg-gradient-to-r from-purple-500/30 to-blue-500/30 text-white rounded-full border border-purple-400/30">
+                                Overall Score: {{ round($aiInsight->overall_score) }}%
+                            </span>
+                        </h3>
+
+                        <!-- Scores Grid -->
+                        <div class="grid grid-cols-3 gap-4 mb-4">
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700/50">
+                                <p class="text-xs text-slate-400 mb-1">Punctuality</p>
+                                <p
+                                    class="text-2xl font-bold {{ $aiInsight->punctuality_score >= 75 ? 'text-green-400' : ($aiInsight->punctuality_score >= 50 ? 'text-yellow-400' : 'text-red-400') }}">
+                                    {{ round($aiInsight->punctuality_score) }}%
+                                </p>
+                            </div>
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700/50">
+                                <p class="text-xs text-slate-400 mb-1">Regularity</p>
+                                <p
+                                    class="text-2xl font-bold {{ $aiInsight->regularity_score >= 75 ? 'text-green-400' : ($aiInsight->regularity_score >= 50 ? 'text-yellow-400' : 'text-red-400') }}">
+                                    {{ round($aiInsight->regularity_score) }}%
+                                </p>
+                            </div>
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700/50">
+                                <p class="text-xs text-slate-400 mb-1">Trend</p>
+                                <p class="text-lg font-bold text-white">
+                                    {{ $aiInsight->getTrendIcon() }} {{ ucfirst($aiInsight->trend) }}
+                                </p>
+                                @if($aiInsight->trend_change != 0)
+                                <p
+                                    class="text-xs {{ $aiInsight->trend_change > 0 ? 'text-green-400' : 'text-red-400' }}">
+                                    {{ $aiInsight->trend_change > 0 ? '+' : '' }}{{ round($aiInsight->trend_change, 1)
+                                    }}%
+                                </p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="bg-slate-900/30 rounded-lg p-4 mb-3">
+                            <p class="text-slate-300 text-sm leading-relaxed">{{ $aiInsight->ai_summary }}</p>
+                        </div>
+
+                        <!-- Suggestions -->
+                        <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+                            <p class="text-blue-300 font-semibold text-sm mb-2">💡 Suggestions to Improve:</p>
+                            <div class="text-slate-300 text-sm whitespace-pre-line">{{ $aiInsight->ai_suggestions }}
+                            </div>
+                        </div>
+
+                        <!-- Metrics -->
+                        <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700/50">
+                                <p class="text-xs text-slate-400 mb-1 font-medium">Avg Clock-in</p>
+                                <p class="text-lg font-bold text-cyan-400">{{ $aiInsight->avg_clock_in_display ?? 'No
+                                    data' }}</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700/50">
+                                <p class="text-xs text-slate-400 mb-1 font-medium">Late Arrivals</p>
+                                <p
+                                    class="text-lg font-bold {{ $aiInsight->late_arrivals_count > 5 ? 'text-red-400' : ($aiInsight->late_arrivals_count > 0 ? 'text-yellow-400' : 'text-green-400') }}">
+                                    {{ $aiInsight->late_arrivals_count }}
+                                </p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700/50">
+                                <p class="text-xs text-slate-400 mb-1 font-medium">Avg Daily Hours</p>
+                                <p class="text-lg font-bold text-blue-400">{{ number_format($aiInsight->avg_daily_hours
+                                    ?? 0, 1) }}h</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-lg p-3 text-center border border-slate-700/50">
+                                <p class="text-xs text-slate-400 mb-1 font-medium">Absent Days</p>
+                                <p
+                                    class="text-lg font-bold {{ $aiInsight->absent_days_count > 3 ? 'text-red-400' : ($aiInsight->absent_days_count > 0 ? 'text-yellow-400' : 'text-green-400') }}">
+                                    {{ $aiInsight->absent_days_count }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-500 mt-3">
+                            📊 Analysis based on last 30 days • Updated {{ $aiInsight->updated_at->diffForHumans() }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
