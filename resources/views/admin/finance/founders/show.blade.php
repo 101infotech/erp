@@ -5,12 +5,21 @@
 
 @section('content')
 <div class="space-y-6">
+    <div class="flex items-center gap-3 mb-6">
+        <a href="{{ route('admin.finance.founders.index') }}" class="group">
+            <svg class="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        <h2 class="text-2xl font-bold text-white">{{ $founder->name }}</h2>
+    </div>
+
     <!-- Founder Info Card -->
     <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-6">
         <div class="flex justify-between items-start mb-6">
             <div>
-                <h2 class="text-2xl font-bold text-slate-800 dark:text-white">{{ $founder->name }}</h2>
-                <p class="text-slate-600 dark:text-slate-400 mt-1">{{ $founder->email }}</p>
+                <p class="text-slate-400 mt-1">{{ $founder->email }}</p>
             </div>
             <div class="flex gap-2">
                 <a href="{{ route('admin.finance.founders.edit', $founder) }}"

@@ -18,106 +18,123 @@
                 <p class="text-slate-400 mt-1">{{ $user->email }}</p>
             </div>
         </div>
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center gap-2">
             @if($jibbleEmployee)
             <!-- Employee Profile Button -->
             <a href="{{ route('admin.hrm.employees.show', $jibbleEmployee) }}"
-                class="px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition inline-flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="group relative px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white rounded-lg font-medium hover:from-teal-500 hover:to-teal-400 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-200 inline-flex items-center">
+                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Employee Profile
+                <span class="text-sm">Employee Profile</span>
             </a>
 
             <!-- Timesheet Button -->
             <a href="{{ route('admin.hrm.attendance.employee', $jibbleEmployee) }}"
-                class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition inline-flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="group relative px-5 py-2.5 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-600 hover:shadow-lg hover:shadow-slate-500/20 border border-slate-600 hover:border-slate-500 transition-all duration-200 inline-flex items-center">
+                <svg class="w-5 h-5 mr-2 text-slate-300 group-hover:text-white group-hover:scale-110 transition-all duration-200"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Timesheet
+                <span class="text-sm">Timesheet</span>
             </a>
             @endif
 
             <!-- Edit User Button -->
             <a href="{{ route('admin.users.edit', $user) }}"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition inline-flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="group relative px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg font-medium hover:from-blue-500 hover:to-blue-400 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200 inline-flex items-center">
+                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Edit User
+                <span class="text-sm">Edit User</span>
             </a>
 
-            <!-- Password Reset Dropdown -->
-            <div class="relative group">
+            <!-- Password Options Dropdown -->
+            <div class="relative">
                 <button type="button" onclick="togglePasswordMenu('password-menu')"
-                    class="px-4 py-2 bg-yellow-600 text-white rounded-lg font-medium hover:bg-yellow-700 transition inline-flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="group relative px-5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-500 text-white rounded-lg font-medium hover:from-amber-500 hover:to-amber-400 hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-200 inline-flex items-center">
+                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                     </svg>
-                    Password Options
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="text-sm">Password Options</span>
+                    <svg class="w-4 h-4 ml-2 group-hover:translate-y-0.5 transition-transform duration-200" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
                 <div id="password-menu"
-                    class="hidden absolute right-0 mt-2 w-64 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50">
-                    <div class="py-1">
-                        <button type="button" onclick="openSetPasswordModal()"
-                            class="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-white border-b border-slate-700">
-                            <span class="flex items-center">
-                                <svg class="w-5 h-5 mr-3 text-lime-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
+                    class="hidden absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl overflow-hidden z-50">
+                    <!-- Set New Password -->
+                    <button type="button" onclick="openSetPasswordModal()"
+                        class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white border-b border-slate-700/50 transition-all duration-150">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 bg-lime-500/10 rounded-lg flex items-center justify-center group-hover/item:bg-lime-500/20 transition-colors">
+                                <svg class="w-5 h-5 text-lime-400 group-hover/item:scale-110 transition-transform"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                                 </svg>
-                                <div>
-                                    <div class="font-medium">Set New Password</div>
-                                    <div class="text-xs text-slate-400">Manually set a new password</div>
-                                </div>
-                            </span>
-                        </button>
-                        <form action="{{ route('admin.users.send-reset-link', $user) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                onclick="return confirm('Send password reset link to {{ $user->email }}?')"
-                                class="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-white border-b border-slate-700">
-                                <span class="flex items-center">
-                                    <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white mb-1">Set New Password</div>
+                                <div class="text-xs text-slate-400">Manually set a new password</div>
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Send Reset Link -->
+                    <form action="{{ route('admin.users.send-reset-link', $user) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            onclick="return confirm('Send password reset link to {{ $user->email }}?')"
+                            class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white border-b border-slate-700/50 transition-all duration-150">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="flex-shrink-0 w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center group-hover/item:bg-blue-500/20 transition-colors">
+                                    <svg class="w-5 h-5 text-blue-400 group-hover/item:scale-110 transition-transform"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
-                                    <div>
-                                        <div class="font-medium">Send Reset Link</div>
-                                        <div class="text-xs text-slate-400">User sets their own password</div>
-                                    </div>
-                                </span>
-                            </button>
-                        </form>
-                        <form action="{{ route('admin.users.reset-password', $user) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                onclick="return confirm('Generate random password and email to {{ $user->email }}?')"
-                                class="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-white">
-                                <span class="flex items-center">
-                                    <svg class="w-5 h-5 mr-3 text-yellow-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-white mb-1">Send Reset Link</div>
+                                    <div class="text-xs text-slate-400">User sets their own password</div>
+                                </div>
+                            </div>
+                        </button>
+                    </form>
+
+                    <!-- Generate & Email Password -->
+                    <form action="{{ route('admin.users.reset-password', $user) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            onclick="return confirm('Generate random password and email to {{ $user->email }}?')"
+                            class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white transition-all duration-150">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="flex-shrink-0 w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center group-hover/item:bg-amber-500/20 transition-colors">
+                                    <svg class="w-5 h-5 text-amber-400 group-hover/item:scale-110 transition-transform"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
-                                    <div>
-                                        <div class="font-medium">Generate & Email Password</div>
-                                        <div class="text-xs text-slate-400">Auto-generate random password</div>
-                                    </div>
-                                </span>
-                            </button>
-                        </form>
-                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-white mb-1">Generate & Email Password</div>
+                                    <div class="text-xs text-slate-400">Auto-generate random password</div>
+                                </div>
+                            </div>
+                        </button>
+                    </form>
                 </div>
             </div>
 
@@ -128,12 +145,13 @@
                 @method('DELETE')
                 <button type="submit"
                     onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
-                    class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition inline-flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="group relative px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium hover:from-red-500 hover:to-red-400 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-200 inline-flex items-center">
+                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    Delete User
+                    <span class="text-sm">Delete User</span>
                 </button>
             </form>
             @endif

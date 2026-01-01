@@ -5,6 +5,16 @@
 
 @section('content')
 <div class="max-w-2xl">
+    <div class="flex items-center gap-3 mb-6">
+        <a href="{{ route('admin.team-members.index') }}" class="group">
+            <svg class="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        <h2 class="text-2xl font-bold text-white">Add New Team Member</h2>
+    </div>
+
     <div class="bg-slate-800 rounded-lg shadow border border-slate-700 p-6">
         <form action="{{ route('admin.team-members.store') }}" method="POST" enctype="multipart/form-data">
             @csrf

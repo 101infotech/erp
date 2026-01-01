@@ -6,9 +6,17 @@
 @section('content')
 <div class="space-y-6 max-w-4xl">
     <!-- Header -->
-    <div>
-        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">New Leave Request</h1>
-        <p class="text-slate-600 dark:text-slate-400 mt-1">Submit a leave request for an employee</p>
+    <div class="flex items-center gap-3 mb-6">
+        <a href="{{ route('admin.hrm.leaves.index') }}" class="group">
+            <svg class="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        <div>
+            <h1 class="text-2xl font-bold text-white">New Leave Request</h1>
+            <p class="text-slate-400 text-sm mt-1">Submit a leave request for an employee</p>
+        </div>
     </div>
 
     <!-- Leave Request Form -->
