@@ -66,7 +66,7 @@ class NotificationController extends Controller
             if (request()->expectsJson() || request()->ajax()) {
                 return response()->json(['success' => true]);
             }
-            
+
             // Redirect back to notifications page for regular requests
             return redirect()->back()->with('success', 'Notification marked as read');
         }
@@ -74,7 +74,7 @@ class NotificationController extends Controller
         if (request()->expectsJson() || request()->ajax()) {
             return response()->json(['success' => false], 404);
         }
-        
+
         return redirect()->back()->with('error', 'Notification not found');
     }
 
