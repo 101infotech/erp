@@ -92,7 +92,7 @@
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-2">Company *</label>
-                            <select name="company_id" required
+                            <select name="company_id" id="company_id" required
                                 class="w-full rounded-lg bg-slate-900 text-white border border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
                                 <option value="">Select Company</option>
                                 @foreach($companies as $company)
@@ -105,12 +105,13 @@
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-2">Department</label>
-                            <select name="department_id"
+                            <select name="department_id" id="department_id"
                                 class="w-full rounded-lg bg-slate-900 text-white border border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
                                 <option value="">Select Department</option>
                                 @foreach($departments as $department)
-                                <option value="{{ $department->id }}" {{ old('department_id', $employee->department_id)
-                                    == $department->id ? 'selected' : '' }}>
+                                <option value="{{ $department->id }}" 
+                                    data-company-id="{{ $department->company_id }}"
+                                    {{ old('department_id', $employee->department_id) == $department->id ? 'selected' : '' }}>
                                     {{ $department->name }}
                                 </option>
                                 @endforeach
@@ -384,4 +385,56 @@
         </div>
     </form>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const companySelect = document.getElementById('company_id');
+        const departmentSelect = document.getElementById('department_id');
+        
+        // Store all department options
+        const allDepartmentOptions = Array.from(departmentSelect.querySelectorAll('option[data-company-id]'));
+        
+        // Function to filter departments based on selected company
+        function filterDepartments() {
+            const selectedCompanyId = companySelect.value;
+            
+            // Remove all department options except the first "Select Department" option
+            departmentSelect.querySelectorAll('option[data-company-id]').forEach(option => {
+                option.remove();
+            });
+            
+            if (selectedCompanyId) {
+                // Add only departments that belong to the selected company
+                allDepartmentOptions.forEach(option => {
+                    if (option.getAttribute('data-company-id') === selectedCompanyId) {
+                        departmentSelect.appendChild(option.cloneNode(true));
+                    }
+                });
+            } else {
+                // If no company selected, show all departments
+                allDepartmentOptions.forEach(option => {
+                    departmentSelect.appendChild(option.cloneNode(true));
+                });
+            }
+            
+            // Reset department selection if current selection is not in filtered list
+            const currentDepartmentId = departmentSelect.value;
+            const validOption = Array.from(departmentSelect.options).find(opt => opt.value === currentDepartmentId);
+            if (!validOption && departmentSelect.options.length > 1) {
+                departmentSelect.value = '';
+            }
+        }
+        
+        // Filter departments on page load
+        filterDepartments();
+        
+        // Filter departments when company changes
+        companySelect.addEventListener('change', function() {
+            filterDepartments();
+        });
+    });
+</script>
+@endpush
+
 @endsection
