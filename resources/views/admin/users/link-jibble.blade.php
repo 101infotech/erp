@@ -18,7 +18,8 @@
     <!-- Employee Info Card -->
     <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6 mb-6">
         <div class="flex items-center gap-4">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+            <div
+                class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
                 <span class="text-white font-bold text-2xl">{{ strtoupper(substr($employee->name, 0, 1)) }}</span>
             </div>
             <div>
@@ -55,7 +56,7 @@
     <!-- Link Form -->
     <div class="bg-slate-800 rounded-lg shadow border border-slate-700 p-6">
         <h3 class="text-lg font-semibold text-white mb-4">Select User Account to Link</h3>
-        
+
         <form action="{{ route('admin.employees.link-jibble', $employee) }}" method="POST">
             @csrf
 
@@ -63,30 +64,33 @@
                 <label for="user_id" class="block text-sm font-medium text-slate-300 mb-2">
                     User Account <span class="text-red-400">*</span>
                 </label>
-                
+
                 <select name="user_id" id="user_id" required
                     class="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent">
                     <option value="">-- Select a user account --</option>
-                    @foreach(\App\Models\User::whereDoesntHave('hrmEmployee')->orWhereHas('hrmEmployee', function($q) use ($employee) { $q->where('id', $employee->id); })->orderBy('name')->get() as $user)
-                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                    @foreach(\App\Models\User::whereDoesntHave('hrmEmployee')->orWhereHas('hrmEmployee', function($q)
+                    use ($employee) { $q->where('id', $employee->id); })->orderBy('name')->get() as $user)
+                    <option value="{{ $user->id }}" {{ old('user_id')==$user->id ? 'selected' : '' }}>
                         {{ $user->name }} ({{ $user->email }}) - {{ ucfirst($user->role) }}
                     </option>
                     @endforeach
                 </select>
-                
+
                 @error('user_id')
                 <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                 @enderror
 
                 <p class="text-slate-400 text-xs mt-2">
-                    Only users without an existing employee link are shown. This will allow the user to log in and access their employee profile and attendance data.
+                    Only users without an existing employee link are shown. This will allow the user to log in and
+                    access their employee profile and attendance data.
                 </p>
             </div>
 
             <!-- Info Box -->
             <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-6">
                 <div class="flex gap-3">
-                    <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>

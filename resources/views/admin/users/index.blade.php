@@ -302,7 +302,8 @@
                                         </svg>
                                         <span>Jibble</span>
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </button>
 
@@ -313,39 +314,47 @@
                                             <!-- Link to User Account -->
                                             <a href="{{ route('admin.employees.link-jibble-form', $employee) }}"
                                                 class="flex items-center gap-2 px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
                                                         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                                 </svg>
                                                 Link to User
                                             </a>
                                             @else
                                             <!-- Unlink from User Account -->
-                                            <form action="{{ route('admin.employees.unlink-jibble', $employee) }}" method="POST"
+                                            <form action="{{ route('admin.employees.unlink-jibble', $employee) }}"
+                                                method="POST"
                                                 onsubmit="return confirm('Are you sure you want to unlink this employee from their user account?');">
                                                 @csrf
                                                 <button type="submit"
                                                     class="w-full flex items-center gap-2 px-4 py-2 text-sm text-yellow-400 hover:bg-slate-700 hover:text-yellow-300 transition text-left">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
                                                             d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
                                                     </svg>
                                                     Unlink User
                                                 </button>
                                             </form>
                                             @endif
-                                            
+
                                             <div class="border-t border-slate-700 my-1"></div>
-                                            
+
                                             <!-- Delete Jibble Employee -->
-                                            <form action="{{ route('admin.employees.delete-jibble', $employee) }}" method="POST"
+                                            <form action="{{ route('admin.employees.delete-jibble', $employee) }}"
+                                                method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this Jibble employee? This will also delete all attendance records. This action cannot be undone.');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
                                                     class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-red-500/20 hover:text-red-300 transition text-left">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
                                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                     </svg>
                                                     Delete Employee

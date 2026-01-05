@@ -258,7 +258,7 @@ class UserController extends Controller
             ->orWhere('id', $employee->id)
             ->orderBy('name')
             ->get();
-        
+
         return view('admin.users.link-jibble', compact('employee', 'availableJibbleEmployees'));
     }
 
@@ -298,7 +298,7 @@ class UserController extends Controller
     public function unlinkJibble($employeeId)
     {
         $employee = \App\Models\HrmEmployee::findOrFail($employeeId);
-        
+
         if (!$employee->user_id) {
             return redirect()->back()
                 ->with('error', 'This employee is not linked to any user account.');
@@ -328,13 +328,13 @@ class UserController extends Controller
 
         // Delete related records first
         $employee->attendanceDays()->delete();
-        
+
         // If employee has user account, optionally delete it too
         if ($employee->user_id) {
             $user = $employee->user;
             $employee->user_id = null;
             $employee->save();
-            
+
             // You can uncomment this if you want to delete the user account too
             // $user->delete();
         }
