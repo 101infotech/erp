@@ -217,5 +217,68 @@ class HrmEmployeeController extends Controller
             ->with('success', 'Employee deleted successfully.');
     }
 
+    /**
+     * Bulk update salaries for multiple employees
+     */
+    public function bulkUpdateSalary(Request $request)
+    {
+        $validated = $request->validate([
+            'employee_ids' => 'required|array',
+            'employee_ids.*' => 'exists:hrm_employees,id',
+            'salary_amount' => 'required|numeric|min:0',
+            'salary_type' => 'required|in:monthly,hourly,daily',
+        ]);
+
+        $updated = 0;
+        foreach ($validated['employee_ids'] as $employeeId) {
+            HrmEmployee::where('id', $employeeId)->update([
+                'basic_salary_npr' => $validated['salary_amount'],
+                'salary_amount' => $validated['salary_amount'],
+                'salary_type' => $validated['salary_type'],
+            ]);
+            $updated++;
+        }
+
+        Log::info("Bulk salary update completed for {$updated} employees", [
+            'salary_amount' => $validated['salary_amount'],
+            'salary_type' => $validated['salary_type']
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Successfully updated salary for {$updated} employee(s)",
+        ]);
+    }
+
+    /**
+     * Update individual salaries for multiple employees
+     */
+    public function updateIndividualSalaries(Request $request)
+    {
+        $validated = $request->validate([
+            'updates' => 'required|array',
+            'updates.*.employee_id' => 'required|exists:hrm_employees,id',
+            'updates.*.salary_amount' => 'required|numeric|min:0',
+            'updates.*.salary_type' => 'required|in:monthly,hourly,daily',
+        ]);
+
+        $updated = 0;
+        foreach ($validated['updates'] as $update) {
+            HrmEmployee::where('id', $update['employee_id'])->update([
+                'basic_salary_npr' => $update['salary_amount'],
+                'salary_amount' => $update['salary_amount'],
+                'salary_type' => $update['salary_type'],
+            ]);
+            $updated++;
+        }
+
+        Log::info("Individual salary updates completed for {$updated} employees");
+
+        return response()->json([
+            'success' => true,
+            'message' => "Successfully updated salary for {$updated} employee(s)",
+        ]);
+    }
+
     // Jibble sync removed: employees are managed within ERP and Finance
 }

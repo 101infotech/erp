@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'workspace' => \App\Http\Middleware\SetWorkspace::class,
             'admin' => \App\Http\Middleware\EnsureAdmin::class,
             'employee' => \App\Http\Middleware\EnsureUserIsEmployee::class,
+            'can.manage.leads' => \App\Http\Middleware\EnsureCanManageLeads::class,
         ]);
 
         // Enable stateful API requests (session-based authentication for same-origin requests)

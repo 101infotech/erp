@@ -149,6 +149,11 @@ class FinanceBudgetController extends Controller
 
     public function destroy(FinanceBudget $budget)
     {
+        // Only allow deletion of draft budgets
+        if ($budget->status !== 'draft') {
+            return back()->with('error', 'Only draft budgets can be deleted. Current status: ' . $budget->status . '. Please archive approved/active budgets instead.');
+        }
+
         $companyId = $budget->company_id;
         $budget->delete();
 

@@ -82,6 +82,23 @@ class FinanceCompanyController extends Controller
 
     public function destroy(FinanceCompany $company)
     {
+        // Check for related records before deletion
+        if ($company->transactions()->exists()) {
+            return back()->with('error', 'Cannot delete company with existing transactions. Please delete all transactions first or deactivate the company instead.');
+        }
+
+        if ($company->sales()->exists()) {
+            return back()->with('error', 'Cannot delete company with existing sales records. Please delete all sales first or deactivate the company instead.');
+        }
+
+        if ($company->purchases()->exists()) {
+            return back()->with('error', 'Cannot delete company with existing purchases. Please delete all purchases first or deactivate the company instead.');
+        }
+
+        if ($company->subsidiaries()->exists()) {
+            return back()->with('error', 'Cannot delete company with subsidiaries. Please reassign or delete subsidiaries first.');
+        }
+
         $company->delete();
         return redirect()->route('admin.finance.companies.index')
             ->with('success', 'Company deleted successfully.');

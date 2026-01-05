@@ -3,17 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class FinanceTransaction extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'company_id',
         'transaction_number',
         'transaction_date_bs',
         'transaction_type',
         'category_id',
+        'ai_categorized',
         'amount',
         'debit_account_id',
         'credit_account_id',
@@ -32,6 +36,7 @@ class FinanceTransaction extends Model
 
     protected $casts = [
         'is_from_holding_company' => 'boolean',
+        'ai_categorized' => 'boolean',
         'amount' => 'decimal:2',
         'fiscal_month_bs' => 'integer',
     ];

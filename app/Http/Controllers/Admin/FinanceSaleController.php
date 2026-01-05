@@ -106,6 +106,11 @@ class FinanceSaleController extends Controller
 
     public function destroy(FinanceSale $sale)
     {
+        // Only allow deletion if payment status is pending
+        if ($sale->payment_status !== 'pending') {
+            return back()->with('error', 'Only pending sales can be deleted. Current status: ' . $sale->payment_status . '. Please contact administrator for paid/partial sales.');
+        }
+
         $companyId = $sale->company_id;
         $sale->delete();
 

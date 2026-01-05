@@ -107,6 +107,13 @@ class FinanceCustomerController extends Controller
 
     public function destroy(FinanceCustomer $customer)
     {
+        // Check if customer has any sales
+        $salesCount = \App\Models\FinanceSale::where('customer_id', $customer->id)->count();
+
+        if ($salesCount > 0) {
+            return back()->with('error', "Cannot delete customer with {$salesCount} sale record(s). Deactivate the customer instead.");
+        }
+
         $customer->delete();
 
         return redirect()->route('admin.finance.customers.index', ['company_id' => $customer->company_id])

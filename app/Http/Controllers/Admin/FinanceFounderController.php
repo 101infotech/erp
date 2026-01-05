@@ -151,8 +151,15 @@ class FinanceFounderController extends Controller
     public function destroy(FinanceFounder $founder)
     {
         // Check if founder has transactions
-        if ($founder->transactions()->count() > 0) {
-            return back()->with('error', 'Cannot delete founder with existing transactions.');
+        $transactionsCount = $founder->transactions()->count();
+
+        if ($transactionsCount > 0) {
+            return back()->with('error', "Cannot delete founder with {$transactionsCount} existing transaction(s). Deactivate the founder instead.");
+        }
+
+        // Check if founder has any outstanding balance
+        if ($founder->current_balance != 0) {
+            return back()->with('error', 'Cannot delete founder with non-zero balance (NPR ' . number_format($founder->current_balance, 2) . '). Please settle all balances first.');
         }
 
         $founder->delete();
@@ -167,7 +174,76 @@ class FinanceFounderController extends Controller
      */
     public function export(Request $request)
     {
-        // TODO: Implement export functionality
-        return back()->with('info', 'Export feature coming soon.');
+        $query = FinanceFounder::query()->with('transactions');
+
+        // Apply same filters as index page
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('pan_number', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->status === 'active');
+        }
+
+        $founders = $query->latest()->get();
+
+        // Prepare export data
+        $exportData = [];
+        $exportData[] = [
+            'Name',
+            'Email',
+            'Phone',
+            'PAN Number',
+            'Citizenship Number',
+            'Address',
+            'Ownership %',
+            'Joined Date (BS)',
+            'Total Investment',
+            'Total Withdrawal',
+            'Net Balance',
+            'Status',
+            'Created At',
+        ];
+
+        foreach ($founders as $founder) {
+            $exportData[] = [
+                $founder->name,
+                $founder->email ?? 'N/A',
+                $founder->phone ?? 'N/A',
+                $founder->pan_number ?? 'N/A',
+                $founder->citizenship_number ?? 'N/A',
+                $founder->address ?? 'N/A',
+                $founder->ownership_percentage ?? 'N/A',
+                $founder->joined_date_bs ?? 'N/A',
+                number_format($founder->getTotalInvestment(), 2),
+                number_format($founder->getTotalWithdrawal(), 2),
+                number_format($founder->getNetBalance(), 2),
+                $founder->is_active ? 'Active' : 'Inactive',
+                $founder->created_at->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        // Generate CSV
+        $filename = 'founders_export_' . date('Y-m-d_His') . '.csv';
+        $filepath = storage_path('app/exports/' . $filename);
+
+        // Create exports directory if it doesn't exist
+        if (!file_exists(storage_path('app/exports'))) {
+            mkdir(storage_path('app/exports'), 0755, true);
+        }
+
+        $file = fopen($filepath, 'w');
+        foreach ($exportData as $row) {
+            fputcsv($file, $row);
+        }
+        fclose($file);
+
+        return response()->download($filepath, $filename)->deleteFileAfterSend(true);
     }
 }

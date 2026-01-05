@@ -30,17 +30,17 @@
 
                 <div>
                     <label class="block text-sm font-medium mb-2">Company Type *</label>
-                    <select name="company_type" required
+                    <select name="type" required
                         class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white">
-                        <option value="holding" {{ old('company_type', $company->company_type) == 'holding' ? 'selected'
+                        <option value="holding" {{ old('type', $company->type) == 'holding' ? 'selected'
                             :
                             '' }}>Holding Company</option>
-                        <option value="subsidiary" {{ old('company_type', $company->company_type) == 'subsidiary' ?
+                        <option value="subsidiary" {{ old('type', $company->type) == 'subsidiary' ?
                             'selected' : '' }}>Subsidiary</option>
-                        <option value="independent" {{ old('company_type', $company->company_type) == 'independent' ?
+                        <option value="independent" {{ old('type', $company->type) == 'independent' ?
                             'selected' : '' }}>Independent</option>
                     </select>
-                    @error('company_type')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                    @error('type')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                 </div>
 
                 <div>
@@ -48,7 +48,7 @@
                     <select name="parent_company_id"
                         class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white">
                         <option value="">None</option>
-                        @foreach($companies as $comp)
+                        @foreach($parentCompanies as $comp)
                         <option value="{{ $comp->id }}" {{ old('parent_company_id', $company->parent_company_id) ==
                             $comp->id ? 'selected' : '' }}>
                             {{ $comp->name }}

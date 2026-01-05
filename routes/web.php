@@ -153,6 +153,63 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('users/{user}/send-reset-link', [UserController::class, 'sendPasswordResetLink'])->name('users.send-reset-link');
         Route::post('users/{user}/set-password', [UserController::class, 'setPassword'])->name('users.set-password');
+        Route::post('users/{user}/toggle-leads-access', [UserController::class, 'toggleLeadsAccess'])->name('users.toggle-leads-access');
+
+        // Leads Management with Permission-based Access Control
+        Route::prefix('leads')->name('leads.')->group(function () {
+            // Utility routes (must come before /{lead} routes)
+            Route::get('/statuses', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'statuses'])
+                ->middleware('can.manage.leads:view')
+                ->name('statuses');
+
+            // Analytics routes - admin only (must come before /{lead})
+            Route::get('/analytics', [\App\Http\Controllers\Admin\LeadAnalyticsController::class, 'index'])
+                ->middleware('can.manage.leads:analytics')
+                ->name('analytics');
+            Route::get('/export/excel', [\App\Http\Controllers\Admin\LeadAnalyticsController::class, 'exportExcel'])
+                ->middleware('can.manage.leads:analytics')
+                ->name('export.excel');
+            Route::get('/export/pdf', [\App\Http\Controllers\Admin\LeadAnalyticsController::class, 'exportPdf'])
+                ->middleware('can.manage.leads:analytics')
+                ->name('export.pdf');
+
+            // Create routes - admin only (must come before /{lead})
+            Route::get('/create', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'create'])
+                ->middleware('can.manage.leads:create')
+                ->name('create');
+            Route::post('/', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'store'])
+                ->middleware('can.manage.leads:create')
+                ->name('store');
+
+            // View list routes
+            Route::get('/', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'index'])
+                ->middleware('can.manage.leads:view')
+                ->name('index');
+
+            // Dynamic routes (must come last)
+            Route::get('/{lead}', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'show'])
+                ->middleware('can.manage.leads:view')
+                ->name('show');
+
+            Route::get('/{lead}/edit', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'edit'])
+                ->middleware('can.manage.leads:edit')
+                ->name('edit');
+            Route::put('/{lead}', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'update'])
+                ->middleware('can.manage.leads:edit')
+                ->name('update');
+
+            Route::patch('/{lead}/status', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'updateStatus'])
+                ->middleware('can.manage.leads:edit')
+                ->name('update-status');
+
+            Route::patch('/{lead}/assign', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'assign'])
+                ->middleware('can.manage.leads:assign')
+                ->name('assign');
+
+            Route::delete('/{lead}', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'destroy'])
+                ->middleware('can.manage.leads:delete')
+                ->name('destroy');
+        });
 
         // HRM Module Routes
         Route::prefix('hrm')->name('hrm.')->group(function () {
@@ -167,6 +224,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             // Employees
             Route::resource('employees', HrmEmployeeController::class);
+            Route::post('employees/bulk-update-salary', [HrmEmployeeController::class, 'bulkUpdateSalary'])->name('employees.bulk-update-salary');
+            Route::post('employees/update-individual-salaries', [HrmEmployeeController::class, 'updateIndividualSalaries'])->name('employees.update-individual-salaries');
             // Jibble sync disabled: employees are managed internally and linked to Finance
 
             // Attendance

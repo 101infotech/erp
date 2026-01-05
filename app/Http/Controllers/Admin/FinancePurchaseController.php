@@ -110,6 +110,11 @@ class FinancePurchaseController extends Controller
 
     public function destroy(FinancePurchase $purchase)
     {
+        // Only allow deletion if payment status is pending
+        if ($purchase->payment_status !== 'pending') {
+            return back()->with('error', 'Only pending purchases can be deleted. Current status: ' . $purchase->payment_status . '. Please contact administrator for paid/partial purchases.');
+        }
+
         $companyId = $purchase->company_id;
         $purchase->delete();
 

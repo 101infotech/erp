@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FinanceCompany extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'type',
@@ -93,9 +96,14 @@ class FinanceCompany extends Model
         return $query->where('type', 'holding');
     }
 
-    public function scopeSister($query)
+    public function scopeSubsidiary($query)
     {
-        return $query->where('type', 'sister');
+        return $query->where('type', 'subsidiary');
+    }
+
+    public function scopeIndependent($query)
+    {
+        return $query->where('type', 'independent');
     }
 
     // Helper Methods

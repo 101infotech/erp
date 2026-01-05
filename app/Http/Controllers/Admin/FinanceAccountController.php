@@ -89,6 +89,21 @@ class FinanceAccountController extends Controller
     public function destroy(FinanceAccount $account)
     {
         $companyId = $account->company_id;
+
+        // Check if account is used in any transactions
+        $debitTransactions = \App\Models\FinanceTransaction::where('debit_account_id', $account->id)->count();
+        $creditTransactions = \App\Models\FinanceTransaction::where('credit_account_id', $account->id)->count();
+
+        if ($debitTransactions > 0 || $creditTransactions > 0) {
+            $totalTransactions = $debitTransactions + $creditTransactions;
+            return back()->with('error', "Cannot delete account that is used in {$totalTransactions} transaction(s). Deactivate the account instead.");
+        }
+
+        // Check for child accounts
+        if ($account->childAccounts()->exists()) {
+            return back()->with('error', 'Cannot delete account with sub-accounts. Please reassign or delete sub-accounts first.');
+        }
+
         $account->delete();
 
         return redirect()->route('admin.finance.accounts.index', ['company_id' => $companyId])

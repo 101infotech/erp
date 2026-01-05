@@ -139,6 +139,22 @@
             </div>
 
             @if($user->id !== Auth::id())
+            <!-- Toggle Leads Access Button (Employee Only) -->
+            @if($user->role === 'employee')
+            <form action="{{ route('admin.users.toggle-leads-access', $user) }}" method="POST" class="inline-block">
+                @csrf
+                <button type="submit"
+                    class="group relative px-5 py-2.5 bg-gradient-to-r {{ $user->can_access_leads ? 'from-orange-600 to-orange-500' : 'from-lime-600 to-lime-500' }} text-white rounded-lg font-medium hover:{{ $user->can_access_leads ? 'from-orange-500 hover:to-orange-400 hover:shadow-orange-500/30' : 'from-lime-500 hover:to-lime-400 hover:shadow-lime-500/30' }} hover:shadow-lg transition-all duration-200 inline-flex items-center">
+                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span class="text-sm">{{ $user->can_access_leads ? 'Disable' : 'Enable' }} Leads Access</span>
+                </button>
+            </form>
+            @endif
+
             <!-- Delete User Button -->
             <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block">
                 @csrf
@@ -183,6 +199,28 @@
                     <span class="text-slate-400 text-sm">Last Updated</span>
                     <span class="text-white text-sm">{{ $user->updated_at->diffForHumans() }}</span>
                 </div>
+                @if($user->role === 'employee')
+                <div class="flex items-center justify-between pt-3 border-t border-slate-700">
+                    <span class="text-slate-400 text-sm">Leads Module Access</span>
+                    <span class="flex items-center text-sm">
+                        @if($user->can_access_leads)
+                        <svg class="w-4 h-4 text-lime-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-lime-400 font-medium">Enabled</span>
+                        @else
+                        <svg class="w-4 h-4 text-slate-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-slate-500">Disabled</span>
+                        @endif
+                    </span>
+                </div>
+                @endif
             </div>
         </div>
 

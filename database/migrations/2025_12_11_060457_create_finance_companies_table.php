@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('finance_companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', ['holding', 'sister'])->default('sister');
+            $table->enum('type', ['holding', 'subsidiary', 'independent'])->default('independent');
             $table->foreignId('parent_company_id')->nullable()->constrained('finance_companies')->onDelete('set null');
             $table->string('contact_email')->nullable();
             $table->string('contact_phone')->nullable();

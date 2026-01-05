@@ -7,6 +7,7 @@ use App\Models\FinanceTransaction;
 use App\Models\FinanceCompany;
 use App\Models\FinanceCategory;
 use App\Models\FinanceAccount;
+use App\Services\Finance\AI\FinanceAiCategorizationService;
 use Illuminate\Http\Request;
 
 class FinanceTransactionController extends Controller
@@ -64,10 +65,37 @@ class FinanceTransactionController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        FinanceTransaction::create($validated);
+        $transaction = FinanceTransaction::create($validated);
+
+        // AI Auto-categorization if category not provided
+        if (!$transaction->category_id && config('finance_ai.enabled')) {
+            try {
+                $aiService = app(FinanceAiCategorizationService::class);
+                $autoCategorized = $aiService->autoCategorize($transaction);
+
+                if ($autoCategorized) {
+                    $category = FinanceCategory::find($transaction->category_id);
+                    $message = 'Transaction created and automatically categorized as "' . $category->name . '" by AI.';
+                } else {
+                    // Get suggestion for user review
+                    $suggestion = $aiService->suggestCategory($transaction);
+                    if ($suggestion && $suggestion['confidence'] >= config('finance_ai.categorization.suggestion_threshold', 0.70)) {
+                        $category = FinanceCategory::find($suggestion['category_id']);
+                        $message = 'Transaction created. AI suggests category: "' . $category->name . '" (Confidence: ' . round($suggestion['confidence'] * 100) . '%)';
+                    } else {
+                        $message = 'Transaction created successfully.';
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('AI categorization error', ['error' => $e->getMessage()]);
+                $message = 'Transaction created successfully.';
+            }
+        } else {
+            $message = 'Transaction created successfully.';
+        }
 
         return redirect()->route('admin.finance.transactions.index', ['company_id' => $validated['company_id']])
-            ->with('success', 'Transaction created successfully.');
+            ->with('success', $message);
     }
 
     public function show(FinanceTransaction $transaction)
@@ -87,6 +115,14 @@ class FinanceTransactionController extends Controller
 
     public function update(Request $request, FinanceTransaction $transaction)
     {
+        // Prevent editing completed or approved transactions
+        if (in_array($transaction->status, ['completed', 'approved'])) {
+            return back()->with(
+                'error',
+                'Cannot edit completed or approved transactions. Create a reversal transaction instead.'
+            );
+        }
+
         $validated = $request->validate([
             'transaction_date_bs' => 'required|string|max:10',
             'transaction_type' => 'required|in:income,expense,transfer,investment,loan',
@@ -108,6 +144,11 @@ class FinanceTransactionController extends Controller
 
     public function destroy(FinanceTransaction $transaction)
     {
+        // Only allow deletion of draft or pending transactions
+        if (!in_array($transaction->status, ['draft', 'pending'])) {
+            return back()->with('error', 'Only draft or pending transactions can be deleted. Current status: ' . $transaction->status . '. Please use reversal for completed transactions.');
+        }
+
         $companyId = $transaction->company_id;
         $transaction->delete();
 

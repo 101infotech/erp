@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Services\PayrollCalculationService;
 use App\Services\NepalCalendarService;
 use App\Services\PayslipPdfService;
+use App\Services\PayrollFinanceIntegrationService;
 use App\Mail\PayrollApprovedMail;
 use App\Mail\PayrollSentMail;
 use App\Services\NotificationService;
@@ -26,17 +27,20 @@ class HrmPayrollController extends Controller
     protected NepalCalendarService $calendarService;
     protected PayslipPdfService $pdfService;
     protected NotificationService $notificationService;
+    protected PayrollFinanceIntegrationService $financeIntegrationService;
 
     public function __construct(
         PayrollCalculationService $payrollService,
         NepalCalendarService $calendarService,
         PayslipPdfService $pdfService,
-        NotificationService $notificationService
+        NotificationService $notificationService,
+        PayrollFinanceIntegrationService $financeIntegrationService
     ) {
         $this->payrollService = $payrollService;
         $this->calendarService = $calendarService;
         $this->pdfService = $pdfService;
         $this->notificationService = $notificationService;
+        $this->financeIntegrationService = $financeIntegrationService;
     }
 
     /**
@@ -444,6 +448,14 @@ class HrmPayrollController extends Controller
                 Log::error('Failed to generate PDF or send email for payroll #' . $payroll->id . ': ' . $e->getMessage());
                 // Don't fail the approval if PDF/email fails
             }
+
+            // Create finance transaction for the payroll
+            try {
+                $this->financeIntegrationService->createFinanceTransactionForPayroll($payroll);
+            } catch (\Exception $e) {
+                Log::error('Failed to create finance transaction for payroll #' . $payroll->id . ': ' . $e->getMessage());
+                // Don't fail the approval if finance integration fails
+            }
         });
 
         return redirect()->route('admin.hrm.payroll.show', $id)
@@ -486,6 +498,13 @@ class HrmPayrollController extends Controller
             'payment_method' => $validated['payment_method'],
             'transaction_reference' => $validated['transaction_reference'] ?? null,
         ]);
+
+        // Update finance transaction to completed status
+        try {
+            $this->financeIntegrationService->updateFinanceTransactionForPaidPayroll($payroll);
+        } catch (\Exception $e) {
+            Log::error('Failed to update finance transaction for paid payroll #' . $payroll->id . ': ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Payroll marked as paid.');
     }

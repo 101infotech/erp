@@ -107,6 +107,13 @@ class FinanceVendorController extends Controller
 
     public function destroy(FinanceVendor $vendor)
     {
+        // Check if vendor has any purchases
+        $purchasesCount = \App\Models\FinancePurchase::where('vendor_id', $vendor->id)->count();
+
+        if ($purchasesCount > 0) {
+            return back()->with('error', "Cannot delete vendor with {$purchasesCount} purchase record(s). Deactivate the vendor instead.");
+        }
+
         $vendor->delete();
 
         return redirect()->route('admin.finance.vendors.index', ['company_id' => $vendor->company_id])

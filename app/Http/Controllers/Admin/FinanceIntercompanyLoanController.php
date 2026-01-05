@@ -139,8 +139,20 @@ class FinanceIntercompanyLoanController extends Controller
 
     public function destroy(FinanceIntercompanyLoan $intercompanyLoan)
     {
-        if ($intercompanyLoan->payments()->count() > 0) {
-            return back()->with('error', 'Cannot delete loan with existing payments.');
+        $paymentsCount = $intercompanyLoan->payments()->count();
+
+        if ($paymentsCount > 0) {
+            return back()->with('error', "Cannot delete loan with {$paymentsCount} existing payment(s).");
+        }
+
+        // Check if loan has outstanding balance
+        if ($intercompanyLoan->outstanding_balance > 0) {
+            return back()->with('error', 'Cannot delete loan with outstanding balance of NPR ' . number_format($intercompanyLoan->outstanding_balance, 2) . '. Please settle all payments first.');
+        }
+
+        // Only allow deletion of draft or cancelled loans
+        if (!in_array($intercompanyLoan->status, ['draft', 'cancelled'])) {
+            return back()->with('error', 'Only draft or cancelled loans can be deleted. Current status: ' . $intercompanyLoan->status);
         }
 
         $intercompanyLoan->delete();

@@ -213,4 +213,24 @@ class UserController extends Controller
         return redirect()->back()
             ->with('success', 'Password has been updated successfully.');
     }
+
+    /**
+     * Toggle leads module access for a user (employee only)
+     */
+    public function toggleLeadsAccess(User $user)
+    {
+        // Only employees can have their leads access toggled
+        if ($user->role !== 'employee') {
+            return redirect()->back()
+                ->with('error', 'Leads access can only be toggled for employees.');
+        }
+
+        $user->can_access_leads = !$user->can_access_leads;
+        $user->save();
+
+        $status = $user->can_access_leads ? 'enabled' : 'disabled';
+
+        return redirect()->back()
+            ->with('success', "Leads module access has been {$status} for {$user->name}.");
+    }
 }
