@@ -60,7 +60,7 @@
 
                     <div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">Amount</p>
-                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">रू {{
+                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">NPR {{
                             number_format($recurringExpense->amount, 2) }}</p>
                     </div>
 
@@ -174,7 +174,7 @@
                     <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
                         <p class="text-sm text-blue-600 dark:text-blue-400 mb-1">{{
                             ucfirst($recurringExpense->frequency) }} Cost</p>
-                        <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">रू {{
+                        <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">NPR {{
                             number_format($recurringExpense->amount, 2) }}</p>
                     </div>
 
@@ -189,7 +189,7 @@
 
                     <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
                         <p class="text-sm text-green-600 dark:text-green-400 mb-1">Estimated Annual</p>
-                        <p class="text-2xl font-bold text-green-700 dark:text-green-300">रू {{
+                        <p class="text-2xl font-bold text-green-700 dark:text-green-300">NPR {{
                             number_format($annualCost, 2) }}</p>
                     </div>
                 </div>

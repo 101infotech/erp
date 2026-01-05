@@ -74,16 +74,16 @@
                         $purchase->purchase_number }}</td>
                     <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">{{ $purchase->vendor_name }}</td>
                     <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">{{ $purchase->bill_number }}</td>
-                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">रू {{
+                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">NPR {{
                         number_format($purchase->taxable_amount, 2) }}
                     </td>
-                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">रू {{
+                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">NPR {{
                         number_format($purchase->vat_amount, 2) }}
                     </td>
-                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">रू {{
+                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">NPR {{
                         number_format($purchase->tds_amount ?? 0, 2)
                         }}</td>
-                    <td class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">रू {{
+                    <td class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">NPR {{
                         number_format($purchase->net_amount, 2) }}</td>
                     <td class="px-6 py-4">
                         <span

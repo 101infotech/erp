@@ -111,7 +111,7 @@
                     <td class="px-6 py-4 text-sm font-semibold
                         @if($transaction->transaction_type === 'income') text-green-600 dark:text-green-400
                         @else text-red-600 dark:text-red-400 @endif">
-                        रू {{ number_format($transaction->amount, 2) }}
+                        NPR {{ number_format($transaction->amount, 2) }}
                     </td>
                     <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                         {{ $transaction->payment_method }}

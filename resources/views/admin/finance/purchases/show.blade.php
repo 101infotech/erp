@@ -39,25 +39,25 @@
         <div class="space-y-3">
             <div class="flex justify-between items-center">
                 <span class="text-slate-600 dark:text-slate-400">Taxable Amount:</span>
-                <span class="text-lg font-medium">रू {{ number_format($purchase->taxable_amount, 2) }}</span>
+                <span class="text-lg font-medium">NPR {{ number_format($purchase->taxable_amount, 2) }}</span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-slate-600 dark:text-slate-400">VAT (13%):</span>
-                <span class="text-lg font-medium">रू {{ number_format($purchase->vat_amount, 2) }}</span>
+                <span class="text-lg font-medium">NPR {{ number_format($purchase->vat_amount, 2) }}</span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-slate-600 dark:text-slate-400">Total Amount:</span>
-                <span class="text-lg font-medium">रू {{ number_format($purchase->total_amount, 2) }}</span>
+                <span class="text-lg font-medium">NPR {{ number_format($purchase->total_amount, 2) }}</span>
             </div>
             @if($purchase->tds_amount)
             <div class="flex justify-between items-center text-red-600">
                 <span>TDS ({{ $purchase->tds_percentage }}%):</span>
-                <span class="text-lg font-medium">- रू {{ number_format($purchase->tds_amount, 2) }}</span>
+                <span class="text-lg font-medium">- NPR {{ number_format($purchase->tds_amount, 2) }}</span>
             </div>
             @endif
             <div class="flex justify-between items-center border-t pt-3">
                 <span class="text-lg font-semibold">Net Amount:</span>
-                <span class="text-xl font-bold">रू {{ number_format($purchase->net_amount, 2) }}</span>
+                <span class="text-xl font-bold">NPR {{ number_format($purchase->net_amount, 2) }}</span>
             </div>
         </div>
     </div>

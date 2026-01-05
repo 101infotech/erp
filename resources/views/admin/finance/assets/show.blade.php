@@ -119,7 +119,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Purchase Cost:</strong><br>
-                            रू {{ number_format($asset->purchase_cost, 2) }}
+                            NPR {{ number_format($asset->purchase_cost, 2) }}
                         </div>
                         <div class="col-md-6">
                             <strong>Purchase Date (BS):</strong><br>
@@ -170,7 +170,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <strong>Salvage Value:</strong><br>
-                            रू {{ number_format($asset->salvage_value ?? 0, 2) }}
+                            NPR {{ number_format($asset->salvage_value ?? 0, 2) }}
                         </div>
                         @if($asset->depreciation_rate)
                         <div class="col-md-6">
@@ -191,15 +191,15 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <strong>Purchase Cost:</strong><br>
-                        <h4>रू {{ number_format($asset->purchase_cost, 2) }}</h4>
+                        <h4>NPR {{ number_format($asset->purchase_cost, 2) }}</h4>
                     </div>
                     <div class="mb-3">
                         <strong>Accumulated Depreciation:</strong><br>
-                        <h4 class="text-danger">रू {{ number_format($asset->accumulated_depreciation, 2) }}</h4>
+                        <h4 class="text-danger">NPR {{ number_format($asset->accumulated_depreciation, 2) }}</h4>
                     </div>
                     <div class="mb-3">
                         <strong>Current Book Value:</strong><br>
-                        <h4 class="text-success">रू {{ number_format($asset->book_value, 2) }}</h4>
+                        <h4 class="text-success">NPR {{ number_format($asset->book_value, 2) }}</h4>
                     </div>
                 </div>
             </div>
@@ -253,10 +253,10 @@
                                 <tr>
                                     <td>{{ $record->fiscal_year_bs }}</td>
                                     <td>{{ $record->fiscal_month_bs }}</td>
-                                    <td>रू {{ number_format($record->opening_book_value, 2) }}</td>
-                                    <td class="text-danger">रू {{ number_format($record->depreciation_amount, 2) }}</td>
-                                    <td>रू {{ number_format($record->accumulated_depreciation, 2) }}</td>
-                                    <td class="text-success">रू {{ number_format($record->closing_book_value, 2) }}</td>
+                                    <td>NPR {{ number_format($record->opening_book_value, 2) }}</td>
+                                    <td class="text-danger">NPR {{ number_format($record->depreciation_amount, 2) }}</td>
+                                    <td>NPR {{ number_format($record->accumulated_depreciation, 2) }}</td>
+                                    <td class="text-success">NPR {{ number_format($record->closing_book_value, 2) }}</td>
                                     <td><span
                                             class="badge bg-{{ $record->status == 'posted' ? 'success' : 'warning' }}">{{
                                             ucfirst($record->status) }}</span></td>

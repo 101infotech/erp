@@ -15,17 +15,17 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
             <div class="text-blue-600 dark:text-blue-400 text-sm font-medium">Total Purchases</div>
-            <div class="text-2xl font-bold text-slate-900 dark:text-white mt-2">रू {{ number_format($totalPurchases, 2)
+            <div class="text-2xl font-bold text-slate-900 dark:text-white mt-2">NPR {{ number_format($totalPurchases, 2)
                 }}</div>
         </div>
         <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
             <div class="text-green-600 dark:text-green-400 text-sm font-medium">Paid</div>
-            <div class="text-2xl font-bold text-slate-900 dark:text-white mt-2">रू {{ number_format($paidPurchases, 2)
+            <div class="text-2xl font-bold text-slate-900 dark:text-white mt-2">NPR {{ number_format($paidPurchases, 2)
                 }}</div>
         </div>
         <div class="bg-orange-50 dark:bg-orange-900/20 p-6 rounded-lg">
             <div class="text-orange-600 dark:text-orange-400 text-sm font-medium">Outstanding</div>
-            <div class="text-2xl font-bold text-slate-900 dark:text-white mt-2">रू {{ number_format($outstanding, 2) }}
+            <div class="text-2xl font-bold text-slate-900 dark:text-white mt-2">NPR {{ number_format($outstanding, 2) }}
             </div>
         </div>
     </div>
@@ -132,7 +132,7 @@
                             $purchase->purchase_number }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{{
                             $purchase->purchase_date_bs }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white font-medium">रू {{
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white font-medium">NPR {{
                             number_format($purchase->total_amount, 2) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 py-1 text-xs rounded-full

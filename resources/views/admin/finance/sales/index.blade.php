@@ -72,12 +72,12 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">{{ $sale->customer_name }}</td>
                     <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">{{ $sale->invoice_number }}</td>
-                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">रू {{
+                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">NPR {{
                         number_format($sale->taxable_amount, 2) }}
                     </td>
-                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">रू {{ number_format($sale->vat_amount,
+                    <td class="px-6 py-4 text-sm text-slate-900 dark:text-white">NPR {{ number_format($sale->vat_amount,
                         2) }}</td>
-                    <td class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">रू {{
+                    <td class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">NPR {{
                         number_format($sale->total_amount, 2) }}</td>
                     <td class="px-6 py-4">
                         <span

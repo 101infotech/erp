@@ -110,7 +110,7 @@
             <!-- Budgeted Amount -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Budgeted Amount (रू) <span class="text-red-500">*</span>
+                    Budgeted Amount (NPR) <span class="text-red-500">*</span>
                 </label>
                 <input type="number" name="budgeted_amount" id="budgeted_amount" step="0.01" min="0" required
                     value="{{ old('budgeted_amount') }}" placeholder="0.00"

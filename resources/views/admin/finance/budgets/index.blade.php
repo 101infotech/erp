@@ -25,7 +25,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600 dark:text-gray-400">Total Budgeted</p>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">रू {{
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">NPR {{
                         number_format($totalBudgeted, 2) }}</h3>
                 </div>
                 <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -42,7 +42,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600 dark:text-gray-400">Actual Expenses</p>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">रू {{ number_format($totalActual,
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">NPR {{ number_format($totalActual,
                         2) }}</h3>
                 </div>
                 <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
@@ -61,7 +61,7 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400">Total Variance</p>
                     <h3
                         class="text-2xl font-bold {{ $totalVariance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }} mt-1">
-                        रू {{ number_format(abs($totalVariance), 2) }}
+                        NPR {{ number_format(abs($totalVariance), 2) }}
                     </h3>
                     <p
                         class="text-xs {{ $totalVariance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }} mt-1">
@@ -201,9 +201,9 @@
                             {{ $budget->budget_type == 'monthly' ? 'Month ' . $budget->period : ($budget->budget_type ==
                             'quarterly' ? 'Q' . $budget->period : 'Full Year') }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-right font-medium text-gray-900 dark:text-white">रू {{
+                        <td class="px-6 py-4 text-sm text-right font-medium text-gray-900 dark:text-white">NPR {{
                             number_format($budget->budgeted_amount, 2) }}</td>
-                        <td class="px-6 py-4 text-sm text-right font-medium text-gray-900 dark:text-white">रू {{
+                        <td class="px-6 py-4 text-sm text-right font-medium text-gray-900 dark:text-white">NPR {{
                             number_format($budget->actual_amount, 2) }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">

@@ -76,8 +76,8 @@
                             <td>{{ $asset->asset_name }}</td>
                             <td>{{ $asset->company->name }}</td>
                             <td><span class="badge bg-info">{{ ucfirst($asset->asset_type) }}</span></td>
-                            <td>रू {{ number_format($asset->purchase_cost, 2) }}</td>
-                            <td>रू {{ number_format($asset->book_value, 2) }}</td>
+                            <td>NPR {{ number_format($asset->purchase_cost, 2) }}</td>
+                            <td>NPR {{ number_format($asset->book_value, 2) }}</td>
                             <td>
                                 @switch($asset->status)
                                 @case('active')

@@ -81,7 +81,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Amount (रू) *</label>
+                    <label class="block text-sm font-medium mb-2">Amount (NPR) *</label>
                     <input type="number" name="amount" value="{{ old('amount', $transaction->amount) }}" step="0.01"
                         min="0" required class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white">
                     @error('amount')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror

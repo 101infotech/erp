@@ -80,12 +80,12 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
                     <p class="text-sm text-blue-600 dark:text-blue-400 mb-1">Budgeted Amount</p>
-                    <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">रू {{
+                    <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">NPR {{
                         number_format($budget->budgeted_amount, 2) }}</p>
                 </div>
                 <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
                     <p class="text-sm text-green-600 dark:text-green-400 mb-1">Actual Expenses</p>
-                    <p class="text-2xl font-bold text-green-700 dark:text-green-300">रू {{
+                    <p class="text-2xl font-bold text-green-700 dark:text-green-300">NPR {{
                         number_format($budget->actual_amount, 2) }}</p>
                 </div>
                 <div
@@ -96,7 +96,7 @@
                     </p>
                     <p
                         class="text-2xl font-bold text-{{ $budget->variance >= 0 ? 'green' : 'red' }}-700 dark:text-{{ $budget->variance >= 0 ? 'green' : 'red' }}-300">
-                        रू {{ number_format(abs($budget->variance), 2) }}
+                        NPR {{ number_format(abs($budget->variance), 2) }}
                     </p>
                     <p
                         class="text-xs text-{{ $budget->variance >= 0 ? 'green' : 'red' }}-600 dark:text-{{ $budget->variance >= 0 ? 'green' : 'red' }}-400 mt-1">
@@ -121,8 +121,8 @@
                         style="width: {{ min($percentage, 100) }}%"></div>
                 </div>
                 <div class="flex items-center justify-between mt-1 text-xs text-gray-600 dark:text-gray-400">
-                    <span>रू 0</span>
-                    <span>रू {{ number_format($budget->budgeted_amount, 0) }}</span>
+                    <span>NPR 0</span>
+                    <span>NPR {{ number_format($budget->budgeted_amount, 0) }}</span>
                 </div>
         </div>
 
@@ -195,7 +195,7 @@
                     <p class="text-xs text-gray-600 dark:text-gray-400">{{ $transaction->transaction_date_bs }}</p>
                 </div>
                 <div class="text-right">
-                    <p class="font-bold text-gray-900 dark:text-white">रू {{ number_format($transaction->credit_amount,
+                    <p class="font-bold text-gray-900 dark:text-white">NPR {{ number_format($transaction->credit_amount,
                         2) }}</p>
                     <p class="text-xs text-gray-600 dark:text-gray-400">{{ $transaction->debitAccount->account_name ??
                         'N/A' }}</p>

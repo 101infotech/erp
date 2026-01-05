@@ -122,7 +122,7 @@
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">{{ $expense->category->category_name
                             ?? 'N/A' }}</td>
-                        <td class="px-6 py-4 text-sm text-right font-medium text-gray-900 dark:text-white">रू {{
+                        <td class="px-6 py-4 text-sm text-right font-medium text-gray-900 dark:text-white">NPR {{
                             number_format($expense->amount, 2) }}</td>
                         <td class="px-6 py-4 text-center">
                             <span

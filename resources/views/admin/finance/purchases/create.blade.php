@@ -81,7 +81,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Taxable Amount (रू) *</label>
+                    <label class="block text-sm font-medium mb-2">Taxable Amount (NPR) *</label>
                     <input type="number" name="taxable_amount" value="{{ old('taxable_amount') }}" step="0.01" min="0"
                         required class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white"
                         placeholder="10000.00">
@@ -105,7 +105,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2">TDS Amount (रू)</label>
+                    <label class="block text-sm font-medium mb-2">TDS Amount (NPR)</label>
                     <input type="number" name="tds_amount" value="{{ old('tds_amount') }}" step="0.01" min="0"
                         class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white"
                         placeholder="150.00">
@@ -113,7 +113,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Total Amount (रू) *</label>
+                    <label class="block text-sm font-medium mb-2">Total Amount (NPR) *</label>
                     <input type="number" name="total_amount" value="{{ old('total_amount') }}" step="0.01" min="0"
                         required class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white"
                         placeholder="11300.00">
@@ -121,7 +121,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Net Amount (रू) *</label>
+                    <label class="block text-sm font-medium mb-2">Net Amount (NPR) *</label>
                     <input type="number" name="net_amount" value="{{ old('net_amount') }}" step="0.01" min="0" required
                         class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white"
                         placeholder="11150.00">

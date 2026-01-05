@@ -156,7 +156,7 @@
                     @if($lead->inspection_charge)
                     <div>
                         <label class="block text-sm font-medium text-slate-400 mb-1">Charge</label>
-                        <p class="text-lime-400 font-semibold">${{ number_format($lead->inspection_charge, 2) }}</p>
+                        <p class="text-lime-400 font-semibold">NPR {{ number_format($lead->inspection_charge, 2) }}</p>
                     </div>
                     @endif
                 </div>

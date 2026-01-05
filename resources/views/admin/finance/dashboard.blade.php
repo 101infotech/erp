@@ -41,7 +41,7 @@
             </div>
             <h3 class="text-sm text-green-300 mb-2">Total Revenue</h3>
             <div class="flex items-baseline space-x-2">
-                <h2 class="text-3xl font-bold text-white" id="kpi-revenue">रू 0</h2>
+                <h2 class="text-3xl font-bold text-white" id="kpi-revenue">NPR 0</h2>
             </div>
             <p class="text-green-400 text-xs mt-2" id="kpi-revenue-growth">+0% vs last month</p>
         </div>
@@ -59,7 +59,7 @@
             </div>
             <h3 class="text-sm text-red-300 mb-2">Total Expenses</h3>
             <div class="flex items-baseline space-x-2">
-                <h2 class="text-3xl font-bold text-white" id="kpi-expenses">रू 0</h2>
+                <h2 class="text-3xl font-bold text-white" id="kpi-expenses">NPR 0</h2>
             </div>
             <p class="text-red-400 text-xs mt-2" id="kpi-expense-growth">+0% vs last month</p>
         </div>
@@ -77,7 +77,7 @@
             </div>
             <h3 class="text-sm text-blue-300 mb-2">Net Profit</h3>
             <div class="flex items-baseline space-x-2">
-                <h2 class="text-3xl font-bold text-white" id="kpi-profit">रू 0</h2>
+                <h2 class="text-3xl font-bold text-white" id="kpi-profit">NPR 0</h2>
             </div>
             <p class="text-blue-400 text-xs mt-2" id="kpi-profit-margin">0% margin</p>
         </div>
@@ -95,7 +95,7 @@
             </div>
             <h3 class="text-sm text-yellow-300 mb-2">Pending Payments</h3>
             <div class="flex items-baseline space-x-2">
-                <h2 class="text-3xl font-bold text-white" id="kpi-pending">रू 0</h2>
+                <h2 class="text-3xl font-bold text-white" id="kpi-pending">NPR 0</h2>
             </div>
             <p class="text-yellow-400 text-xs mt-2" id="kpi-pending-count">0 invoices</p>
         </div>
@@ -215,13 +215,13 @@
         .then(data => {
             if (data.success && data.data) {
                 const kpis = data.data;
-                document.getElementById('kpi-revenue').textContent = 'रू ' + Number(kpis.total_revenue || 0).toLocaleString('en-NP');
+                document.getElementById('kpi-revenue').textContent = 'NPR ' + Number(kpis.total_revenue || 0).toLocaleString('en-NP');
                 document.getElementById('kpi-revenue-growth').textContent = (kpis.revenue_growth >= 0 ? '+' : '') + kpis.revenue_growth + '% vs last month';
-                document.getElementById('kpi-expenses').textContent = 'रू ' + Number(kpis.total_expenses || 0).toLocaleString('en-NP');
+                document.getElementById('kpi-expenses').textContent = 'NPR ' + Number(kpis.total_expenses || 0).toLocaleString('en-NP');
                 document.getElementById('kpi-expense-growth').textContent = (kpis.expense_growth >= 0 ? '+' : '') + kpis.expense_growth + '% vs last month';
-                document.getElementById('kpi-profit').textContent = 'रू ' + Number(kpis.net_profit || 0).toLocaleString('en-NP');
+                document.getElementById('kpi-profit').textContent = 'NPR ' + Number(kpis.net_profit || 0).toLocaleString('en-NP');
                 document.getElementById('kpi-profit-margin').textContent = Number(kpis.profit_margin || 0).toFixed(1) + '% margin';
-                document.getElementById('kpi-pending').textContent = 'रू ' + Number(kpis.pending_sales_amount || 0).toLocaleString('en-NP');
+                document.getElementById('kpi-pending').textContent = 'NPR ' + Number(kpis.pending_sales_amount || 0).toLocaleString('en-NP');
                 document.getElementById('kpi-pending-count').textContent = (kpis.pending_sales_count || 0) + ' invoices';
             }
         })
@@ -254,7 +254,7 @@
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="${isCredit ? 'text-green-400' : 'text-red-400'} font-semibold">रू ${Number(txn.amount).toLocaleString('en-NP')}</p>
+                                <p class="${isCredit ? 'text-green-400' : 'text-red-400'} font-semibold">NPR ${Number(txn.amount).toLocaleString('en-NP')}</p>
                                 <p class="text-slate-500 text-xs">${txn.account_name || ''}</p>
                             </div>
                         </div>

@@ -37,7 +37,7 @@
         </div>
         <div>
             <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Amount</h3>
-            <p class="mt-1 text-lg font-semibold">रू {{ number_format($transaction->amount, 2) }}</p>
+            <p class="mt-1 text-lg font-semibold">NPR {{ number_format($transaction->amount, 2) }}</p>
         </div>
         <div>
             <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Payment Method</h3>

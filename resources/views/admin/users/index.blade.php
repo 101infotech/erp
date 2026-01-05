@@ -52,7 +52,7 @@
 @endpush
 
 @section('content')
-<div class="space-y-6">
+    <div class="space-y-4">
     <!-- Include Confirmation Modal -->
     @include('components.confirm-modal')
 
@@ -65,7 +65,7 @@
         </div>
         <div class="flex flex-wrap gap-2 justify-end">
             <a href="{{ route('admin.hrm.attendance.index') }}"
-                class="px-4 py-2 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-600 transition flex items-center space-x-2">
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-700 text-white rounded-lg text-sm font-medium hover:bg-slate-600 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -73,12 +73,12 @@
                 <span>Attendance Records</span>
             </a>
             <a href="{{ route('admin.hrm.attendance.sync-employees') }}"
-                class="px-4 py-2 bg-lime-500 text-slate-950 rounded-lg font-medium hover:bg-lime-400 transition flex items-center space-x-2">
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-lime-500 text-slate-950 rounded-lg text-sm font-medium hover:bg-lime-400 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 4v5h.582M20 20v-5h-.581M5 9a7 7 0 0114 0M5 9H4m15 0h1M5 15a7 7 0 0114 0M5 15H4m15 0h1" />
                 </svg>
-                <span>Sync Employees from Jibble</span>
+                <span>Sync from Jibble</span>
             </a>
         </div>
     </div>
