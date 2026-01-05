@@ -193,6 +193,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('payroll/{payroll}', [HrmPayrollController::class, 'update'])->name('payroll.update');
             Route::delete('payroll/{payroll}', [HrmPayrollController::class, 'destroy'])->name('payroll.destroy');
             Route::post('payroll/{payroll}/approve', [HrmPayrollController::class, 'approve'])->name('payroll.approve');
+            Route::post('payroll/{payroll}/regenerate', [HrmPayrollController::class, 'regenerate'])->name('payroll.regenerate');
             Route::post('payroll/{payroll}/review-anomalies', [HrmPayrollController::class, 'reviewAnomalies'])->name('payroll.review-anomalies');
             Route::post('payroll/{payroll}/mark-as-paid', [HrmPayrollController::class, 'markAsPaid'])->name('payroll.mark-as-paid');
             Route::post('payroll/{payroll}/mark-as-sent', [HrmPayrollController::class, 'markAsSent'])->name('payroll.mark-as-sent');

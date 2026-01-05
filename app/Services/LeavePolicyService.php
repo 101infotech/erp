@@ -89,27 +89,58 @@ class LeavePolicyService
     }
 
     /**
-     * Validate leave request against policy
+     * Get effective quota for employee
+     * Uses individual employee quota if set, otherwise falls back to company policy
+     * 
+     * @param HrmEmployee $employee
+     * @param string $leaveType
+     * @return float The effective quota (employee-specific or company-wide)
      */
-    public function validateLeaveRequest(HrmEmployee $employee, string $leaveType, float $days): array
+    public function getEffectiveQuota(HrmEmployee $employee, string $leaveType): float
     {
+        // Map leave type to employee quota field
+        $quotaFields = [
+            'annual' => 'paid_leave_annual',
+            'sick' => 'paid_leave_sick',
+            'casual' => 'paid_leave_casual',
+        ];
+
+        $quotaField = $quotaFields[$leaveType] ?? null;
+
+        // Check if employee has individual quota set
+        if ($quotaField && $employee->{$quotaField} !== null && $employee->{$quotaField} > 0) {
+            return (float) $employee->{$quotaField};
+        }
+
+        // Fall back to company policy
         $policy = $this->getPolicy($employee->company_id, $leaveType);
 
         if (!$policy) {
-            return [
-                'valid' => false,
-                'message' => 'No active leave policy found for this leave type.'
-            ];
+            return 0;
         }
 
-        // Check gender restriction
-        if ($policy->gender_restriction !== 'none') {
-            if ($employee->gender !== $policy->gender_restriction) {
-                return [
-                    'valid' => false,
-                    'message' => 'This leave type is not available for your gender.'
-                ];
-            }
+        // Check gender restriction on company policy
+        if ($policy->gender_restriction !== 'none' && $employee->gender !== $policy->gender_restriction) {
+            return 0;
+        }
+
+        return (float) $policy->annual_quota;
+    }
+
+    /**
+     * Validate leave request against policy
+     * Uses employee-specific quota if defined, otherwise company policy
+     */
+    public function validateLeaveRequest(HrmEmployee $employee, string $leaveType, float $days): array
+    {
+        // Get effective quota (employee-specific or company-wide)
+        $effectiveQuota = $this->getEffectiveQuota($employee, $leaveType);
+
+        if ($effectiveQuota <= 0) {
+            return [
+                'valid' => false,
+                'message' => 'No leave quota available for this leave type.'
+            ];
         }
 
         $balanceField = $this->getBalanceField($leaveType);
@@ -131,9 +162,12 @@ class LeavePolicyService
             ];
         }
 
+        $policy = $this->getPolicy($employee->company_id, $leaveType);
+
         return [
             'valid' => true,
             'policy' => $policy,
+            'quota' => $effectiveQuota,
             'balance' => $balance,
             'used' => $usedDays,
             'available' => $availableDays
@@ -142,6 +176,7 @@ class LeavePolicyService
 
     /**
      * Get leave balance summary for an employee
+     * Uses employee-specific quota if defined, otherwise company policy
      */
     public function getLeaveBalanceSummary(HrmEmployee $employee): array
     {
@@ -149,15 +184,11 @@ class LeavePolicyService
         $leaveTypes = ['annual', 'sick', 'casual', 'period'];
 
         foreach ($leaveTypes as $type) {
-            $policy = $this->getPolicy($employee->company_id, $type);
+            // Get effective quota (employee-specific or company-wide)
+            $effectiveQuota = $this->getEffectiveQuota($employee, $type);
 
-            // Skip if no policy exists
-            if (!$policy) {
-                continue;
-            }
-
-            // Skip if gender restriction doesn't match
-            if ($policy->gender_restriction !== 'none' && $employee->gender !== $policy->gender_restriction) {
+            // Skip if no quota available
+            if ($effectiveQuota <= 0) {
                 continue;
             }
 
@@ -170,12 +201,24 @@ class LeavePolicyService
                 ->whereYear('start_date', now()->year)
                 ->sum('total_days');
 
+            $policy = $this->getPolicy($employee->company_id, $type);
+
+            // Check if using individual quota
+            $quotaFields = [
+                'annual' => 'paid_leave_annual',
+                'sick' => 'paid_leave_sick',
+                'casual' => 'paid_leave_casual',
+            ];
+            $quotaField = $quotaFields[$type] ?? null;
+            $hasIndividualQuota = $quotaField && $employee->{$quotaField} !== null && $employee->{$quotaField} > 0;
+
             $summary[$type] = [
-                'quota' => $policy ? $policy->annual_quota : 0,
+                'quota' => $effectiveQuota,
                 'balance' => $balance,
                 'used' => $usedDays,
                 'available' => $balance - $usedDays,
-                'policy' => $policy
+                'policy' => $policy,
+                'source' => $hasIndividualQuota ? 'individual' : 'company'
             ];
         }
 

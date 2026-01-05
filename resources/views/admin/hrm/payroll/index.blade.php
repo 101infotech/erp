@@ -106,9 +106,9 @@
                             Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800">
                     @forelse($payrolls as $payroll)
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-750">
+                    <tr class="hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer">
                         <td class="px-6 py-4">
                             <div class="text-sm font-medium text-slate-900 dark:text-white whitespace-nowrap">{{
                                 $payroll->employee->name ??
@@ -194,7 +194,7 @@
 <!-- Mobile Card View (visible on mobile only) -->
 <div class="lg:hidden divide-y divide-slate-700">
     @forelse($payrolls as $payroll)
-    <div class="p-4 hover:bg-slate-750">
+    <div class="p-4 hover:bg-slate-700/30 transition-colors">
         <!-- Employee Info -->
         <div class="flex items-start justify-between mb-3">
             <div class="flex-1">

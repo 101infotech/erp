@@ -596,4 +596,87 @@ class HrmPayrollController extends Controller
         return redirect()->route('admin.hrm.payroll.index')
             ->with('success', 'Payroll record deleted successfully.');
     }
+
+    /**
+     * Regenerate payroll record (recalculates with latest data including holidays)
+     */
+    public function regenerate($id)
+    {
+        $payroll = HrmPayrollRecord::with('employee')->findOrFail($id);
+
+        // Only allow regeneration of draft payrolls
+        if ($payroll->status !== 'draft') {
+            return back()->with('error', 'Only draft payrolls can be regenerated. Approved/paid payrolls are locked.');
+        }
+
+        try {
+            DB::transaction(function () use ($payroll) {
+                // Convert BS dates back to AD for calculation
+                $periodStartAd = english_date($payroll->period_start_bs);
+                $periodEndAd = english_date($payroll->period_end_bs);
+
+                // Recalculate payroll with current data (includes new holidays)
+                // Parameters: employee, periodStart, periodEnd, periodStartBs, periodEndBs, 
+                //             overtimePayment=0, monthTotalDays=null, standardWorkingHours=8.00
+                $calculation = $this->payrollService->calculatePayroll(
+                    $payroll->employee,
+                    Carbon::parse($periodStartAd),
+                    Carbon::parse($periodEndAd),
+                    $payroll->period_start_bs,
+                    $payroll->period_end_bs,
+                    0, // overtimePayment - don't pass old OT payment, will be preserved separately
+                    $payroll->month_total_days,
+                    $payroll->standard_working_hours_per_day
+                );
+
+                // Update payroll record with recalculated values
+                // Keep manual edits like overtime_payment, hourly_deduction, advance_payment
+                $payroll->update([
+                    'total_hours_worked' => $calculation['total_hours_worked'],
+                    'total_working_hours_required' => $calculation['total_working_hours_required'],
+                    'total_working_hours_missing' => $calculation['total_working_hours_missing'],
+                    'total_days_worked' => $calculation['total_days_worked'],
+                    'overtime_hours' => $calculation['overtime_hours'],
+                    'absent_days' => $calculation['absent_days'],
+                    'unpaid_leave_days' => $calculation['unpaid_leave_days'],
+                    'paid_leave_days_used' => $calculation['paid_leave_days_used'],
+                    'total_payable_days' => $calculation['total_payable_days'],
+                    'weekend_days' => $calculation['weekend_days'],
+                    'holiday_days' => $calculation['holiday_days'],
+                    'basic_salary' => $calculation['basic_salary'],
+                    'gross_salary' => $calculation['gross_salary'],
+                    'tax_amount' => $calculation['tax_amount'],
+                    'deductions_total' => $calculation['deductions_total'],
+                    'unpaid_leave_deduction' => $calculation['unpaid_leave_deduction'],
+                    'suggested_hourly_deduction' => $calculation['suggested_hourly_deduction'],
+                    // Recalculate net salary with preserved manual edits
+                    'net_salary' => $calculation['gross_salary']
+                        - $calculation['tax_amount']
+                        - $calculation['deductions_total']
+                        + $payroll->overtime_payment // Keep manual OT payment
+                        - $payroll->hourly_deduction // Keep manual hourly deduction
+                        - $payroll->advance_payment, // Keep manual advance payment
+                    'anomalies' => $calculation['anomalies'],
+                    'anomalies_reviewed' => false, // Reset review status since data changed
+                ]);
+
+                // Delete PDF since values changed
+                if ($payroll->payslip_pdf_path && file_exists($payroll->payslip_pdf_path)) {
+                    try {
+                        unlink($payroll->payslip_pdf_path);
+                        $payroll->update(['payslip_pdf_path' => null]);
+                    } catch (\Exception $e) {
+                        Log::warning('Failed to delete old PDF during regeneration: ' . $e->getMessage());
+                    }
+                }
+
+                Log::info("Payroll #{$payroll->id} regenerated for employee {$payroll->employee->name}");
+            });
+
+            return back()->with('success', 'Payroll regenerated successfully with latest data including holidays. Please review before approval.');
+        } catch (\Exception $e) {
+            Log::error('Failed to regenerate payroll #' . $payroll->id . ': ' . $e->getMessage());
+            return back()->with('error', 'Failed to regenerate payroll: ' . $e->getMessage());
+        }
+    }
 }

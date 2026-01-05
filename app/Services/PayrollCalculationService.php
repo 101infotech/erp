@@ -142,9 +142,10 @@ class PayrollCalculationService
             'absent_days' => $attendanceData['absent_days'],
             'unpaid_leave_days' => $attendanceData['unpaid_leave_days'],
             'paid_leave_days_used' => $paidLeaveData['paid_leave_days'],
-            'hourly_deduction_suggested' => $workingHoursMetrics['suggested_deduction'],
-            'hourly_deduction_amount' => 0, // Admin will approve/edit
-            'hourly_deduction_approved' => false,
+            'holiday_days' => $attendanceData['holiday_days'] ?? 0,
+            'weekend_days' => $this->countWeekends($periodStart, $periodEnd),
+            'suggested_hourly_deduction' => $workingHoursMetrics['suggested_deduction'],
+            'hourly_deduction' => 0, // Admin will approve/edit
             'basic_salary' => round($basicSalary, 2),
             'per_day_rate' => round($perDayRate, 2),
             'total_payable_days' => $totalPayableDays,
@@ -155,8 +156,6 @@ class PayrollCalculationService
             'expense_claims_total' => round($expenseClaimsTotal, 2),
             'gross_salary' => round($grossSalary, 2),
             'tax_amount' => round($taxAmount, 2),
-            'tax_overridden' => false,
-            'tax_override_reason' => null,
             'deductions' => $deductions,
             'deductions_total' => round($deductionsTotal, 2),
             'unpaid_leave_deduction' => round($unpaidLeaveDeduction, 2),
@@ -187,10 +186,11 @@ class PayrollCalculationService
         $overtimeHours = $attendances->sum('overtime_hours');
         $daysWorked = $attendances->where('tracked_hours', '>', 0)->count();
 
-        // Calculate absent days (total work days - days worked - weekends)
+        // Calculate absent days (total work days - days worked - weekends - holidays)
         $totalDays = $periodStart->diffInDays($periodEnd) + 1;
         $weekends = $this->countWeekends($periodStart, $periodEnd);
-        $expectedWorkDays = $totalDays - $weekends;
+        $holidays = $this->countHolidays($periodStart, $periodEnd);
+        $expectedWorkDays = $totalDays - $weekends - $holidays;
 
         // Get unpaid leave days
         $unpaidLeaveDays = HrmLeaveRequest::where('employee_id', $employee->id)
@@ -216,6 +216,7 @@ class PayrollCalculationService
             'absent_days' => $absentDays,
             'unpaid_leave_days' => $unpaidLeaveDays,
             'expected_work_days' => $expectedWorkDays,
+            'holiday_days' => $holidays,
         ];
     }
 
@@ -243,24 +244,8 @@ class PayrollCalculationService
             })
             ->get();
 
-        $totalPaidLeaveDays = 0;
-        foreach ($paidLeaveRequests as $leave) {
-            $leaveStart = max($leave->start_date, $periodStart);
-            $leaveEnd = min($leave->end_date, $periodEnd);
-            $daysInPeriod = $leaveStart->diffInDays($leaveEnd) + 1;
-
-            // Exclude weekends from paid leave count
-            $current = $leaveStart->copy();
-            $paidDaysCount = 0;
-            while ($current->lte($leaveEnd)) {
-                if (!$current->isSaturday()) {
-                    $paidDaysCount++;
-                }
-                $current->addDay();
-            }
-
-            $totalPaidLeaveDays += $paidDaysCount;
-        }
+        // Use the total_days field directly - it already accounts for half days (0.5)
+        $totalPaidLeaveDays = $paidLeaveRequests->sum('total_days');
 
         return [
             'paid_leave_days' => $totalPaidLeaveDays,
@@ -531,6 +516,21 @@ class PayrollCalculationService
         }
 
         return $weekends;
+    }
+
+    /**
+     * Count company-wide active holidays in period
+     *
+     * @param Carbon $start
+     * @param Carbon $end
+     * @return int
+     */
+    protected function countHolidays(Carbon $start, Carbon $end): int
+    {
+        return \App\Models\Holiday::where('is_active', true)
+            ->where('is_company_wide', true)
+            ->whereBetween('date', [$start, $end])
+            ->count();
     }
 
     /**

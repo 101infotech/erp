@@ -62,9 +62,8 @@
                         class="w-full rounded-lg bg-slate-900 text-white border border-slate-700 px-4 py-2 focus:border-lime-500 focus:outline-none">
                         <option value="">Select Department</option>
                         @foreach($departments as $department)
-                        <option value="{{ $department->id }}" 
-                            data-company-id="{{ $department->company_id }}"
-                            {{ old('department_id')==$department->id ? 'selected' : '' }}>
+                        <option value="{{ $department->id }}" data-company-id="{{ $department->company_id }}" {{
+                            old('department_id')==$department->id ? 'selected' : '' }}>
                             {{ $department->name }}
                         </option>
                         @endforeach
