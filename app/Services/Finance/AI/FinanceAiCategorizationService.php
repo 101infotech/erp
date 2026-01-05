@@ -28,7 +28,6 @@ class FinanceAiCategorizationService
 
             // No pattern match, use AI
             return $this->callAiForCategorization($transaction);
-
         } catch (\Exception $e) {
             Log::error('AI categorization failed', [
                 'transaction_id' => $transaction->id,
@@ -164,9 +163,9 @@ class FinanceAiCategorizationService
         return [
             'category_id' => $pattern->category_id,
             'confidence' => (float) $pattern->confidence_score * $bestPattern['weight'],
-            'reasoning' => "Pattern matched based on {$pattern->pattern_type} (Success rate: " . 
-                          round($pattern->success_rate * 100) . "%, Used " . 
-                          $pattern->usage_count . " times)",
+            'reasoning' => "Pattern matched based on {$pattern->pattern_type} (Success rate: " .
+                round($pattern->success_rate * 100) . "%, Used " .
+                $pattern->usage_count . " times)",
             'pattern_matched' => true,
             'pattern_id' => $pattern->id,
         ];
@@ -443,7 +442,7 @@ PROMPT;
     {
         // Remove common words
         $stopWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'];
-        
+
         $words = preg_split('/\s+/', strtolower($description));
         $keywords = array_filter($words, function ($word) use ($stopWords) {
             return strlen($word) > 3 && !in_array($word, $stopWords);

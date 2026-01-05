@@ -43,9 +43,9 @@ class AiFinanceCategoryPattern extends Model
     public function recordUsage(bool $wasSuccessful): void
     {
         $this->increment('usage_count');
-        
+
         $newSuccessRate = ($this->success_rate * ($this->usage_count - 1) + ($wasSuccessful ? 1 : 0)) / $this->usage_count;
-        
+
         $this->update([
             'success_rate' => $newSuccessRate,
             'last_used_at' => now(),

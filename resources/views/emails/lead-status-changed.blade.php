@@ -183,7 +183,9 @@
         <div class="header">
             <div class="header-icon">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path
+                        d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
             <h1>Lead Status Updated</h1>
@@ -228,14 +230,16 @@
                 <div class="detail-row">
                     <div class="detail-label">Contact Email:</div>
                     <div class="detail-value">
-                        <a href="mailto:{{ $lead->email }}" style="color: #3b82f6; font-weight: 500;">{{ $lead->email }}</a>
+                        <a href="mailto:{{ $lead->email }}" style="color: #3b82f6; font-weight: 500;">{{ $lead->email
+                            }}</a>
                     </div>
                 </div>
 
                 <div class="detail-row">
                     <div class="detail-label">Contact Phone:</div>
                     <div class="detail-value">
-                        <a href="tel:{{ $lead->phone_number }}" style="color: #3b82f6; font-weight: 500;">{{ $lead->phone_number }}</a>
+                        <a href="tel:{{ $lead->phone_number }}" style="color: #3b82f6; font-weight: 500;">{{
+                            $lead->phone_number }}</a>
                     </div>
                 </div>
 
@@ -261,7 +265,8 @@
             @if($newStatus === 'Inspection Booked' && $lead->inspection_date)
             <div class="message"
                 style="margin-top: 20px; padding: 16px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                <strong style="color: #d97706;">⏰ Reminder:</strong> An inspection is scheduled for {{ $lead->inspection_date->format('F j, Y')
+                <strong style="color: #d97706;">⏰ Reminder:</strong> An inspection is scheduled for {{
+                $lead->inspection_date->format('F j, Y')
                 }}
                 @if($lead->inspection_time)
                 at {{ $lead->inspection_time->format('h:i A') }}
@@ -272,7 +277,8 @@
             @if($newStatus === 'Positive')
             <div class="message"
                 style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                <strong style="color: #059669;">🎉 Great news!</strong> This lead has converted to a positive client. Please ensure all
+                <strong style="color: #059669;">🎉 Great news!</strong> This lead has converted to a positive client.
+                Please ensure all
                 follow-up actions are completed.
             </div>
             @endif

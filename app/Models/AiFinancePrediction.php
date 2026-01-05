@@ -42,7 +42,7 @@ class AiFinancePrediction extends Model
     {
         $predicted = (float) $this->predicted_amount;
         $accuracy = $predicted > 0 ? (1 - abs($predicted - $actualAmount) / $predicted) : 0;
-        
+
         $this->update([
             'actual_amount' => $actualAmount,
             'accuracy_score' => max(0, min(1, $accuracy)), // Clamp between 0 and 1
