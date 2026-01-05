@@ -123,10 +123,19 @@ class UserController extends Controller
                 ->with('error', 'You cannot delete your own account.');
         }
 
+        // Check if user has an employee record
+        $employee = $user->hrmEmployee;
+        if ($employee) {
+            // Unlink the employee from user account before deleting user
+            $employee->user_id = null;
+            $employee->save();
+        }
+
+        $name = $user->name;
         $user->delete();
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User deleted successfully.');
+            ->with('success', "User '{$name}' has been deleted successfully." . ($employee ? " The employee record has been preserved and unlinked." : ""));
     }
 
     public function resetPassword(User $user)
@@ -237,5 +246,103 @@ class UserController extends Controller
 
         return redirect()->back()
             ->with('success', "Leads module access has been {$status} for {$user->name}.");
+    }
+
+    /**
+     * Show form to link employee with Jibble
+     */
+    public function linkJibbleForm($employeeId)
+    {
+        $employee = \App\Models\HrmEmployee::findOrFail($employeeId);
+        $availableJibbleEmployees = \App\Models\HrmEmployee::whereNull('user_id')
+            ->orWhere('id', $employee->id)
+            ->orderBy('name')
+            ->get();
+        
+        return view('admin.users.link-jibble', compact('employee', 'availableJibbleEmployees'));
+    }
+
+    /**
+     * Link a user account with a Jibble employee
+     */
+    public function linkJibble(Request $request, $employeeId)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $employee = \App\Models\HrmEmployee::findOrFail($employeeId);
+        $user = User::findOrFail($validated['user_id']);
+
+        // Check if user is already linked to another employee
+        $existingLink = \App\Models\HrmEmployee::where('user_id', $user->id)
+            ->where('id', '!=', $employee->id)
+            ->first();
+
+        if ($existingLink) {
+            return redirect()->back()
+                ->with('error', "User {$user->name} is already linked to employee {$existingLink->name}. Please unlink first.");
+        }
+
+        // Link the employee to the user
+        $employee->user_id = $user->id;
+        $employee->save();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "Successfully linked {$employee->name} with user account {$user->email}");
+    }
+
+    /**
+     * Unlink user account from Jibble employee
+     */
+    public function unlinkJibble($employeeId)
+    {
+        $employee = \App\Models\HrmEmployee::findOrFail($employeeId);
+        
+        if (!$employee->user_id) {
+            return redirect()->back()
+                ->with('error', 'This employee is not linked to any user account.');
+        }
+
+        $employee->user_id = null;
+        $employee->save();
+
+        return redirect()->back()
+            ->with('success', "Successfully unlinked user account from {$employee->name}");
+    }
+
+    /**
+     * Delete a Jibble-synced employee
+     */
+    public function deleteJibbleEmployee($employeeId)
+    {
+        $employee = \App\Models\HrmEmployee::findOrFail($employeeId);
+
+        // Check if employee has a Jibble ID (was synced from Jibble)
+        if (!$employee->jibble_person_id) {
+            return redirect()->back()
+                ->with('error', 'This employee was not synced from Jibble and cannot be deleted this way.');
+        }
+
+        $name = $employee->name;
+
+        // Delete related records first
+        $employee->attendanceDays()->delete();
+        
+        // If employee has user account, optionally delete it too
+        if ($employee->user_id) {
+            $user = $employee->user;
+            $employee->user_id = null;
+            $employee->save();
+            
+            // You can uncomment this if you want to delete the user account too
+            // $user->delete();
+        }
+
+        // Delete the employee
+        $employee->delete();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "Successfully deleted Jibble employee: {$name}");
     }
 }

@@ -154,6 +154,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('users/{user}/send-reset-link', [UserController::class, 'sendPasswordResetLink'])->name('users.send-reset-link');
         Route::post('users/{user}/set-password', [UserController::class, 'setPassword'])->name('users.set-password');
         Route::post('users/{user}/toggle-leads-access', [UserController::class, 'toggleLeadsAccess'])->name('users.toggle-leads-access');
+        
+        // Jibble Employee Management
+        Route::get('employees/{employee}/link-jibble', [UserController::class, 'linkJibbleForm'])->name('employees.link-jibble-form');
+        Route::post('employees/{employee}/link-jibble', [UserController::class, 'linkJibble'])->name('employees.link-jibble');
+        Route::post('employees/{employee}/unlink-jibble', [UserController::class, 'unlinkJibble'])->name('employees.unlink-jibble');
+        Route::delete('employees/{employee}/delete-jibble', [UserController::class, 'deleteJibbleEmployee'])->name('employees.delete-jibble');
 
         // Leads Management with Permission-based Access Control
         Route::prefix('leads')->name('leads.')->group(function () {
