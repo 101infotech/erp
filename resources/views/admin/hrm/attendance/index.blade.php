@@ -4,6 +4,7 @@
 @section('page-title', 'Attendance Records')
 
 @section('content')
+<div class="py-6">
 <!-- Header -->
 <div class="mb-6">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">

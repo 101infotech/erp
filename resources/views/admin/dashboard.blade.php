@@ -4,9 +4,9 @@
 @section('page-title', 'Dashboard')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 -m-8 p-8">
+<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 -m-8 p-8 pt-6">
     <!-- Welcome Section -->
-    <div class="mb-6 mt-6">
+    <div class="mb-6">
         <h1 class="text-2xl font-semibold text-white mb-1">Welcome back, {{ Auth::user()->name }}!</h1>
         <p class="text-slate-400 text-sm">Here's what's happening with your business today.</p>
     </div>
