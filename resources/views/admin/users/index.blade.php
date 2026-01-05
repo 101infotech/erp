@@ -137,7 +137,8 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs uppercase tracking-wider">Active</p>
-                    <p class="text-2xl font-bold text-lime-400 mt-1">{{ \App\Models\HrmEmployee::where('status', 'active')->count() }}</p>
+                    <p class="text-2xl font-bold text-lime-400 mt-1">{{ \App\Models\HrmEmployee::where('status',
+                        'active')->count() }}</p>
                 </div>
                 <div class="w-10 h-10 bg-lime-500/20 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +167,8 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs uppercase tracking-wider">With User Account</p>
-                    <p class="text-2xl font-bold text-teal-400 mt-1">{{ \App\Models\HrmEmployee::whereNotNull('user_id')->count() }}</p>
+                    <p class="text-2xl font-bold text-teal-400 mt-1">{{
+                        \App\Models\HrmEmployee::whereNotNull('user_id')->count() }}</p>
                 </div>
                 <div class="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,7 +217,8 @@
                                     @else
                                     <div
                                         class="h-12 w-12 rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center shadow-lg">
-                                        <span class="text-slate-900 font-bold text-lg">{{ strtoupper(substr($displayName,
+                                        <span class="text-slate-900 font-bold text-lg">{{
+                                            strtoupper(substr($displayName,
                                             0, 1)) }}</span>
                                     </div>
                                     @endif
