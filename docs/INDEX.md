@@ -35,6 +35,8 @@ Feature documentation including implementation guides and quick references.
 -   Password Reset System
 -   Registration System
 -   Jibble Integration & Sync
+-   **Create User Account for Employee** ⭐ NEW
+-   **Cascading Delete (User & Employee)** ⭐ NEW
 
 ### 🐛 [FIXES/](FIXES/)
 
@@ -43,9 +45,11 @@ Bug fixes, issue resolutions, and optimization documents.
 -   Bug fixes and completion reports
 -   Payroll collision detection and fixes
 -   Finance module fixes
--   UI/UX fixes
+-   UI/UX fixes (Users vs Employees clarification)
 -   Leave policy fixes
 -   Modal and email fixes
+-   **Confirm Modal Replacement** ⭐ NEW
+-   **Cascading Delete Implementation** ⭐ NEW
 
 ### 📋 [IMPLEMENTATION/](IMPLEMENTATION/)
 

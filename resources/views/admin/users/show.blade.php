@@ -91,11 +91,12 @@
                     </button>
 
                     <!-- Send Reset Link -->
-                    <form action="{{ route('admin.users.send-reset-link', $user) }}" method="POST">
+                    <form action="{{ route('admin.users.send-reset-link', $user) }}" method="POST"
+                        id="send-reset-link-form">
                         @csrf
-                        <button type="submit"
-                            onclick="return confirm('Send password reset link to {{ $user->email }}?')"
-                            class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white border-b border-slate-700/50 transition-all duration-150">
+                        <button type="button"
+                            class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white border-b border-slate-700/50 transition-all duration-150"
+                            onclick="confirmAction({title: 'Send Password Reset Link?', message: 'A password reset link will be sent to &lt;strong&gt;{{ $user->email }}&lt;/strong&gt;. The user can click the link to set a new password.', type: 'info', confirmText: 'Yes, Send Link', onConfirm: () => document.getElementById('send-reset-link-form').submit()})">
                             <div class="flex items-center gap-4">
                                 <div
                                     class="flex-shrink-0 w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center group-hover/item:bg-blue-500/20 transition-colors">
@@ -114,11 +115,12 @@
                     </form>
 
                     <!-- Generate & Email Password -->
-                    <form action="{{ route('admin.users.reset-password', $user) }}" method="POST">
+                    <form action="{{ route('admin.users.reset-password', $user) }}" method="POST"
+                        id="generate-password-form">
                         @csrf
-                        <button type="submit"
-                            onclick="return confirm('Generate random password and email to {{ $user->email }}?')"
-                            class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white transition-all duration-150">
+                        <button type="button"
+                            class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white transition-all duration-150"
+                            onclick="confirmAction({title: 'Generate Random Password?', message: 'A random password will be generated and sent to &lt;strong&gt;{{ $user->email }}&lt;/strong&gt;.&lt;br&gt;&lt;br&gt;&lt;strong&gt;Note:&lt;/strong&gt; This will replace their current password immediately.', type: 'warning', confirmText: 'Yes, Generate & Send', onConfirm: () => document.getElementById('generate-password-form').submit()})">
                             <div class="flex items-center gap-4">
                                 <div
                                     class="flex-shrink-0 w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center group-hover/item:bg-amber-500/20 transition-colors">
@@ -156,12 +158,13 @@
             @endif
 
             <!-- Delete User Button -->
-            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block">
+            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block"
+                id="delete-user-profile-form">
                 @csrf
                 @method('DELETE')
-                <button type="submit"
-                    onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
-                    class="group relative px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium hover:from-red-500 hover:to-red-400 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-200 inline-flex items-center">
+                <button type="button"
+                    class="group relative px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium hover:from-red-500 hover:to-red-400 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-200 inline-flex items-center"
+                    onclick="confirmAction({title: 'Delete User & Employee?', message: 'Are you sure you want to delete &lt;strong&gt;{{ $user->name }}&lt;/strong&gt;?&lt;br&gt;&lt;br&gt;This will permanently delete:&lt;br&gt;• User login account&lt;br&gt;• Employee record&lt;br&gt;• All attendance data&lt;br&gt;&lt;br&gt;&lt;strong&gt;This action cannot be undone!&lt;/strong&gt;', type: 'danger', confirmText: 'Yes, Delete Everything', onConfirm: () => document.getElementById('delete-user-profile-form').submit()})">
                     <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -251,8 +254,8 @@
                 <div class="bg-slate-900 rounded-lg p-4">
                     <p class="text-slate-400 text-sm mb-1">Status</p>
                     <span
-                        class="px-2 py-1 text-xs font-semibold rounded-full {{ $jibbleEmployee->is_active ? 'bg-lime-500/20 text-lime-400' : 'bg-red-500/20 text-red-400' }}">
-                        {{ $jibbleEmployee->is_active ? 'Active' : 'Inactive' }}
+                        class="px-2 py-1 text-xs font-semibold rounded-full {{ $jibbleEmployee->status === 'active' ? 'bg-lime-500/20 text-lime-400' : 'bg-red-500/20 text-red-400' }}">
+                        {{ $jibbleEmployee->status === 'active' ? 'Active' : 'Inactive' }}
                     </span>
                 </div>
             </div>
@@ -442,5 +445,8 @@
         }
     });
 </script>
+
+<!-- Confirmation Modal Component -->
+@include('components.confirm-modal')
 
 @endsection

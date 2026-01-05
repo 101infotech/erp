@@ -64,8 +64,8 @@
             <div class="p-4 border-b border-slate-200 dark:border-slate-800">
                 <div class="flex items-center space-x-3">
                     <div
-                        class="w-10 h-10 rounded-lg bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center">
-                        <span class="text-slate-950 text-lg font-bold">S</span>
+                        class="w-9 h-9 rounded-lg bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center">
+                        <span class="text-slate-950 text-base font-bold">S</span>
                     </div>
                     <div>
                         <div class="text-sm font-semibold text-slate-900 dark:text-white">Saubhagya ERP</div>
@@ -108,7 +108,8 @@
                 </a>
 
                 <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
-                    <p class="px-3 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">HRM Module</p>
+                    <p class="px-3 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">HRM Module
+                    </p>
 
                     <!-- Who is Clocked In -->
                     <a href="{{ route('admin.hrm.attendance.active-users') }}"
@@ -120,7 +121,7 @@
                         Who is Clocked In
                     </a>
 
-                    <!-- Team & Users (Merged) -->
+                    <!-- Employees -->
                     <a href="{{ route('admin.users.index') }}"
                         class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.hrm.employees.*') ? 'bg-lime-600/10 text-lime-600 dark:text-lime-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +129,7 @@
                                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                             </path>
                         </svg>
-                        Team & Users
+                        Employees
                     </a>
 
                     <!-- Organization (Companies & Departments) -->
@@ -212,7 +213,8 @@
                     </div>
 
                     <div class="pt-2 pb-1">
-                        <p class="px-3 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Communication
+                        <p class="px-3 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            Communication
                         </p>
                         <!-- Weekly Feedback -->
                         <a href="{{ route('admin.feedback.index') }}"
@@ -410,13 +412,72 @@
                             </svg>
                         </button>
                         <x-notification-bell />
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit"
-                                class="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-lime-700 dark:hover:text-lime-400 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                                Logout
+                        <!-- Profile Dropdown -->
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open"
+                                class="inline-flex items-center justify-center w-10 h-10 rounded-full border-2 border-slate-200 dark:border-slate-600 hover:border-lime-500 dark:hover:border-lime-500 transition focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+                                @php use Illuminate\Support\Facades\Storage; @endphp
+                                @if(Auth::user()->profile_picture && Storage::exists(Auth::user()->profile_picture))
+                                <img src="{{ Storage::url(Auth::user()->profile_picture) }}"
+                                    alt="{{ Auth::user()->name }}" class="w-full h-full rounded-full object-cover">
+                                @else
+                                <div
+                                    class="w-full h-full rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center">
+                                    <span class="text-sm font-semibold text-slate-950">
+                                        {{ substr(Auth::user()->name, 0, 1) }}
+                                    </span>
+                                </div>
+                                @endif
                             </button>
-                        </form>
+
+                            <!-- Dropdown Menu -->
+                            <div x-show="open" @click.away="open = false"
+                                class="absolute right-0 z-50 mt-2 w-56 rounded-lg shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1">
+                                <div
+                                    class="px-4 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full border-2 border-lime-500/30 flex-shrink-0">
+                                        @if(Auth::user()->profile_picture &&
+                                        Storage::exists(Auth::user()->profile_picture))
+                                        <img src="{{ Storage::url(Auth::user()->profile_picture) }}"
+                                            alt="{{ Auth::user()->name }}"
+                                            class="w-full h-full rounded-full object-cover">
+                                        @else
+                                        <div
+                                            class="w-full h-full rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center">
+                                            <span class="text-lg font-semibold text-slate-950">
+                                                {{ substr(Auth::user()->name, 0, 1) }}
+                                            </span>
+                                        </div>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-900 dark:text-white">{{
+                                            Auth::user()->name }}</p>
+                                    </div>
+                                </div>
+                                <a href="{{ route('admin.profile.edit') }}"
+                                    class="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                        </path>
+                                    </svg>
+                                    {{ __('Profile') }}
+                                </a>
+                                <form method="POST" action="{{ route('logout') }}" class="block">
+                                    @csrf
+                                    <button type="submit"
+                                        class="flex items-center w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border-t border-slate-200 dark:border-slate-700">
+                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                            </path>
+                                        </svg>
+                                        {{ __('Log Out') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>

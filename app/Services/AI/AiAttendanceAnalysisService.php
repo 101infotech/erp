@@ -106,8 +106,8 @@ class AiAttendanceAnalysisService
                 }
                 $weeklyPattern[$dayOfWeek]['avg_clock_in'][] = $clockInHour;
 
-                // Check if late (after 9:30 AM)
-                if ($clockInHour > 9.5) {
+                // Check if late (after 10:30 AM)
+                if ($clockInHour > 10.5) {
                     $lateArrivals++;
                 }
             }
@@ -301,7 +301,7 @@ class AiAttendanceAnalysisService
             "- Least Productive Day: {$metrics['least_productive_day']}\n\n" .
             "Provide:\n" .
             "1. SUMMARY: A brief 2-3 sentence summary of attendance patterns\n" .
-            "2. SUGGESTIONS: 3-5 specific, actionable suggestions to improve clock-in behavior and attendance";
+            "2. SUGGESTIONS: 3-5 specific, actionable suggestions to improve clock-in behavior and attendance. Note: Office hours are 10:00 AM - 6:00 PM.";
     }
 
     /**
@@ -350,12 +350,12 @@ class AiAttendanceAnalysisService
         $suggestions = "To improve your attendance and clock-in behavior:\n\n";
 
         if ($metrics['late_arrivals_count'] > 5) {
-            $suggestions .= "1. Set multiple alarms 30 minutes before your start time\n";
-            $suggestions .= "2. Prepare your work materials the night before\n";
-            $suggestions .= "3. Plan your commute with 15-minute buffer time\n";
+            $suggestions .= "1. Set a consistent morning routine and aim to arrive by 10:00 AM\n";
+            $suggestions .= "2. Use calendar reminders for your scheduled start time\n";
+            $suggestions .= "3. Track your commute time to plan accordingly\n";
         } else {
-            $suggestions .= "1. Maintain your consistent morning routine\n";
-            $suggestions .= "2. Continue arriving before your scheduled start time\n";
+            $suggestions .= "1. Maintain your consistent routine and continue arriving on time\n";
+            $suggestions .= "2. Keep tracking your time to ensure full 8-hour workdays\n";
             $suggestions .= "3. Use calendar reminders for important meetings\n";
         }
 

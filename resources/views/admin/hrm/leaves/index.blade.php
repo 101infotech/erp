@@ -8,46 +8,46 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
         <div>
-            <h1 class="text-3xl font-bold text-white">Leave Management</h1>
-            <p class="text-slate-400 mt-1">Manage employee leave requests and approvals</p>
+            <h1 class="text-2xl font-bold text-white">Leave Management</h1>
+            <p class="text-sm text-slate-400 mt-1">Manage employee leave requests and approvals</p>
         </div>
         <a href="{{ route('admin.hrm.leaves.create') }}"
-            class="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition">
+            class="px-3 py-1.5 bg-lime-500 hover:bg-lime-600 text-slate-900 text-sm font-semibold rounded-lg transition">
             New Leave Request
         </a>
     </div>
 
     <!-- Status Tabs -->
     <div class="border-b border-slate-700">
-        <nav class="flex space-x-8">
+        <nav class="flex space-x-6">
             <a href="{{ route('admin.hrm.leaves.index', ['status' => 'pending']) }}"
-                class="pb-4 px-1 border-b-2 font-medium text-sm {{ $status === 'pending' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
+                class="pb-3 px-1 border-b-2 font-medium text-xs {{ $status === 'pending' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
                 Pending
             </a>
             <a href="{{ route('admin.hrm.leaves.index', ['status' => 'approved']) }}"
-                class="pb-4 px-1 border-b-2 font-medium text-sm {{ $status === 'approved' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
+                class="pb-3 px-1 border-b-2 font-medium text-xs {{ $status === 'approved' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
                 Approved
             </a>
             <a href="{{ route('admin.hrm.leaves.index', ['status' => 'rejected']) }}"
-                class="pb-4 px-1 border-b-2 font-medium text-sm {{ $status === 'rejected' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
+                class="pb-3 px-1 border-b-2 font-medium text-xs {{ $status === 'rejected' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
                 Rejected
             </a>
             <a href="{{ route('admin.hrm.leaves.index', ['status' => 'all']) }}"
-                class="pb-4 px-1 border-b-2 font-medium text-sm {{ $status === 'all' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
+                class="pb-3 px-1 border-b-2 font-medium text-xs {{ $status === 'all' ? 'border-lime-500 text-lime-400' : 'border-transparent text-slate-400 hover:text-slate-300' }}">
                 All
             </a>
         </nav>
     </div>
 
     <!-- Filters -->
-    <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
-        <form method="GET" action="{{ route('admin.hrm.leaves.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+        <form method="GET" action="{{ route('admin.hrm.leaves.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-3">
             <input type="hidden" name="status" value="{{ $status }}">
 
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">Employee</label>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Employee</label>
                 <select name="employee_id"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2">
+                    class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg px-2.5 py-1.5">
                     <option value="">All Employees</option>
                     @foreach($employees as $employee)
                     <option value="{{ $employee->id }}" {{ request('employee_id')==$employee->id ? 'selected' : ''
@@ -59,9 +59,9 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">Leave Type</label>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Leave Type</label>
                 <select name="leave_type"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2">
+                    class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg px-2.5 py-1.5">
                     <option value="">All Types</option>
                     <option value="annual" {{ request('leave_type')==='annual' ? 'selected' : '' }}>Annual</option>
                     <option value="sick" {{ request('leave_type')==='sick' ? 'selected' : '' }}>Sick</option>
@@ -71,14 +71,14 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">Date From</label>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Date From</label>
                 <input type="date" name="date_from" value="{{ request('date_from') }}"
-                    class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2">
+                    class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg px-2.5 py-1.5">
             </div>
 
             <div class="flex items-end">
                 <button type="submit"
-                    class="w-full px-4 py-2 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition">
+                    class="w-full px-3 py-1.5 bg-lime-500 hover:bg-lime-600 text-slate-900 text-sm font-semibold rounded-lg transition">
                     Apply Filters
                 </button>
             </div>
@@ -91,13 +91,13 @@
             <table class="w-full">
                 <thead class="bg-slate-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Employee</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Leave Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Period</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th class="px-4 py-2.5 text-center text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Days</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Reason</th>

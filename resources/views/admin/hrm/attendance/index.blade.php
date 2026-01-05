@@ -8,8 +8,8 @@
 <div class="mb-6">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
         <div>
-            <h2 class="text-2xl font-bold text-white">Attendance Records</h2>
-            <p class="text-slate-400 mt-1">Track and manage employee attendance</p>
+            <h2 class="text-lg font-semibold text-white">Attendance Records</h2>
+            <p class="text-slate-400 text-sm mt-1">Track and manage employee attendance</p>
         </div>
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('admin.hrm.attendance.active-users') }}"
@@ -46,7 +46,7 @@
     </div>
 
     <!-- Filters -->
-    <form method="GET" class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
+    <form method="GET" class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-3">
         <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
             <select name="employee_id"
                 class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500">
@@ -77,45 +77,48 @@
         <table class="min-w-full divide-y divide-slate-700">
             <thead class="bg-slate-900">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Employee
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        Employee
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Date
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Date
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Tracked
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        Tracked
                     </th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider hidden sm:table-cell">
+                        class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider hidden sm:table-cell">
                         Payroll</th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider hidden md:table-cell">
+                        class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider hidden md:table-cell">
                         Overtime</th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider hidden md:table-cell">
+                        class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider hidden md:table-cell">
                         Source</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">Actions
+                    <th class="px-4 py-2.5 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        Actions
                     </th>
                 </tr>
             </thead>
             <tbody class="bg-slate-800/50 divide-y divide-slate-700">
                 @forelse($attendances as $attendance)
                 <tr class="hover:bg-slate-700/50 transition">
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-4 py-3 whitespace-nowrap">
                         <a href="{{ route('admin.hrm.attendance.employee', $attendance->employee) }}"
                             class="hover:text-lime-400">
                             <div class="text-sm font-medium text-white">{{ $attendance->employee->full_name }}</div>
                             <div class="text-xs text-slate-400">{{ $attendance->employee->code }}</div>
                         </a>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-300">
                         {{ $attendance->date->format('M d, Y') }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-white font-medium">
                         {{ number_format($attendance->tracked_hours, 2) }}h
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-300">
                         {{ number_format($attendance->payroll_hours, 2) }}h
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <td class="px-4 py-3 whitespace-nowrap text-sm">
                         @if($attendance->overtime_hours > 0)
                         <span class="text-orange-400 font-medium">{{ number_format($attendance->overtime_hours, 2)
                             }}h</span>
@@ -123,27 +126,27 @@
                         <span class="text-slate-500">0.00h</span>
                         @endif
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-4 py-3 whitespace-nowrap">
                         <span
                             class="px-2 py-1 text-xs font-semibold rounded-full 
                         {{ $attendance->source === 'jibble' ? 'bg-blue-500/20 text-blue-400' : 'bg-slate-700 text-slate-400' }}">
                             {{ ucfirst($attendance->source) }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                         <a href="{{ route('admin.hrm.attendance.show', $attendance) }}"
                             class="text-lime-400 hover:text-lime-300">View</a>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-8 text-center text-slate-400">
-                        <svg class="w-12 h-12 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor"
+                    <td colspan="7" class="px-4 py-6 text-center text-slate-400">
+                        <svg class="w-10 h-10 mx-auto mb-3 text-slate-600" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <p>No attendance records found</p>
+                        <p class="text-sm">No attendance records found</p>
                     </td>
                 </tr>
                 @endforelse

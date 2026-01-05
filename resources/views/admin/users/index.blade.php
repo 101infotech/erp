@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Team & Users')
-@section('page-title', 'Team & User Management')
+@section('title', 'Employees & Accounts')
+@section('page-title', 'Employees & Accounts Management')
 
 @push('styles')
 <style>
@@ -53,13 +53,17 @@
 
 @section('content')
 <div class="space-y-6">
+    <!-- Include Confirmation Modal -->
+    @include('components.confirm-modal')
+
     <!-- Header -->
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-            <h2 class="text-2xl font-bold text-white">Team & Users</h2>
-            <p class="text-slate-400 mt-1">Manage your team members and system users in one place</p>
+            <h2 class="text-2xl font-bold text-white">Employees & Accounts</h2>
+            <p class="text-slate-400 mt-1">Manage employee records, system accounts, and Jibble integration in one place
+            </p>
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2 justify-end">
             <a href="{{ route('admin.hrm.attendance.index') }}"
                 class="px-4 py-2 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-600 transition flex items-center space-x-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,85 +121,20 @@
         </div>
     </form>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs uppercase tracking-wider">Total Employees</p>
-                    <p class="text-2xl font-bold text-white mt-1">{{ $users->total() }}</p>
-                </div>
-                <div class="w-10 h-10 bg-lime-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs uppercase tracking-wider">Active</p>
-                    <p class="text-2xl font-bold text-lime-400 mt-1">{{ \App\Models\HrmEmployee::where('status',
-                        'active')->count() }}</p>
-                </div>
-                <div class="w-10 h-10 bg-lime-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs uppercase tracking-wider">Admins</p>
-                    <p class="text-2xl font-bold text-blue-400 mt-1">{{ \App\Models\User::where('role',
-                        'admin')->count() }}</p>
-                </div>
-                <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs uppercase tracking-wider">With User Account</p>
-                    <p class="text-2xl font-bold text-teal-400 mt-1">{{
-                        \App\Models\HrmEmployee::whereNotNull('user_id')->count() }}</p>
-                </div>
-                <div class="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Desktop Table View -->
     <div class="hidden lg:block bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead class="bg-slate-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">User
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                            Employee
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Company / Department</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                            Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Role
+                            Account
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                            Joined</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                             Actions</th>
                     </tr>
@@ -242,27 +181,39 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                {{ $employee->status === 'active' ? 'bg-lime-500/20 text-lime-400' : '' }}
-                                {{ $employee->status === 'inactive' ? 'bg-yellow-500/20 text-yellow-400' : '' }}
-                                {{ $employee->status === 'suspended' ? 'bg-red-500/20 text-red-400' : '' }}">
-                                {{ ucfirst($employee->status) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
                             @if($user)
-                            <span
-                                class="px-2 py-1 text-xs font-semibold rounded-full {{ $user->role === 'admin' ? 'bg-blue-500/20 text-blue-400' : 'bg-slate-700 text-slate-300' }}">
-                                {{ ucfirst($user->role) }}
-                            </span>
+                            <div class="flex flex-col gap-1">
+                                <span
+                                    class="px-2 py-1 text-xs font-semibold rounded-full {{ $user->role === 'admin' ? 'bg-blue-500/20 text-blue-400' : 'bg-teal-500/20 text-teal-400' }}">
+                                    <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    {{ $user->role === 'admin' ? 'Admin Access' : 'User Access' }}
+                                </span>
+                            </div>
                             @else
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-400">
-                                No Account
-                            </span>
+                            <div class="flex flex-col gap-2">
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-400">
+                                    <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    No Login Account
+                                </span>
+                                <a href="{{ route('admin.users.create-for-employee', $employee) }}"
+                                    class="px-2 py-1 text-xs font-semibold rounded-full bg-lime-500/20 text-lime-400 hover:bg-lime-500/30 transition text-center">
+                                    <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Create Account
+                                </a>
+                            </div>
                             @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
-                            {{ $employee->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center justify-end gap-2">
@@ -295,7 +246,7 @@
                                 <!-- Jibble Actions Dropdown -->
                                 <div class="relative inline-block text-left" x-data="{ open: false }">
                                     <button @click="open = !open" @click.away="open = false"
-                                        class="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition border border-orange-500/50">
+                                        class="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium bg-slate-700/50 text-slate-300 rounded-lg hover:bg-slate-700 transition border border-slate-600">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -325,11 +276,11 @@
                                             @else
                                             <!-- Unlink from User Account -->
                                             <form action="{{ route('admin.employees.unlink-jibble', $employee) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Are you sure you want to unlink this employee from their user account?');">
+                                                method="POST" id="unlink-form-{{ $employee->id }}">
                                                 @csrf
-                                                <button type="submit"
-                                                    class="w-full flex items-center gap-2 px-4 py-2 text-sm text-yellow-400 hover:bg-slate-700 hover:text-yellow-300 transition text-left">
+                                                <button type="button"
+                                                    class="w-full flex items-center gap-2 px-4 py-2 text-sm text-yellow-400 hover:bg-slate-700 hover:text-yellow-300 transition text-left"
+                                                    onclick="confirmAction({title: 'Unlink User Account?', message: 'Are you sure you want to unlink this employee from their user account? The user account will remain but will no longer be linked to this employee.', type: 'warning', confirmText: 'Yes, Unlink', onConfirm: () => document.getElementById('unlink-form-{{ $employee->id }}').submit()})">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -345,12 +296,12 @@
 
                                             <!-- Delete Jibble Employee -->
                                             <form action="{{ route('admin.employees.delete-jibble', $employee) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Are you sure you want to delete this Jibble employee? This will also delete all attendance records. This action cannot be undone.');">
+                                                method="POST" id="delete-jibble-form-{{ $employee->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit"
-                                                    class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-red-500/20 hover:text-red-300 transition text-left">
+                                                <button type="button"
+                                                    class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-red-500/20 hover:text-red-300 transition text-left"
+                                                    onclick="confirmAction({title: 'Delete Jibble Employee?', message: 'Are you sure you want to delete this Jibble employee?&lt;br&gt;&lt;br&gt;&lt;strong&gt;Warning:&lt;/strong&gt; This will also delete all attendance records. This action cannot be undone.', type: 'danger', confirmText: 'Yes, Delete', onConfirm: () => document.getElementById('delete-jibble-form-{{ $employee->id }}').submit()})">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -368,17 +319,22 @@
                                 @if($user)
                                 <!-- Delete User Account Button -->
                                 <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to delete user account: {{ $user->name }}? This will remove their login access but preserve the employee record.');"
-                                    class="inline-block">
+                                    id="delete-user-form-{{ $user->id }}" class="inline-block">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition border border-red-500/50">
+                                    <button type="button"
+                                        class="inline-flex items-center justify-center p-2 text-sm font-medium bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition border border-red-500/50"
+                                        onclick="confirmAction({
+                                            title: 'Delete User & Employee?',
+                                            message: 'Are you sure you want to delete <strong>{{ $user->name }}</strong>?<br><br>This will permanently delete:<br>• User login account<br>• Employee record<br>• All attendance data<br><br><strong class=\'text-red-400\'>This action cannot be undone!</strong>',
+                                            type: 'danger',
+                                            confirmText: 'Yes, Delete Everything',
+                                            onConfirm: () => document.getElementById('delete-user-form-{{ $user->id }}').submit()
+                                        })">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
-                                        <span>Delete User</span>
                                     </button>
                                 </form>
                                 @endif
@@ -387,7 +343,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-slate-400">
+                        <td colspan="4" class="px-6 py-8 text-center text-slate-400">
                             <svg class="w-12 h-12 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -520,11 +476,12 @@
                                 </div>
                             </div>
                         </button>
-                        <form action="{{ route('admin.users.send-reset-link', $user) }}" method="POST">
+                        <form action="{{ route('admin.users.send-reset-link', $user) }}" method="POST"
+                            id="reset-link-form-mobile-{{ $user->id }}">
                             @csrf
-                            <button type="submit"
-                                onclick="return confirm('Send password reset link to {{ $user->email }}?')"
-                                class="w-full text-left px-4 py-3 text-sm hover:bg-slate-700 transition border-b border-slate-700">
+                            <button type="button"
+                                class="w-full text-left px-4 py-3 text-sm hover:bg-slate-700 transition border-b border-slate-700"
+                                onclick="confirmAction({title: 'Send Password Reset Link?', message: 'Send a password reset link to &lt;strong&gt;{{ $user->email }}&lt;/strong&gt;?&lt;br&gt;&lt;br&gt;The user will receive an email with a secure link to reset their password.', type: 'info', confirmText: 'Yes, Send Link', onConfirm: () => document.getElementById('reset-link-form-mobile-{{ $user->id }}').submit()})">
                                 <div class="flex items-center gap-3">
                                     <div
                                         class="flex-shrink-0 w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -541,11 +498,12 @@
                                 </div>
                             </button>
                         </form>
-                        <form action="{{ route('admin.users.reset-password', $user) }}" method="POST">
+                        <form action="{{ route('admin.users.reset-password', $user) }}" method="POST"
+                            id="random-password-form-mobile-{{ $user->id }}">
                             @csrf
-                            <button type="submit"
-                                onclick="return confirm('Generate random password and email to {{ $user->email }}?')"
-                                class="w-full text-left px-4 py-3 text-sm hover:bg-slate-700 transition">
+                            <button type="button"
+                                class="w-full text-left px-4 py-3 text-sm hover:bg-slate-700 transition"
+                                onclick="confirmAction({title: 'Generate Random Password?', message: 'Generate a random secure password and email it to &lt;strong&gt;{{ $user->email }}&lt;/strong&gt;?&lt;br&gt;&lt;br&gt;A new random password will be created and sent to the user immediately.', type: 'warning', confirmText: 'Yes, Generate & Send', onConfirm: () => document.getElementById('random-password-form-mobile-{{ $user->id }}').submit()})">
                                 <div class="flex items-center gap-3">
                                     <div
                                         class="flex-shrink-0 w-8 h-8 bg-yellow-500/10 rounded-lg flex items-center justify-center">
@@ -566,11 +524,13 @@
                 </div>
 
                 @if($user->id !== Auth::id())
-                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block">
+                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block"
+                    id="delete-user-mobile-form-{{ $user->id }}">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this user?')"
-                        class="px-3 py-1.5 text-xs bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition">
+                    <button type="button"
+                        class="px-3 py-1.5 text-xs bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition"
+                        onclick="confirmAction({title: 'Delete User & Employee?', message: 'Are you sure you want to delete &lt;strong&gt;{{ $user->name }}&lt;/strong&gt;?&lt;br&gt;&lt;br&gt;This will permanently delete:&lt;br&gt;• User login account&lt;br&gt;• Employee record&lt;br&gt;• All attendance data&lt;br&gt;&lt;br&gt;&lt;strong&gt;This action cannot be undone!&lt;/strong&gt;', type: 'danger', confirmText: 'Yes, Delete Everything', onConfirm: () => document.getElementById('delete-user-mobile-form-{{ $user->id }}').submit()})">
                         Delete
                     </button>
                 </form>

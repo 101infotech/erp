@@ -8,10 +8,26 @@
 <div class="mb-6">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
         <div>
-            <h2 class="text-2xl font-bold text-white">Employees</h2>
-            <p class="text-slate-400 mt-1">Manage your team members and their information</p>
+            <h2 class="text-lg font-semibold text-white">Employee HR Records</h2>
+            <p class="text-slate-400 text-sm mt-1">Manage employee information, positions, and departments</p>
+            <p class="text-xs text-slate-500 mt-2">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                For system accounts and Jibble integration, use <a href="{{ route('admin.users.index') }}"
+                    class="text-lime-400 hover:text-lime-300 underline">Employees & Accounts</a>
+            </p>
         </div>
         <div class="flex flex-wrap gap-2">
+            <a href="{{ route('admin.users.index') }}"
+                class="px-3 py-1.5 text-sm bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>Accounts & Jibble</span>
+            </a>
             <a href="{{ route('admin.hrm.employees.create') }}"
                 class="px-3 py-1.5 text-sm bg-lime-500 text-slate-950 font-semibold rounded-lg hover:bg-lime-400 transition flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -24,7 +40,7 @@
 
     <!-- Filters -->
     <form method="GET"
-        class="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+        class="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg p-3">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search employees..."
                 class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
@@ -61,44 +77,47 @@
         <table class="min-w-full divide-y divide-slate-700">
             <thead class="bg-slate-900">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Employee
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        Employee
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
                         Department</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Status
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">Status
                     </th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">Actions
+                    <th class="px-4 py-2.5 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        Actions
                     </th>
                 </tr>
             </thead>
             <tbody class="bg-slate-800/50 divide-y divide-slate-700">
                 @forelse($employees as $employee)
                 <tr class="hover:bg-slate-700/50 transition">
-                    <td class="px-6 py-4">
+                    <td class="px-4 py-3">
                         <div class="flex items-center">
-                            <div class="h-12 w-12 flex-shrink-0">
+                            <div class="h-10 w-10 flex-shrink-0">
                                 @if($employee->avatar_url)
-                                <img class="h-12 w-12 rounded-full object-cover border-2 border-slate-600"
+                                <img class="h-10 w-10 rounded-full object-cover border-2 border-slate-600"
                                     src="{{ $employee->avatar_url }}" alt="{{ $employee->name }}">
                                 @else
                                 <div
-                                    class="h-12 w-12 rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center shadow-lg">
-                                    <span class="text-slate-900 font-bold text-lg">{{ strtoupper(substr($employee->name
+                                    class="h-10 w-10 rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center shadow-lg">
+                                    <span class="text-slate-900 font-bold text-base">{{
+                                        strtoupper(substr($employee->name
                                         ?? 'U', 0, 1)) }}</span>
                                 </div>
                                 @endif
                             </div>
-                            <div class="ml-4">
-                                <div class="text-base font-semibold text-white">{{ $employee->name }}</div>
-                                <div class="text-sm text-slate-400 mt-0.5">{{ $employee->position ?? 'Employee' }}</div>
-                                <div class="text-xs text-slate-500 mt-1">{{ $employee->company->name }}</div>
+                            <div class="ml-3">
+                                <div class="text-sm font-semibold text-white">{{ $employee->name }}</div>
+                                <div class="text-xs text-slate-400 mt-0.5">{{ $employee->position ?? 'Employee' }}</div>
+                                <div class="text-xs text-slate-500 mt-0.5">{{ $employee->company->name }}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-300">
                         {{ $employee->department->name ?? 'N/A' }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-4 py-3 whitespace-nowrap">
                         <span class="px-2 py-1 text-xs font-semibold rounded-full 
                             {{ $employee->status === 'active' ? 'bg-lime-500/20 text-lime-400' : '' }}
                             {{ $employee->status === 'inactive' ? 'bg-yellow-500/20 text-yellow-400' : '' }}
@@ -107,7 +126,7 @@
                         </span>
                     </td>
                     <!-- Jibble sync status removed -->
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium space-x-2">
                         <a href="{{ route('admin.hrm.attendance.employee', $employee) }}"
                             class="text-teal-400 hover:text-teal-300">Timesheet</a>
                         <a href="{{ route('admin.hrm.employees.show', $employee) }}"
@@ -125,13 +144,13 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-8 text-center text-slate-400">
-                        <svg class="w-12 h-12 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor"
+                    <td colspan="5" class="px-4 py-6 text-center text-slate-400">
+                        <svg class="w-10 h-10 mx-auto mb-3 text-slate-600" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                        <p class="mb-2">No employees found</p>
+                        <p class="mb-2 text-sm">No employees found</p>
                         <a href="{{ route('admin.hrm.employees.create') }}"
                             class="text-lime-400 hover:text-lime-300">Add your first employee</a>
                     </td>
@@ -154,14 +173,14 @@
                     src="{{ $employee->avatar_url }}" alt="{{ $employee->name }}">
                 @else
                 <div
-                    class="h-14 w-14 rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center shadow-lg">
-                    <span class="text-slate-900 font-bold text-xl">{{ strtoupper(substr($employee->name ?? 'U', 0, 1))
+                    class="h-12 w-12 rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center shadow-lg">
+                    <span class="text-slate-900 font-bold text-lg">{{ strtoupper(substr($employee->name ?? 'U', 0, 1))
                         }}</span>
                 </div>
                 @endif
                 <div>
-                    <div class="text-base font-semibold text-white">{{ $employee->name }}</div>
-                    <div class="text-sm text-slate-400">{{ $employee->position ?? 'Employee' }}</div>
+                    <div class="text-sm font-semibold text-white">{{ $employee->name }}</div>
+                    <div class="text-xs text-slate-400">{{ $employee->position ?? 'Employee' }}</div>
                 </div>
             </div>
             <span class="px-2 py-1 text-xs font-semibold rounded-full 
@@ -206,12 +225,12 @@
         </div>
     </div>
     @empty
-    <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-8 text-center">
-        <svg class="w-12 h-12 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6 text-center">
+        <svg class="w-10 h-10 mx-auto mb-3 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
-        <p class="text-slate-400 mb-2">No employees found</p>
+        <p class="text-slate-400 mb-2 text-sm">No employees found</p>
         <a href="{{ route('admin.hrm.employees.create') }}" class="text-lime-400 hover:text-lime-300">Add your first
             employee</a>
     </div>

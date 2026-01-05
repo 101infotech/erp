@@ -16,34 +16,8 @@ class HrmEmployeeController extends Controller
 
     public function index(Request $request)
     {
-        $query = HrmEmployee::with(['company', 'department', 'user']);
-
-        if ($request->filled('company_id')) {
-            $query->where('company_id', $request->company_id);
-        }
-
-        if ($request->filled('department_id')) {
-            $query->where('department_id', $request->department_id);
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%");
-            });
-        }
-
-        $employees = $query->orderBy('name')->paginate(15);
-        $companies = HrmCompany::orderBy('name')->get();
-        $departments = HrmDepartment::orderBy('name')->get();
-
-        return view('admin.hrm.employees.index', compact('employees', 'companies', 'departments'));
+        // Redirect to the Employees & Accounts page
+        return redirect()->route('admin.users.index');
     }
 
     public function create()

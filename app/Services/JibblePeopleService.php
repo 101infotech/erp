@@ -78,6 +78,23 @@ class JibblePeopleService
                 $fullName = $person['fullName'] ?? trim(($person['firstName'] ?? '') . ' ' . ($person['lastName'] ?? ''));
                 $email = $person['email'] ?? null;
 
+                // Validate email uniqueness (allow multiple NULL, but not duplicate emails)
+                if ($email) {
+                    $existingEmployee = HrmEmployee::where('email', $email)
+                        ->where('jibble_person_id', '!=', $person['id'])
+                        ->first();
+
+                    if ($existingEmployee) {
+                        Log::warning('Duplicate email detected during Jibble sync', [
+                            'jibble_id' => $person['id'],
+                            'email' => $email,
+                            'existing_employee_id' => $existingEmployee->id,
+                        ]);
+                        // Skip this email to prevent duplicates
+                        $email = null;
+                    }
+                }
+
                 // Find existing employee by jibble_person_id
                 $employee = HrmEmployee::firstOrNew(['jibble_person_id' => $person['id']]);
 

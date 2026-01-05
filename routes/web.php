@@ -125,6 +125,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin Routes without workspace
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+        
+        // Admin Profile
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        
         Route::resource('sites', SiteController::class);
 
         // Site-specific dashboard
@@ -150,6 +155,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // User Management
         Route::resource('users', UserController::class);
+        Route::get('users/create-for-employee/{employee}', [UserController::class, 'createForEmployee'])->name('users.create-for-employee');
+        Route::post('users/store-for-employee/{employee}', [UserController::class, 'storeForEmployee'])->name('users.store-for-employee');
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('users/{user}/send-reset-link', [UserController::class, 'sendPasswordResetLink'])->name('users.send-reset-link');
         Route::post('users/{user}/set-password', [UserController::class, 'setPassword'])->name('users.set-password');
@@ -160,6 +167,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('employees/{employee}/link-jibble', [UserController::class, 'linkJibble'])->name('employees.link-jibble');
         Route::post('employees/{employee}/unlink-jibble', [UserController::class, 'unlinkJibble'])->name('employees.unlink-jibble');
         Route::delete('employees/{employee}/delete-jibble', [UserController::class, 'deleteJibbleEmployee'])->name('employees.delete-jibble');
+
+        // Restore soft-deleted records
+        Route::get('users/trash', [UserController::class, 'trash'])->name('users.trash');
+        Route::post('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+        Route::post('employees/{id}/restore', [UserController::class, 'restoreEmployee'])->name('employees.restore');
 
         // Leads Management with Permission-based Access Control
         Route::prefix('leads')->name('leads.')->group(function () {
