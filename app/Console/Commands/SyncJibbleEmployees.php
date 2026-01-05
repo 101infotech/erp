@@ -14,7 +14,7 @@ class SyncJibbleEmployees extends Command
     public function handle(JibblePeopleService $peopleService): int
     {
         $this->info('Starting Jibble employee sync...');
-        
+
         try {
             $count = $peopleService->syncEmployees();
             $this->info("Successfully synced {$count} employees from Jibble.");
