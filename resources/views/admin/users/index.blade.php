@@ -122,7 +122,7 @@
         <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-xs uppercase tracking-wider">Total Users</p>
+                    <p class="text-slate-400 text-xs uppercase tracking-wider">Total Employees</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ $users->total() }}</p>
                 </div>
                 <div class="w-10 h-10 bg-lime-500/20 rounded-lg flex items-center justify-center">
@@ -137,14 +137,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs uppercase tracking-wider">Active</p>
-                    @php
-                    if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'status')) {
-                    $activeCount = \App\Models\User::where('status', 'active')->count();
-                    } else {
-                    $activeCount = \App\Models\User::count();
-                    }
-                    @endphp
-                    <p class="text-2xl font-bold text-lime-400 mt-1">{{ $activeCount }}</p>
+                    <p class="text-2xl font-bold text-lime-400 mt-1">{{ \App\Models\HrmEmployee::where('status', 'active')->count() }}</p>
                 </div>
                 <div class="w-10 h-10 bg-lime-500/20 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,9 +165,8 @@
         <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-xs uppercase tracking-wider">With Employee Profile</p>
-                    <p class="text-2xl font-bold text-teal-400 mt-1">{{
-                        \App\Models\User::whereHas('hrmEmployee')->count() }}</p>
+                    <p class="text-slate-400 text-xs uppercase tracking-wider">With User Account</p>
+                    <p class="text-2xl font-bold text-teal-400 mt-1">{{ \App\Models\HrmEmployee::whereNotNull('user_id')->count() }}</p>
                 </div>
                 <div class="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,63 +199,72 @@
                     </tr>
                 </thead>
                 <tbody class="bg-slate-800/50 divide-y divide-slate-700">
-                    @forelse($users as $user)
+                    @forelse($users as $employee)
                     @php
-                    $employee = $user->hrmEmployee;
+                    $user = $employee->user; // Get the related user account if exists
+                    $displayName = $user ? $user->name : $employee->name;
+                    $displayEmail = $user ? $user->email : $employee->email;
                     @endphp
                     <tr class="hover:bg-slate-700/50 transition">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-12 w-12">
-                                    @if($employee && $employee->avatar_url)
+                                    @if($employee->avatar_url)
                                     <img class="h-12 w-12 rounded-full object-cover border-2 border-slate-600"
-                                        src="{{ $employee->avatar_url }}" alt="{{ $user->name }}">
+                                        src="{{ $employee->avatar_url }}" alt="{{ $displayName }}">
                                     @else
                                     <div
                                         class="h-12 w-12 rounded-full bg-gradient-to-br from-lime-500 to-lime-600 flex items-center justify-center shadow-lg">
-                                        <span class="text-slate-900 font-bold text-lg">{{ strtoupper(substr($user->name,
+                                        <span class="text-slate-900 font-bold text-lg">{{ strtoupper(substr($displayName,
                                             0, 1)) }}</span>
                                     </div>
                                     @endif
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-white">{{ $user->name }}</div>
-                                    <div class="text-xs text-slate-400 mt-0.5">{{ $user->email }}</div>
-                                    @if($employee && $employee->position)
+                                    <div class="text-sm font-medium text-white">{{ $displayName }}</div>
+                                    @if($displayEmail)
+                                    <div class="text-xs text-slate-400 mt-0.5">{{ $displayEmail }}</div>
+                                    @else
+                                    <div class="text-xs text-orange-400 mt-0.5">⚠️ No email</div>
+                                    @endif
+                                    @if($employee->position)
                                     <div class="text-xs text-slate-500 mt-1">{{ $employee->position }}</div>
                                     @endif
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @if($employee)
                             <div class="text-sm text-white">{{ $employee->company->name ?? 'N/A' }}</div>
                             <div class="text-xs text-slate-400">{{ $employee->department->name ?? 'No Department' }}
                             </div>
-                            @else
-                            <span class="text-xs text-slate-500 italic">No employee profile</span>
-                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                {{ ($user->status ?? 'active') === 'active' ? 'bg-lime-500/20 text-lime-400' : '' }}
-                                {{ ($user->status ?? 'active') === 'inactive' ? 'bg-yellow-500/20 text-yellow-400' : '' }}
-                                {{ ($user->status ?? 'active') === 'suspended' ? 'bg-red-500/20 text-red-400' : '' }}">
-                                {{ ucfirst($user->status ?? 'active') }}
+                                {{ $employee->status === 'active' ? 'bg-lime-500/20 text-lime-400' : '' }}
+                                {{ $employee->status === 'inactive' ? 'bg-yellow-500/20 text-yellow-400' : '' }}
+                                {{ $employee->status === 'suspended' ? 'bg-red-500/20 text-red-400' : '' }}">
+                                {{ ucfirst($employee->status) }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
+                            @if($user)
                             <span
                                 class="px-2 py-1 text-xs font-semibold rounded-full {{ $user->role === 'admin' ? 'bg-blue-500/20 text-blue-400' : 'bg-slate-700 text-slate-300' }}">
                                 {{ ucfirst($user->role) }}
                             </span>
+                            @else
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-400">
+                                No Account
+                            </span>
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
-                            {{ $user->created_at->format('M d, Y') }}
+                            {{ $employee->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center justify-end gap-2">
-                                <!-- View User Profile Button -->
+                                <!-- View Employee Profile Button -->
+                                @if($user)
                                 <a href="{{ route('admin.users.show', $user) }}"
                                     class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-transparent text-slate-300 rounded-lg hover:bg-slate-700/50 hover:text-white transition border border-slate-600">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -274,6 +275,18 @@
                                     </svg>
                                     <span>View</span>
                                 </a>
+                                @else
+                                <a href="{{ route('admin.hrm.employees.show', $employee) }}"
+                                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-transparent text-slate-300 rounded-lg hover:bg-slate-700/50 hover:text-white transition border border-slate-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <span>View</span>
+                                </a>
+                                @endif
                             </div>
                         </td>
                     </tr>

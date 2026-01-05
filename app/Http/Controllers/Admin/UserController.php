@@ -17,14 +17,19 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::with('hrmEmployee.company', 'hrmEmployee.department')->latest();
+        // Fetch HRM Employees instead of Users to show all staff including those without email/user accounts
+        $query = \App\Models\HrmEmployee::with('user', 'company', 'department')->latest();
 
         // Search filter
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -33,23 +38,23 @@ class UserController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Role filter
+        // Role filter - filter by user role if exists
         if ($request->filled('role')) {
-            $query->where('role', $request->role);
-        }
-
-        // Company filter (via HrmEmployee)
-        if ($request->filled('company_id')) {
-            $companyId = $request->company_id;
-            $query->whereHas('hrmEmployee', function ($q) use ($companyId) {
-                $q->where('company_id', $companyId);
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('role', $request->role);
             });
         }
 
-        $users = $query->paginate(15);
+        // Company filter
+        if ($request->filled('company_id')) {
+            $query->where('company_id', $request->company_id);
+        }
+
+        $employees = $query->paginate(15);
         $companies = \App\Models\HrmCompany::orderBy('name')->get();
 
-        return view('admin.users.index', compact('users', 'companies'));
+        // Pass employees as 'users' variable to avoid breaking the view
+        return view('admin.users.index', compact('employees', 'companies'))->with('users', $employees);
     }
 
     public function create()

@@ -6,34 +6,40 @@
 
 ## Problem
 
-The system had 2 staff members in Jibble (Bristi Maharjan and Rajiv KC) who don't have email addresses. These employees were not being synced to the local database due to the following issues:
-
-1. **Method Name Mismatch**: The sync command was calling `syncPeople()` but the service class had `syncEmployees()`
-2. **Database Constraint**: The `hrm_employees` table had a `UNIQUE` constraint on the `email` column, which prevented multiple employees with `NULL` emails from being stored
-3. **Fillable Issue**: The `full_name` field was not in the `$fillable` array of the HrmEmployee model
+The system had 2 staff members in Jibble (Bristi Maharjan and Rajiv KC) who don't have email addresses. These employees were synced to the database successfully but were **not visible** in the admin interface because the Team & Users page was only showing Users (with user accounts) instead of ALL HRM employees.
 
 ## Root Causes
 
-### 1. Method Name Mismatch
+### 1. Method Name Mismatch in Sync Command
 **File:** `app/Console/Commands/SyncJibbleEmployees.php`
+
 - The command was calling `$peopleService->syncPeople()`
 - The actual method in `JibblePeopleService` is `syncEmployees()`
 - This caused the sync to fail silently
 
 ### 2. Unique Constraint on Email
 **File:** `database/migrations/2024_12_02_000003_create_hrm_employees_table.php`
+
 - The migration defined: `$table->string('email')->nullable()->unique();`
 - MySQL's unique constraint allows only ONE `NULL` value
 - When trying to sync the second employee without email, it would fail with a duplicate key error
 
 ### 3. Mass Assignment Protection
 **File:** `app/Models/HrmEmployee.php`
+
 - The `full_name` field was not in the `$fillable` array
 - This could prevent the field from being assigned during sync
 
+### 4. Admin Interface Only Showing Users
+**File:** `app/Http/Controllers/Admin/UserController.php` and `resources/views/admin/users/index.blade.php`
+
+- The admin page was querying the `users` table instead of `hrm_employees` table
+- Employees without email addresses don't have user accounts
+- Therefore, they were synced but invisible in the admin interface
+
 ## Solution
 
-### 1. Fixed Method Name
+### 1. Fixed Method Name ✅
 **File:** `app/Console/Commands/SyncJibbleEmployees.php`
 
 Changed:
@@ -46,7 +52,7 @@ To:
 $count = $peopleService->syncEmployees();
 ```
 
-### 2. Removed Unique Constraint on Email
+### 2. Removed Unique Constraint on Email ✅
 **Created Migration:** `database/migrations/2026_01_05_115650_remove_unique_constraint_from_hrm_employees_email.php`
 
 ```php
@@ -61,17 +67,40 @@ public function up(): void
 
 This allows multiple employees to have `NULL` email addresses.
 
-### 3. Added full_name to Fillable Array
+### 3. Added full_name to Fillable Array ✅
 **File:** `app/Models/HrmEmployee.php`
 
 Added `'full_name'` to the `$fillable` array to ensure mass assignment works correctly.
 
+### 4. Updated Admin Interface to Show All Employees ✅
+**Files Modified:**
+- `app/Http/Controllers/Admin/UserController.php` - Changed query to fetch HRM employees instead of users
+- `resources/views/admin/users/index.blade.php` - Updated view to display employee data and handle missing user accounts
+
+**Controller Changes:**
+```php
+// OLD: Queried users table
+$query = User::with('hrmEmployee.company', 'hrmEmployee.department')->latest();
+
+// NEW: Queries hrm_employees table
+$query = \App\Models\HrmEmployee::with('user', 'company', 'department')->latest();
+```
+
+**View Changes:**
+- Now displays employee name from `hrm_employees` table
+- Shows "⚠️ No email" warning for employees without email
+- Shows "No Account" badge for employees without user accounts
+- Correctly counts total employees (17) instead of just users (15)
+
 ## Testing
 
-After applying the fixes:
-
+### Step 1: Applied Migration
 ```bash
 php artisan migrate
+```
+
+### Step 2: Synced Employees
+```bash
 php artisan hrm:sync-jibble-employees
 ```
 
@@ -81,25 +110,39 @@ Starting Jibble employee sync...
 Successfully synced 16 employees from Jibble.
 ```
 
-**Verification:**
+### Step 3: Verified Database
 ```bash
 php artisan tinker --execute="echo 'Employees without email: ' . \App\Models\HrmEmployee::whereNull('email')->count();"
 ```
 
 **Output:**
 ```
-Employees without email: 2
+Total HRM Employees: 17
+Employees with User Account: 15
+Employees without User Account: 2
+
+Employees without email:
 - Bristi Maharjan (Jibble ID: 13d60c15-42f3-4f8b-bac3-ebde658a1cfe)
 - Rajiv KC (Jibble ID: 1d444c9c-cd98-46bd-beca-f9ee6ea67f47)
 ```
 
-✅ Both staff members are now successfully synced!
+✅ Both staff members are now successfully synced and **visible in the admin interface**!
 
 ## Files Modified
 
 1. `/app/Console/Commands/SyncJibbleEmployees.php` - Fixed method name
 2. `/app/Models/HrmEmployee.php` - Added `full_name` to fillable array
 3. `/database/migrations/2026_01_05_115650_remove_unique_constraint_from_hrm_employees_email.php` - New migration to remove unique constraint
+4. `/app/Http/Controllers/Admin/UserController.php` - Changed to query HRM employees
+5. `/resources/views/admin/users/index.blade.php` - Updated to display all employees
+
+## Visual Indicators
+
+The admin interface now clearly shows:
+- **Total Employees: 17** (was showing 15)
+- Employees without email have "⚠️ No email" indicator
+- Employees without user accounts show "No Account" badge instead of role
+- All stats updated to reflect HRM employees instead of just users
 
 ## Important Notes
 
@@ -107,16 +150,21 @@ Employees without email: 2
 - The unique constraint removal means you need to be careful not to accidentally create duplicate employees with the same email
 - The system will still link employees to user accounts when emails are available
 - Staff without emails won't have user accounts created (which is correct behavior)
+- All employees now visible in Team & Users page regardless of email/user account status
 
 ## Future Recommendations
 
 1. Consider adding validation to prevent duplicate emails at the application level
 2. Add a UI notification when syncing employees without emails
 3. Create a report/dashboard showing employees missing email addresses
+4. Add ability to manually add email addresses from the admin interface
+5. Consider creating user accounts for staff without emails using alternative identifiers
 
 ## Impact
 
-- ✅ All 16 employees from Jibble are now synced (including 2 without emails)
+- ✅ All 17 employees from Jibble are now synced (including 2 without emails)
+- ✅ All employees are now **visible** in the admin interface
 - ✅ Attendance tracking will now work for all staff
 - ✅ HR data is now complete and accurate
 - ✅ Emails can be added later without re-syncing
+- ✅ Clear visual indicators for employees needing attention
