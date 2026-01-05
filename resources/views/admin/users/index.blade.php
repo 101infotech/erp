@@ -52,7 +52,7 @@
 @endpush
 
 @section('content')
-    <div class="space-y-4">
+<div class="space-y-4">
     <!-- Include Confirmation Modal -->
     @include('components.confirm-modal')
 

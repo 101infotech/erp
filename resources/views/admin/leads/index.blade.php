@@ -211,7 +211,8 @@
                         </td>
                         <td class="px-4 py-3">
                             @if($lead->inspection_charge)
-                            <span class="text-lime-400 font-medium">NPR {{ number_format($lead->inspection_charge, 2) }}</span>
+                            <span class="text-lime-400 font-medium">NPR {{ number_format($lead->inspection_charge, 2)
+                                }}</span>
                             @else
                             <span class="text-slate-500">-</span>
                             @endif
