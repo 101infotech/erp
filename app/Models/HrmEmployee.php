@@ -17,6 +17,7 @@ class HrmEmployee extends Model
         'department_id',
         'jibble_person_id',
         'name',
+        'full_name',
         'email',
         'phone',
         'code',

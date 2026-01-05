@@ -16,7 +16,7 @@ class SyncJibbleEmployees extends Command
         $this->info('Starting Jibble employee sync...');
         
         try {
-            $count = $peopleService->syncPeople();
+            $count = $peopleService->syncEmployees();
             $this->info("Successfully synced {$count} employees from Jibble.");
             return self::SUCCESS;
         } catch (\Exception $e) {
