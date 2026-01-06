@@ -86,52 +86,52 @@
     @if($leave->status !== 'pending')
     <div class="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
-            @if($leave->status === 'approved') 
-                Approval Information
-            @elseif($leave->status === 'cancelled') 
-                Cancelled Information
-            @else 
-                {{ ucfirst($leave->status) }} Information
+            @if($leave->status === 'approved')
+            Approval Information
+            @elseif($leave->status === 'cancelled')
+            Cancelled Information
+            @else
+            {{ ucfirst($leave->status) }} Information
             @endif
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <p class="text-sm text-slate-600 dark:text-slate-400">
                     @if($leave->status === 'cancelled')
-                        Cancelled By
+                    Cancelled By
                     @elseif($leave->status === 'rejected')
-                        Rejected By
+                    Rejected By
                     @else
-                        {{ $leave->status === 'approved' ? 'Approved' : ucfirst($leave->status) }} By
+                    {{ $leave->status === 'approved' ? 'Approved' : ucfirst($leave->status) }} By
                     @endif
                 </p>
                 <p class="text-slate-900 dark:text-white font-medium">
                     @if($leave->status === 'cancelled')
-                        {{ $leave->canceller->name ?? 'N/A' }}
+                    {{ $leave->canceller->name ?? 'N/A' }}
                     @elseif($leave->status === 'rejected')
-                        {{ $leave->rejecter->name ?? 'N/A' }}
+                    {{ $leave->rejecter->name ?? 'N/A' }}
                     @else
-                        {{ $leave->approver->name ?? 'N/A' }}
+                    {{ $leave->approver->name ?? 'N/A' }}
                     @endif
                 </p>
             </div>
             <div>
                 <p class="text-sm text-slate-600 dark:text-slate-400">
                     @if($leave->status === 'cancelled')
-                        Cancelled At
+                    Cancelled At
                     @elseif($leave->status === 'rejected')
-                        Rejected At
+                    Rejected At
                     @else
-                        {{ $leave->status === 'approved' ? 'Approved' : ucfirst($leave->status) }} At
+                    {{ $leave->status === 'approved' ? 'Approved' : ucfirst($leave->status) }} At
                     @endif
                 </p>
                 <p class="text-slate-900 dark:text-white font-medium">
                     @if($leave->status === 'cancelled')
-                        {{ $leave->cancelled_at ? $leave->cancelled_at->format('d M Y, h:i A') : 'N/A' }}
+                    {{ $leave->cancelled_at ? $leave->cancelled_at->format('d M Y, h:i A') : 'N/A' }}
                     @elseif($leave->status === 'rejected')
-                        {{ $leave->rejected_at ? $leave->rejected_at->format('d M Y, h:i A') : 'N/A' }}
+                    {{ $leave->rejected_at ? $leave->rejected_at->format('d M Y, h:i A') : 'N/A' }}
                     @else
-                        {{ $leave->approved_at ? $leave->approved_at->format('d M Y, h:i A') : 'N/A' }}
+                    {{ $leave->approved_at ? $leave->approved_at->format('d M Y, h:i A') : 'N/A' }}
                     @endif
                 </p>
             </div>

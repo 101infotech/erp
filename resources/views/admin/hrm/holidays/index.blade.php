@@ -147,7 +147,8 @@
 
 <!-- Delete Modals -->
 @foreach($holidays as $item)
-<div id="delete-holiday-{{ $item->id }}" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+<div id="delete-holiday-{{ $item->id }}"
+    class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-slate-800 rounded-lg max-w-md w-full p-6 border border-slate-700">
         <div class="flex items-start gap-4 mb-4">
             <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
@@ -157,7 +158,8 @@
             </div>
             <div class="flex-1">
                 <h3 class="text-xl font-semibold text-white mb-2">Delete Holiday</h3>
-                <p class="text-slate-300 text-sm">Are you sure you want to delete "{{ $item->name }}" on {{ $item->date }}? This action cannot be undone.</p>
+                <p class="text-slate-300 text-sm">Are you sure you want to delete "{{ $item->name }}" on {{ $item->date
+                    }}? This action cannot be undone.</p>
             </div>
         </div>
         <div class="flex gap-3 justify-end">
@@ -168,8 +170,7 @@
             <form action="{{ route('admin.hrm.holidays.destroy', $item) }}" method="POST" class="inline">
                 @csrf
                 @method('DELETE')
-                <button type="submit"
-                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
+                <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
                     Delete Holiday
                 </button>
             </form>
@@ -180,7 +181,7 @@
 
 @push('scripts')
 <script>
-function openDeleteModal(id) {
+    function openDeleteModal(id) {
     document.getElementById(id).classList.remove('hidden');
 }
 
