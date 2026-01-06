@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         $stats = [
             'total_sites' => \App\Models\Site::count(),
-            'total_team_members' => \App\Models\TeamMember::count(),
+            'total_team_members' => \App\Models\HrmEmployee::where('status', 'active')->count(),
             'total_news' => \App\Models\NewsMedia::count(),
             'total_careers' => \App\Models\Career::where('is_active', true)->count(),
             'total_case_studies' => \App\Models\CaseStudy::count(),
