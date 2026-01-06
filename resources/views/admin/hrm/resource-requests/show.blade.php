@@ -146,7 +146,6 @@
             <form action="{{ route('admin.hrm.resource-requests.approve', $request->id) }}" method="POST"
                 class="inline">
                 @csrf
-                @method('PATCH')
                 <button type="submit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition"
                     onclick="return confirm('Are you sure you want to approve this request?')">
                     Approve Request
@@ -176,7 +175,6 @@
         <h3 class="text-xl font-semibold text-white mb-4">Reject Request</h3>
         <form action="{{ route('admin.hrm.resource-requests.reject', $request->id) }}" method="POST">
             @csrf
-            @method('PATCH')
             <div class="mb-4">
                 <label class="block text-sm text-slate-300 mb-2">Reason for rejection (optional)</label>
                 <textarea name="admin_notes" rows="4"
@@ -203,7 +201,6 @@
         <h3 class="text-xl font-semibold text-white mb-4">Mark as Fulfilled</h3>
         <form action="{{ route('admin.hrm.resource-requests.fulfill', $request->id) }}" method="POST">
             @csrf
-            @method('PATCH')
             <div class="mb-4">
                 <label class="block text-sm text-slate-300 mb-2">Fulfillment notes (optional)</label>
                 <textarea name="admin_notes" rows="4"
