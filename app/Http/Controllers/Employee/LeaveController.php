@@ -152,7 +152,8 @@ class LeaveController extends Controller
 
         $employee = $user->hrmEmployee;
 
-        $leave = HrmLeaveRequest::where('employee_id', $employee->id)
+        $leave = HrmLeaveRequest::with('approver', 'rejecter', 'canceller')
+            ->where('employee_id', $employee->id)
             ->findOrFail($id);
 
         return view('employee.leave.show', compact('leave'));
@@ -176,7 +177,11 @@ class LeaveController extends Controller
             ->where('status', 'pending')
             ->findOrFail($id);
 
-        $leave->update(['status' => 'cancelled']);
+        $leave->update([
+            'status' => 'cancelled',
+            'cancelled_by' => $user->id,
+            'cancelled_at' => now(),
+        ]);
 
         return redirect()->route('employee.leave.index')
             ->with('success', 'Leave request cancelled successfully.');

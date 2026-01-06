@@ -93,15 +93,35 @@
                                     d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div>
-                                <p class="text-red-400 font-semibold">Rejected {{ $leave->approver ? 'by ' .
-                                    $leave->approver->name : '' }}</p>
-                                @if($leave->approved_at)
-                                <p class="text-red-300 text-sm mb-2">on {{ $leave->approved_at->format('M d, Y h:i A')
+                                <p class="text-red-400 font-semibold">Rejected {{ $leave->rejecter ? 'by ' .
+                                    $leave->rejecter->name : '' }}</p>
+                                @if($leave->rejected_at)
+                                <p class="text-red-300 text-sm mb-2">on {{ $leave->rejected_at->format('M d, Y h:i A')
                                     }}</p>
                                 @endif
                                 @if($leave->rejection_reason)
                                 <p class="text-red-300 text-sm mt-2"><strong>Reason:</strong> {{
                                     $leave->rejection_reason }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($leave->status === 'cancelled')
+                    <div class="bg-slate-500/10 border border-slate-500/30 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-slate-400 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            <div>
+                                <p class="text-slate-400 font-semibold">Cancelled {{ $leave->canceller ? 'by ' .
+                                    $leave->canceller->name : '' }}</p>
+                                @if($leave->cancelled_at)
+                                <p class="text-slate-300 text-sm">on {{ $leave->cancelled_at->format('M d, Y h:i A')
+                                    }}</p>
                                 @endif
                             </div>
                         </div>

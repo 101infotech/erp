@@ -18,6 +18,10 @@ class HrmLeaveRequest extends Model
         'approved_by',
         'approved_at',
         'rejection_reason',
+        'rejected_by',
+        'rejected_at',
+        'cancelled_by',
+        'cancelled_at',
     ];
 
     protected $casts = [
@@ -25,6 +29,8 @@ class HrmLeaveRequest extends Model
         'end_date' => 'string',
         'total_days' => 'decimal:1',
         'approved_at' => 'datetime',
+        'rejected_at' => 'datetime',
+        'cancelled_at' => 'datetime',
     ];
 
     /**
@@ -51,6 +57,16 @@ class HrmLeaveRequest extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function canceller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'cancelled_by');
+    }
+
+    public function rejecter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'rejected_by');
     }
 
     public function scopePending($query)

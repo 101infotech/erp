@@ -77,6 +77,33 @@
             </div>
         </div>
 
+        <!-- Approve Modal -->
+        <div id="approveModal"
+            class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-slate-800 rounded-lg max-w-md w-full p-6 border border-slate-700">
+                <h3 class="text-xl font-semibold text-white mb-4">Approve Request</h3>
+                <form action="{{ route('admin.hrm.resource-requests.approve', $request->id) }}" method="POST">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="block text-sm text-slate-300 mb-2">Approval notes (optional)</label>
+                        <textarea name="approval_notes" rows="4"
+                            class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
+                            placeholder="Enter any notes about approval..."></textarea>
+                    </div>
+                    <div class="flex gap-3 justify-end">
+                        <button type="button" onclick="closeApproveModal()"
+                            class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition">
+                            Confirm Approve
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Description & Notes -->
         <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
             <h2 class="text-xl font-semibold text-white mb-4">Details</h2>
@@ -143,14 +170,11 @@
         <h2 class="text-xl font-semibold text-white mb-4">Actions</h2>
         <div class="flex flex-wrap gap-3">
             @if($request->isPending())
-            <form action="{{ route('admin.hrm.resource-requests.approve', $request->id) }}" method="POST"
-                class="inline">
-                @csrf
-                <button type="submit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition"
-                    onclick="return confirm('Are you sure you want to approve this request?')">
-                    Approve Request
-                </button>
-            </form>
+            <!-- Approve: open modal to confirm and add optional notes -->
+            <button type="button" onclick="openApproveModal()"
+                class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition">
+                Approve Request
+            </button>
             <button type="button" onclick="openRejectModal()"
                 class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
                 Reject Request
@@ -176,8 +200,8 @@
         <form action="{{ route('admin.hrm.resource-requests.reject', $request->id) }}" method="POST">
             @csrf
             <div class="mb-4">
-                <label class="block text-sm text-slate-300 mb-2">Reason for rejection (optional)</label>
-                <textarea name="admin_notes" rows="4"
+                <label class="block text-sm text-slate-300 mb-2">Reason for rejection (required)</label>
+                <textarea name="rejection_reason" rows="4"
                     class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500"
                     placeholder="Enter reason for rejection..."></textarea>
             </div>
@@ -203,7 +227,7 @@
             @csrf
             <div class="mb-4">
                 <label class="block text-sm text-slate-300 mb-2">Fulfillment notes (optional)</label>
-                <textarea name="admin_notes" rows="4"
+                <textarea name="fulfillment_notes" rows="4"
                     class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
                     placeholder="Enter any notes about fulfillment..."></textarea>
             </div>
@@ -239,11 +263,20 @@ function closeFulfillModal() {
     document.getElementById('fulfillModal').classList.add('hidden');
 }
 
+function openApproveModal() {
+    document.getElementById('approveModal').classList.remove('hidden');
+}
+
+function closeApproveModal() {
+    document.getElementById('approveModal').classList.add('hidden');
+}
+
 // Close modals on escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeRejectModal();
         closeFulfillModal();
+        closeApproveModal();
     }
 });
 
@@ -254,6 +287,10 @@ document.getElementById('rejectModal').addEventListener('click', function(e) {
 
 document.getElementById('fulfillModal').addEventListener('click', function(e) {
     if (e.target === this) closeFulfillModal();
+});
+
+document.getElementById('approveModal').addEventListener('click', function(e) {
+    if (e.target === this) closeApproveModal();
 });
 </script>
 @endpush

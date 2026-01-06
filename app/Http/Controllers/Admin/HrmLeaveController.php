@@ -23,7 +23,7 @@ class HrmLeaveController extends Controller
      */
     public function index(Request $request)
     {
-        $query = HrmLeaveRequest::with('employee', 'approver');
+        $query = HrmLeaveRequest::with('employee', 'approver', 'rejecter', 'canceller');
 
         // Filter by status
         $status = $request->get('status', 'pending');
@@ -125,7 +125,7 @@ class HrmLeaveController extends Controller
      */
     public function show($id)
     {
-        $leave = HrmLeaveRequest::with('employee', 'approver')->findOrFail($id);
+        $leave = HrmLeaveRequest::with('employee', 'approver', 'rejecter', 'canceller')->findOrFail($id);
         return view('admin.hrm.leaves.show', compact('leave'));
     }
 
@@ -200,8 +200,8 @@ class HrmLeaveController extends Controller
 
         $leave->update([
             'status' => 'rejected',
-            'approved_by' => Auth::id(),
-            'approved_at' => now(),
+            'rejected_by' => Auth::id(),
+            'rejected_at' => now(),
             'rejection_reason' => $validated['rejection_reason'],
         ]);
 
@@ -251,7 +251,11 @@ class HrmLeaveController extends Controller
                 $employee->update([$balanceField => $currentBalance + $leave->total_days]);
             }
 
-            $leave->update(['status' => 'cancelled']);
+            $leave->update([
+                'status' => 'cancelled',
+                'cancelled_by' => Auth::id(),
+                'cancelled_at' => now(),
+            ]);
         });
 
         return back()->with('success', 'Leave request cancelled successfully.');

@@ -124,12 +124,8 @@
                                 <div class="flex items-center justify-end gap-2">
                                     <a href="{{ route('admin.hrm.holidays.edit', $item) }}"
                                         class="text-lime-400 hover:text-lime-300">Edit</a>
-                                    <form action="{{ route('admin.hrm.holidays.destroy', $item) }}" method="POST"
-                                        onsubmit="return confirm('Delete this holiday?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-400 hover:text-red-300">Delete</button>
-                                    </form>
+                                    <button type="button" onclick="openDeleteModal('delete-holiday-{{ $item->id }}')"
+                                        class="text-red-400 hover:text-red-300">Delete</button>
                                 </div>
                             </td>
                         </tr>
@@ -148,4 +144,65 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Modals -->
+@foreach($holidays as $item)
+<div id="delete-holiday-{{ $item->id }}" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-800 rounded-lg max-w-md w-full p-6 border border-slate-700">
+        <div class="flex items-start gap-4 mb-4">
+            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+                <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white mb-2">Delete Holiday</h3>
+                <p class="text-slate-300 text-sm">Are you sure you want to delete "{{ $item->name }}" on {{ $item->date }}? This action cannot be undone.</p>
+            </div>
+        </div>
+        <div class="flex gap-3 justify-end">
+            <button type="button" onclick="closeDeleteModal('delete-holiday-{{ $item->id }}')"
+                class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition">
+                Cancel
+            </button>
+            <form action="{{ route('admin.hrm.holidays.destroy', $item) }}" method="POST" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
+                    Delete Holiday
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
+
+@push('scripts')
+<script>
+function openDeleteModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function closeDeleteModal(id) {
+    document.getElementById(id).classList.add('hidden');
+}
+
+// Close on escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('[id^="delete-holiday-"]').forEach(modal => {
+            modal.classList.add('hidden');
+        });
+    }
+});
+
+// Close on background click
+document.querySelectorAll('[id^="delete-holiday-"]').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteModal(this.id);
+    });
+});
+</script>
+@endpush
 @endsection
