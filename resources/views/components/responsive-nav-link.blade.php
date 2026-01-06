@@ -3,9 +3,11 @@
 
 @php
 $classes = ($active ?? false)
-? 'block w-full ps-3 pe-4 py-2 border-l-4 border-lime-400 text-start ' . Design::TEXT_BASE . ' ' . Design::FONT_MEDIUM . ' text-white bg-slate-800
+? 'block w-full ps-3 pe-4 py-2 border-l-4 border-lime-400 text-start ' . Design::TEXT_BASE . ' ' . Design::FONT_MEDIUM .
+' text-white bg-slate-800
 focus:outline-none focus:text-white focus:bg-slate-700 focus:border-lime-500 transition duration-150 ease-in-out'
-: 'block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start ' . Design::TEXT_BASE . ' ' . Design::FONT_MEDIUM . ' text-slate-300
+: 'block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start ' . Design::TEXT_BASE . ' ' .
+Design::FONT_MEDIUM . ' text-slate-300
 hover:text-white hover:bg-slate-800 hover:border-slate-700 focus:outline-none focus:text-white focus:bg-slate-800
 focus:border-slate-700 transition duration-150 ease-in-out';
 @endphp

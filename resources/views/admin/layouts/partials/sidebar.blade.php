@@ -28,28 +28,6 @@
                 </svg>
             </a>
 
-            <!-- Sites -->
-            <a href="{{ route('admin.sites.index') }}"
-                @click.prevent="activeNav = null; window.location.href = '{{ route('admin.sites.index') }}'"
-                class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors {{ request()->routeIs('admin.sites.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200' }}">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9">
-                    </path>
-                </svg>
-            </a>
-
-            <!-- Service Leads -->
-            <a href="{{ route('admin.leads.index') }}"
-                @click.prevent="activeNav = null; window.location.href = '{{ route('admin.leads.index') }}'"
-                class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors {{ request()->routeIs('admin.leads.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200' }}">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
-                    </path>
-                </svg>
-            </a>
-
             <!-- HRM -->
             <button @click="activeNav = activeNav === 'hrm' ? null : 'hrm'"
                 class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
@@ -57,6 +35,17 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Service -->
+            <button @click="activeNav = activeNav === 'service' ? null : 'service'"
+                class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
+                :class="activeNav === 'service' || {{ request()->routeIs('admin.leads.*') || request()->routeIs('admin.services.*') || request()->routeIs('admin.sites.*') ? 'true' : 'false' }} ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
                     </path>
                 </svg>
             </button>
@@ -270,6 +259,91 @@
                             </path>
                         </svg>
                         <span>Announcements</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Detail Panel -->
+        <div x-show="activeNav === 'service'" class="{{ Design::SIDEBAR_SECTION_PADDING }}">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="{{ Design::TEXT_LG }} {{ Design::FONT_SEMIBOLD }} text-white">Service</h2>
+                <button @click="activeNav = null" class="text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Leads Management -->
+            <div x-data="{ open: true }" class="mb-6">
+                <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Leads Management</h3>
+                    <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    </svg>
+                    <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-collapse class="mt-2 space-y-1">
+                    <a href="{{ route('admin.leads.index') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.leads.*') && !request()->routeIs('admin.leads.analytics') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                            </path>
+                        </svg>
+                        <span>Service Leads</span>
+                    </a>
+                    <a href="{{ route('admin.leads.analytics') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.leads.analytics') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                            </path>
+                        </svg>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Service Configuration -->
+            <div x-data="{ open: true }" class="mb-6">
+                <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Configuration</h3>
+                    <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    </svg>
+                    <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-collapse class="mt-2 space-y-1">
+                    <a href="{{ route('admin.sites.index') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.sites.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9">
+                            </path>
+                        </svg>
+                        <span>Sites</span>
+                    </a>
+                    <a href="{{ route('admin.services.index') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.services.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                        <span>Services</span>
                     </a>
                 </div>
             </div>

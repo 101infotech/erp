@@ -87,7 +87,9 @@
         </a>
 
         <div class="{{ Design::PAD_Y_LG }} {{ Design::MARGIN_Y_SM }} border-t border-slate-800">
-            <p class="{{ Design::PAD_X_MD }} {{ Design::MARGIN_Y_SM }} {{ Design::TEXT_XS }} {{ Design::FONT_SEMIBOLD }} text-slate-500 uppercase tracking-wider">Self-Service</p>
+            <p
+                class="{{ Design::PAD_X_MD }} {{ Design::MARGIN_Y_SM }} {{ Design::TEXT_XS }} {{ Design::FONT_SEMIBOLD }} text-slate-500 uppercase tracking-wider">
+                Self-Service</p>
 
             <!-- My Profile -->
             <a href="{{ route('employee.profile.show') }}"

@@ -33,65 +33,65 @@
             <div @click.away="showModal = false"
                 class="relative bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full p-6">
 
-                <!-- Icon --{{ Design::MARGIN_LG }}
+                <!-- Icon -->
                 <div class="mb-4 flex justify-center">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center" :class="{
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center {{ Design::MARGIN_LG }}" :class="{
                             'bg-red-500/20': modalType === 'danger',
                             'bg-yellow-500/20': modalType === 'warning',
                             'bg-blue-500/20': modalType === 'info',
                             'bg-lime-500/20': modalType === 'success'
                         }">
                         <!-- Danger Icon -->
-                        <svg x-show="modalType === 'danger'" class="w-8 h-8 text-red-400" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <!-- Warning Icon -->
-                        <svg x-show="modalType === 'warning'" class="w-8 h-8 text-yellow-400" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <!-- Info Icon -->
-                        <svg x-show="modalType === 'info'" class="w-8 h-8 text-blue-400" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <!-- Success Icon -->
-                        <svg x-show="modalType === 'success'" class="w-8 h-8 text-lime-400" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                </div>
+                <svg x-show="modalType === 'danger'" class="w-8 h-8 text-red-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <!-- Warning Icon -->
+                <svg x-show="modalType === 'warning'" class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <!-- Info Icon -->
+                <svg x-show="modalType === 'info'" class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <!-- Success Icon -->
+                <svg x-show="modalType === 'success'" class="w-8 h-8 text-lime-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+        </div>
 
-                <!-- Title -->
-                <h3 class="{{ Design::TEXT_XL }} {{ Design::FONT_BOLD }} text-white text-center mb-2" x-text="modalTitle"></h3>
+        <!-- Title -->
+        <h3 class="{{ Design::TEXT_XL }} {{ Design::FONT_BOLD }} text-white text-center mb-2" x-text="modalTitle"></h3>
 
-                <!-- Message -->
-                <p class="text-slate-300 text-center {{ Design::MARGIN_LG }}" x-html="modalMessage"></p>
+        <!-- Message -->
+        <p class="text-slate-300 text-center {{ Design::MARGIN_LG }}" x-html="modalMessage"></p>
 
-                <!-- Actions -->
-                <div class="{{ Design::GAP_LG }} flex">
-                    <button @click="showModal = false"
-                        class="flex-1 {{ Design::BTN_PADDING }} bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition {{ Design::FONT_MEDIUM }}"
-                        x-text="cancelButtonText">
-                    </button>
-                    <button @click="if(confirmAction) confirmAction(); showModal = false;"
-                        class="flex-1 {{ Design::BTN_PADDING }} rounded-lg transition {{ Design::FONT_MEDIUM }}" :class="{
+        <!-- Actions -->
+        <div class="{{ Design::GAP_LG }} flex">
+            <button @click="showModal = false"
+                class="flex-1 {{ Design::BTN_PADDING }} bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition {{ Design::FONT_MEDIUM }}"
+                x-text="cancelButtonText">
+            </button>
+            <button @click="if(confirmAction) confirmAction(); showModal = false;"
+                class="flex-1 {{ Design::BTN_PADDING }} rounded-lg transition {{ Design::FONT_MEDIUM }}" :class="{
                             'bg-red-500 text-white hover:bg-red-600': modalType === 'danger',
                             'bg-yellow-500 text-slate-900 hover:bg-yellow-600': modalType === 'warning',
                             'bg-blue-500 text-white hover:bg-blue-600': modalType === 'info',
                             'bg-lime-500 text-slate-900 hover:bg-lime-600': modalType === 'success'
                         }" x-text="confirmButtonText">
-                    </button>
-                </div>
-            </div>
+            </button>
         </div>
     </div>
+</div>
+</div>
 </div>
 
 <script>

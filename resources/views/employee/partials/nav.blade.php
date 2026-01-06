@@ -1,5 +1,5 @@
 <nav class="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800 relative z-30">
-@use('App\Constants\Design')
+    @use('App\Constants\Design')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <!-- Logo -->

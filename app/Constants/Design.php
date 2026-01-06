@@ -39,7 +39,7 @@ class Design
     public const SPACE_MD = 'px-4 py-2';         // 16px/8px
     public const SPACE_LG = 'px-6 py-3';         // 24px/12px
     public const SPACE_XL = 'px-8 py-4';         // 32px/16px
-    
+
     // ========== PADDING CONSTANTS ==========
     public const PAD_XS = 'p-1';         // 4px
     public const PAD_SM = 'p-2';         // 8px
@@ -116,10 +116,10 @@ class Design
     // ========== COMMON COMBINATIONS ==========
     // Sidebar menu item
     public const MENU_ITEM = 'flex items-center gap-3 px-4 py-2.5 text-sm rounded transition-colors';
-    
+
     // Navigation link
     public const NAV_LINK = 'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium';
-    
+
     // Form label
     public const FORM_LABEL = 'block font-medium text-sm text-slate-300';
 

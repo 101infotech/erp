@@ -10,7 +10,7 @@
         <p class="text-sm text-slate-400">Manage services for {{ session('selected_site_id') ?
             $sites->find(session('selected_site_id'))->name : 'all sites' }}</p>
     </div>
-    <a href="{{ route('workspace.services.create', ['workspace' => $workspace ?? 'all']) }}"
+    <a href="{{ route('admin.services.create') }}"
         class="bg-lime-500 hover:bg-lime-600 text-slate-950 font-medium px-4 py-2 rounded-lg transition">
         <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -22,7 +22,7 @@
 <!-- Filters -->
 @if(!session('selected_site_id'))
 <div class="mb-6 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-    <form method="GET" action="{{ route('workspace.services.index', ['workspace' => $workspace ?? 'all']) }}"
+    <form method="GET" action="{{ route('admin.services.index') }}"
         class="flex gap-4">
         <div class="flex-1">
             <label class="block text-sm font-medium text-slate-300 mb-2">Filter by Site</label>
@@ -107,7 +107,7 @@
                 </td>
                 <td class="px-6 py-4">
                     <div class="flex items-center space-x-2">
-                        <a href="{{ route('workspace.services.edit', ['workspace' => $workspace ?? 'all', 'service' => $service->id]) }}"
+                        <a href="{{ route('admin.services.edit', $service->id) }}"
                             class="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -166,7 +166,7 @@
         <button onclick="closeModal('deleteServiceModal_{{ $service->id }}')"
             class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Keep</button>
         <form method="POST"
-            action="{{ route('workspace.services.destroy', ['workspace' => $workspace ?? 'all', 'service' => $service->id]) }}"
+            action="{{ route('admin.services.destroy', $service->id) }}"
             class="inline">
             @csrf
             @method('DELETE')

@@ -31,8 +31,8 @@
 <div id="{{ $id }}" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div
         class="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl {{ $maxWidth }} w-full overflow-hidden transition-all transform">
-        {{-- Header {{ Design::MODAL_HEADER_PADDING }}
-        <div class="flex items-center justify-between p-6 border-b border-slate-700 bg-slate-800/50">
+        {{-- Header --}}
+        <div class="flex items-center justify-between {{ Design::MODAL_HEADER_PADDING }} border-b border-slate-700 bg-slate-800/50">
             <div class="flex items-center gap-4 flex-1">
                 {{-- Icon --}}
                 @if($icon)
@@ -127,10 +127,10 @@
                 @endif
 
                 {{-- Title --}}
-                <div>{{ Design::TEXT_XL }} {{ Design::FONT_SEMIBOLD }} text-white">{{ $title }}</h3>
+                <div>
+                    <h3 class="{{ Design::TEXT_XL }} {{ Design::FONT_SEMIBOLD }} text-white">{{ $title }}</h3>
                     @if($subtitle)
-                    <p class="{{ Design::TEXT_SM }}
-                    <p class="text-sm text-slate-400 mt-1">{{ $subtitle }}</p>
+                    <p class="{{ Design::TEXT_SM }} text-slate-400 mt-1">{{ $subtitle }}</p>
                     @endif
                 </div>
             </div>
@@ -144,16 +144,16 @@
             </button>
         </div>
 
-        {{-- Body --{{ Design::MODAL_PADDING }}">
+        {{-- Body --}}
+        <div class="{{ Design::MODAL_PADDING }}">
             {{ $slot }}
         </div>
 
         {{-- Footer --}}
         @if($footer && isset($footer))
-        <div class="flex justify-end gap-3 {{ Design::MODAL_PADDING }}
-        <div class="flex justify-end gap-3 p-6 border-t border-slate-700 bg-slate-800/30">
+        <div class="flex justify-end gap-3 {{ Design::MODAL_PADDING }} border-t border-slate-700 bg-slate-800/30">
             {{ $footer }}
         </div>
         @endif
-    </div>
+</div>
 </div>
