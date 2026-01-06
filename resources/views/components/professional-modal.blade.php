@@ -17,6 +17,7 @@
 </x-professional-modal>
 --}}
 
+@use('App\Constants\Design')
 @props([
 'id' => 'modal-' . uniqid(),
 'title' => '',
@@ -30,7 +31,7 @@
 <div id="{{ $id }}" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div
         class="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl {{ $maxWidth }} w-full overflow-hidden transition-all transform">
-        {{-- Header --}}
+        {{-- Header {{ Design::MODAL_HEADER_PADDING }}
         <div class="flex items-center justify-between p-6 border-b border-slate-700 bg-slate-800/50">
             <div class="flex items-center gap-4 flex-1">
                 {{-- Icon --}}
@@ -126,9 +127,9 @@
                 @endif
 
                 {{-- Title --}}
-                <div>
-                    <h3 class="text-xl font-semibold text-white">{{ $title }}</h3>
+                <div>{{ Design::TEXT_XL }} {{ Design::FONT_SEMIBOLD }} text-white">{{ $title }}</h3>
                     @if($subtitle)
+                    <p class="{{ Design::TEXT_SM }}
                     <p class="text-sm text-slate-400 mt-1">{{ $subtitle }}</p>
                     @endif
                 </div>
@@ -143,13 +144,13 @@
             </button>
         </div>
 
-        {{-- Body --}}
-        <div class="p-6">
+        {{-- Body --{{ Design::MODAL_PADDING }}">
             {{ $slot }}
         </div>
 
         {{-- Footer --}}
         @if($footer && isset($footer))
+        <div class="flex justify-end gap-3 {{ Design::MODAL_PADDING }}
         <div class="flex justify-end gap-3 p-6 border-t border-slate-700 bg-slate-800/30">
             {{ $footer }}
         </div>
