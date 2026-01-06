@@ -8,7 +8,8 @@
 
         <!-- Logo -->
         <div class="flex items-center justify-center h-20 border-b border-slate-800 flex-shrink-0">
-            <div class="{{ Design::SIDEBAR_ICON_SIZE }} rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center">
+            <div
+                class="{{ Design::SIDEBAR_ICON_SIZE }} rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center">
                 <span class="text-white {{ Design::TEXT_LG }} {{ Design::FONT_BOLD }}">S</span>
             </div>
         </div>
