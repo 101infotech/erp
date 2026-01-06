@@ -91,9 +91,53 @@ Comprehensive guides, quick starts, and visual documentation.
 -   **IMPLEMENTATION**: Technical implementation details (including Resource Requests & Expense Claims)
 -   **GUIDES**: Comprehensive guides and specifications
 
-## 🆕 Latest Updates (January 5, 2026)
+## 🆕 Latest Updates (January 2026)
 
-### UI Redesign - Modern Dashboard Aesthetic ⭐ NEWEST
+### ✨ [FIX_SUMMARY_LAYOUT_SEPARATION.md](FIX_SUMMARY_LAYOUT_SEPARATION.md) - Navigation & Content Layout Fix ⭐ LATEST
+
+**Fixed overlapping sections issue** between navigation and content areas!
+
+-   ✅ **Proper flex-based layout separation**
+-   ✅ **Icon bar + expandable detail panels** (no overlap)
+-   ✅ **Smooth Alpine.js transitions**
+-   ✅ **Content area uses full remaining width**
+
+**Related**: [LAYOUT_RESTRUCTURING_FIX.md](LAYOUT_RESTRUCTURING_FIX.md) - Technical deep dive
+
+### 🎨 [UI_REDESIGN/](UI_REDESIGN/) - Sidebar Navigation Reorganization ⭐ PREVIOUS
+
+**Complete sidebar navigation redesign** reducing visual clutter by 79%!
+
+-   ✅ **Collapsible module-based navigation** (HRM & Finance)
+-   ✅ **4 reusable Blade components** created
+-   ✅ **Persistent state management** with localStorage
+-   ✅ **Smart auto-expansion** to active routes
+-   ✅ **Logical grouping** of menu items
+-   📊 **Metrics**: 28 items → 6 visible initially
+
+**Quick Links:**
+-   [Complete Plan](UI_REDESIGN/SIDEBAR_NAVIGATION_REORGANIZATION_PLAN.md) - Full design & implementation plan
+-   [Implementation Summary](UI_REDESIGN/SIDEBAR_IMPLEMENTATION_SUMMARY.md) - What was built
+-   [Visual Comparison](UI_REDESIGN/SIDEBAR_VISUAL_COMPARISON.md) - Before/after comparison
+-   [Quick Reference](UI_REDESIGN/QUICK_REFERENCE.md) - Developer guide
+
+---
+
+## 🎨 [UI_REDESIGN/](UI_REDESIGN/)
+
+UI/UX redesign initiatives and improvements.
+
+-   **Sidebar Navigation Reorganization** ⭐ LATEST
+    -   Collapsible module-based design
+    -   Reusable component library
+    -   Persistent state management
+    -   79% reduction in visual clutter
+-   Implementation guides and visual comparisons
+-   Quick reference for developers
+
+### Previous Updates (January 5, 2026)
+
+### UI Redesign - Modern Dashboard Aesthetic
 
 Complete UI redesign with modern design system inspired by contemporary UI patterns:
 

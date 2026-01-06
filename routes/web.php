@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\ScheduleMeetingController;
 use App\Http\Controllers\Admin\HiringController;
 use App\Http\Controllers\Admin\CompanyListController;
-use App\Http\Controllers\Admin\HrmCompanyController;
 use App\Http\Controllers\Admin\HrmDepartmentController;
 use App\Http\Controllers\Admin\HrmEmployeeController;
 use App\Http\Controllers\Admin\HrmAttendanceController;
@@ -234,8 +233,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // Organization Management (Companies & Departments)
             Route::get('organization', [HrmOrganizationController::class, 'index'])->name('organization.index');
 
-            // Companies
-            Route::resource('companies', HrmCompanyController::class);
+            Route::get('organization/companies/create', [HrmOrganizationController::class, 'create'])->name('organization.companies.create');
+            Route::post('organization/companies', [HrmOrganizationController::class, 'store'])->name('organization.companies.store');
+            Route::get('organization/companies/{company}', [HrmOrganizationController::class, 'show'])->name('organization.companies.show');
+            Route::get('organization/companies/{company}/edit', [HrmOrganizationController::class, 'edit'])->name('organization.companies.edit');
+            Route::put('organization/companies/{company}', [HrmOrganizationController::class, 'update'])->name('organization.companies.update');
+            Route::delete('organization/companies/{company}', [HrmOrganizationController::class, 'destroy'])->name('organization.companies.destroy');
 
             // Departments
             Route::resource('departments', HrmDepartmentController::class);

@@ -29,7 +29,7 @@
             <p class="mt-1 text-lg">
                 @if($company->hrmCompany)
                 <a class="text-blue-600 dark:text-lime-400 hover:underline"
-                    href="{{ route('admin.hrm.companies.show', $company->hrmCompany) }}">{{ $company->hrmCompany->name
+                    href="{{ route('admin.hrm.organization.companies.show', $company->hrmCompany) }}">{{ $company->hrmCompany->name
                     }}</a>
                 @else
                 Not linked

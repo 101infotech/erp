@@ -30,7 +30,7 @@
         <div class="space-y-4">
             <div class="flex justify-between items-center">
                 <h2 class="text-xl font-semibold text-white">Companies ({{ $companies->count() }})</h2>
-                <a href="{{ route('admin.hrm.companies.create') }}"
+                <a href="{{ route('admin.hrm.organization.companies.create') }}"
                     class="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-slate-900 font-semibold rounded-lg transition">
                     Add Company
                 </a>
@@ -47,7 +47,7 @@
                             @endif
                         </div>
                         <div class="flex gap-2">
-                            <a href="{{ route('admin.hrm.companies.edit', $company->id) }}"
+                            <a href="{{ route('admin.hrm.organization.companies.edit', $company->id) }}"
                                 class="text-blue-400 hover:text-blue-300 text-sm">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -71,7 +71,7 @@
                     </div>
 
                     <div class="mt-4 pt-4 border-t border-slate-700">
-                        <a href="{{ route('admin.hrm.companies.show', $company->id) }}"
+                        <a href="{{ route('admin.hrm.organization.companies.show', $company->id) }}"
                             class="text-lime-400 hover:text-lime-300 text-sm font-medium">
                             View Details →
                         </a>
@@ -84,7 +84,7 @@
                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                     <p class="mt-2 text-slate-400">No companies found</p>
-                    <a href="{{ route('admin.hrm.companies.create') }}"
+                    <a href="{{ route('admin.hrm.organization.companies.create') }}"
                         class="text-lime-400 hover:text-lime-300 mt-2 inline-block">
                         Add your first company
                     </a>
