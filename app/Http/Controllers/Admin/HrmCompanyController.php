@@ -43,6 +43,9 @@ class HrmCompanyController extends Controller
     public function show(HrmCompany $company)
     {
         $company->loadCount(['employees', 'departments']);
+        $company->load(['departments' => function ($query) {
+            $query->withCount('employees');
+        }]);
         return view('admin.hrm.companies.show', compact('company'));
     }
 

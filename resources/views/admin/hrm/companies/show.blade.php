@@ -38,7 +38,7 @@
 </div>
 
 <!-- Company Information -->
-<div class="bg-slate-800 rounded-lg border border-slate-700 p-6">
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-6 mt-8">
     <h3 class="text-lg font-semibold text-white mb-4">Company Information</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -77,7 +77,7 @@
 </div>
 
 <!-- Departments -->
-<div class="bg-slate-800 rounded-lg border border-slate-700 p-6">
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-6 mt-8">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-semibold text-white">Departments ({{ $company->departments_count }})</h3>
         <a href="{{ route('admin.hrm.departments.create') }}"
@@ -123,7 +123,7 @@
 </div>
 
 <!-- Employees -->
-<div class="bg-slate-800 rounded-lg border border-slate-700 p-6">
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-6 mt-8">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-semibold text-white">Employees ({{ $company->employees_count }})</h3>
         <a href="{{ route('admin.hrm.employees.create') }}"
@@ -182,7 +182,7 @@
 </div>
 
 <!-- Danger Zone -->
-<div class="bg-red-500/10 border border-red-500/30 rounded-lg p-6">
+<div class="bg-red-500/10 border border-red-500/30 rounded-lg p-6 mt-8">
     <h3 class="text-lg font-semibold text-red-400 mb-2">Danger Zone</h3>
     <p class="text-slate-400 text-sm mb-4">Deleting this company will also delete all associated departments and
         employees. This action cannot be undone.</p>
