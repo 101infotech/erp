@@ -86,7 +86,7 @@ class Design
 
     // ========== SPECIFIC COMPONENT SPACING ==========
     // Navigation items
-    public const NAV_ITEM_SPACING = 'gap-3 px-4 py-2.5';
+    public const NAV_ITEM_SPACING = 'flex items-center gap-3 px-4 py-2.5';
     public const NAV_ITEM_TEXT = 'text-sm';
 
     // Sidebar
