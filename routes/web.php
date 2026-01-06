@@ -124,11 +124,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin Routes without workspace
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
-        
+
         // Admin Profile
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        
+
         Route::resource('sites', SiteController::class);
 
         // Site-specific dashboard

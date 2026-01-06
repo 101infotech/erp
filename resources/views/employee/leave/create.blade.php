@@ -25,7 +25,22 @@
             </div>
 
             <!-- Leave Request Form -->
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700 p-8">
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700 p-8" x-data="{
+                leaveType: '{{ old('leave_type', '') }}',
+                leaveBalances: {
+                    sick: {{ $stats['sick']['available'] ?? 0 }},
+                    casual: {{ $stats['casual']['available'] ?? 0 }},
+                    annual: {{ $stats['annual']['available'] ?? 0 }},
+                    @if(isset($stats['period']))
+                    period: {{ $stats['period']['available'] ?? 0 }},
+                    @endif
+                    unpaid: 999
+                },
+                get canSubmit() {
+                    if (!this.leaveType) return false;
+                    return this.leaveBalances[this.leaveType] > 0;
+                }
+            }">
                 <form method="POST" action="{{ route('employee.leave.store') }}">
                     @csrf
 
@@ -33,7 +48,7 @@
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-300 mb-2">Leave Type <span
                                 class="text-red-400">*</span></label>
-                        <select name="leave_type" required
+                        <select name="leave_type" required x-model="leaveType"
                             class="w-full bg-slate-700 border-slate-600 text-white rounded-lg focus:ring-lime-500 focus:border-lime-500 p-3">
                             <option value="">Select leave type</option>
                             <option value="sick" {{ old('leave_type')==='sick' ? 'selected' : '' }}>Sick Leave ({{
@@ -111,8 +126,10 @@
 
                     <!-- Submit Button -->
                     <div class="flex items-center gap-4">
-                        <button type="submit"
-                            class="flex-1 px-6 py-3 bg-lime-500 text-slate-900 rounded-lg font-semibold hover:bg-lime-400 transition">
+                        <button type="submit" :disabled="!canSubmit"
+                            class="flex-1 px-6 py-3 rounded-lg font-semibold transition"
+                            :class="canSubmit ? 'bg-lime-500 text-slate-900 hover:bg-lime-400' : 'bg-slate-600 text-slate-400 cursor-not-allowed'"
+                            x-bind:title="!canSubmit && leaveType ? 'No leave balance available for selected type' : ''">
                             Submit Leave Request
                         </button>
                         <a href="{{ route('employee.leave.index') }}"

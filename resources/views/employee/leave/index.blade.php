@@ -200,7 +200,8 @@
         <div class="space-y-4">
             <p class="text-slate-300">Are you sure you want to cancel this leave request?</p>
             <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-                <p class="text-sm text-white"><span class="font-medium">Leave Type:</span> {{ $leave->leaveType->name }}
+                <p class="text-sm text-white"><span class="font-medium">Leave Type:</span> {{ ucfirst(str_replace('_', '
+                    ', $leave->leave_type)) }}
                 </p>
                 <p class="text-sm text-slate-400 mt-1"><span class="font-medium">Status:</span> {{
                     ucfirst($leave->status) }}</p>

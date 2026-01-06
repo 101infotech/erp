@@ -37,7 +37,7 @@
                         data-sick="{{ $employee->paid_leave_sick ?? 0 }}"
                         data-casual="{{ $employee->paid_leave_casual ?? 0 }}" {{ old('employee_id')==$employee->id ?
                         'selected' : '' }}>
-                        {{ $employee->full_name }} ({{ $employee->employee_code }})
+                        {{ $employee->name }}
                     </option>
                     @endforeach
                 </select>
@@ -52,15 +52,15 @@
                 <h3 class="text-sm font-semibold text-slate-900 dark:text-white mb-3">Available Leave Balance</h3>
                 <div class="grid grid-cols-3 gap-4">
                     <div class="text-center">
-                        <p class="text-2xl font-bold text-blue-400" id="balance-annual">0</p>
+                        <p class="text-2xl font-bold text-blue-400" id="balance-annual">0.0</p>
                         <p class="text-xs text-slate-600 dark:text-slate-400">Annual</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-2xl font-bold text-red-400" id="balance-sick">0</p>
+                        <p class="text-2xl font-bold text-red-400" id="balance-sick">0.0</p>
                         <p class="text-xs text-slate-400">Sick</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-2xl font-bold text-green-400" id="balance-casual">0</p>
+                        <p class="text-2xl font-bold text-green-400" id="balance-casual">0.0</p>
                         <p class="text-xs text-slate-400">Casual</p>
                     </div>
                 </div>
@@ -71,15 +71,18 @@
                 <label class="block text-sm font-medium text-slate-300 mb-2">
                     Leave Type <span class="text-red-400">*</span>
                 </label>
-                <select name="leave_type" required
+                <select name="leave_type" id="leave_type" required
                     class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-lime-500 focus:border-transparent">
                     <option value="">Select Type</option>
-                    <option value="annual" {{ old('leave_type')==='annual' ? 'selected' : '' }}>Annual Leave
+                    <option value="annual" {{ old('leave_type')==='annual' ? 'selected' : '' }} data-balance="annual">
+                        Annual Leave (<span id="annual-count">0.0</span> available)
                     </option>
-                    <option value="sick" {{ old('leave_type')==='sick' ? 'selected' : '' }}>Sick Leave</option>
-                    <option value="casual" {{ old('leave_type')==='casual' ? 'selected' : '' }}>Casual Leave
+                    <option value="sick" {{ old('leave_type')==='sick' ? 'selected' : '' }} data-balance="sick">Sick
+                        Leave (<span id="sick-count">0.0</span> available)</option>
+                    <option value="casual" {{ old('leave_type')==='casual' ? 'selected' : '' }} data-balance="casual">
+                        Casual Leave (<span id="casual-count">0.0</span> available)
                     </option>
-                    <option value="unpaid" {{ old('leave_type')==='unpaid' ? 'selected' : '' }}>Unpaid Leave
+                    <option value="unpaid" {{ old('leave_type')==='unpaid' ? 'selected' : '' }}>Unpaid Leave (Unlimited)
                     </option>
                 </select>
                 @error('leave_type')
@@ -165,12 +168,27 @@
             
             if (select.value) {
                 const option = select.options[select.selectedIndex];
-                document.getElementById('balance-annual').textContent = parseFloat(option.dataset.annual || 0).toFixed(1);
-                document.getElementById('balance-sick').textContent = parseFloat(option.dataset.sick || 0).toFixed(1);
-                document.getElementById('balance-casual').textContent = parseFloat(option.dataset.casual || 0).toFixed(1);
+                const annual = parseFloat(option.dataset.annual || 0).toFixed(1);
+                const sick = parseFloat(option.dataset.sick || 0).toFixed(1);
+                const casual = parseFloat(option.dataset.casual || 0).toFixed(1);
+                
+                // Update balance display
+                document.getElementById('balance-annual').textContent = annual;
+                document.getElementById('balance-sick').textContent = sick;
+                document.getElementById('balance-casual').textContent = casual;
+                
+                // Update leave type dropdown counts
+                document.getElementById('annual-count').textContent = annual;
+                document.getElementById('sick-count').textContent = sick;
+                document.getElementById('casual-count').textContent = casual;
+                
                 balancesDiv.classList.remove('hidden');
             } else {
                 balancesDiv.classList.add('hidden');
+                // Reset counts
+                document.getElementById('annual-count').textContent = '0.0';
+                document.getElementById('sick-count').textContent = '0.0';
+                document.getElementById('casual-count').textContent = '0.0';
             }
         }
 

@@ -61,7 +61,7 @@ class HrmLeaveController extends Controller
     public function create()
     {
         $employees = HrmEmployee::where('status', 'active')
-            ->select('id', 'name', 'paid_leave_annual', 'paid_leave_sick', 'paid_leave_casual')
+            ->select('id', 'name', 'code', 'paid_leave_annual', 'paid_leave_sick', 'paid_leave_casual')
             ->orderBy('name')
             ->get();
 
