@@ -1,3 +1,11 @@
+## Staff Mobile Sidebar
+
+- Implemented icon-only sidebar on small screens for the employee portal.
+- Sidebar width is now `w-20` on mobile and `w-64` on md+.
+- Labels are hidden on mobile; icons centered with `mr-0` and `justify-center`.
+- Updated main content margin to `ml-20 md:ml-64` to avoid overlap.
+- Adjusted logout and section header to match responsive behavior.
+
 # Implementation Summary - Phases 1 & 2 Complete ✅
 
 **Date:** January 5, 2026  

@@ -22,8 +22,7 @@
 <!-- Filters -->
 @if(!session('selected_site_id'))
 <div class="mb-6 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-    <form method="GET" action="{{ route('admin.services.index') }}"
-        class="flex gap-4">
+    <form method="GET" action="{{ route('admin.services.index') }}" class="flex gap-4">
         <div class="flex-1">
             <label class="block text-sm font-medium text-slate-300 mb-2">Filter by Site</label>
             <select name="site_id"
@@ -165,9 +164,7 @@
     <x-slot name="footer">
         <button onclick="closeModal('deleteServiceModal_{{ $service->id }}')"
             class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition">Keep</button>
-        <form method="POST"
-            action="{{ route('admin.services.destroy', $service->id) }}"
-            class="inline">
+        <form method="POST" action="{{ route('admin.services.destroy', $service->id) }}" class="inline">
             @csrf
             @method('DELETE')
             <button type="submit"

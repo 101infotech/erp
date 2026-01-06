@@ -27,7 +27,7 @@
         @include('student.partials.sidebar')
         @endif
 
-        <div class="flex-1 @if(request()->is('employee/*') || request()->is('student/*')) ml-64 @endif">
+        <div class="flex-1 @if(request()->is('employee/*') || request()->is('student/*')) ml-20 md:ml-64 @endif">
             <!-- Employee/Student Navigation Bar -->
             @if(request()->is('employee/*'))
             @include('employee.partials.nav')
