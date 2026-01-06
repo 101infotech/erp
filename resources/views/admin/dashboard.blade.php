@@ -33,12 +33,12 @@
 
         <!-- Team Members -->
         <div
-            class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-lime-500/50 transition-colors">
+            class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700 hover:border-lime-500/50 transition-colors">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs mb-1.5">Team Members</p>
                     <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ?? $stats['total_team_members'] }}</h2>
-                    <p class="text-xs text-slate-500 mt-1">Active employees</p>
+                    <p class="text-xs text-slate-500 mt-1">Total employees ({{ $hrmStats['active_employees'] ?? 0 }} active)</p>
                 </div>
                 <div class="w-10 h-10 bg-lime-500/10 rounded-xl flex items-center justify-center">
                     <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,7 +88,7 @@
 
     <!-- Business Summary (Finance + HRM) -->
     <div class="mb-8">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3">
             <h2 class="text-lg font-semibold text-white">Business Summary</h2>
             <div class="flex items-center gap-3 text-xs font-medium">
                 <a href="{{ route('admin.finance.dashboard') }}"
@@ -107,7 +107,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
             <!-- Finance Summary -->
             <div class="lg:col-span-2 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
                 <div class="flex items-center justify-between mb-3">
@@ -154,7 +154,7 @@
                     <div class="flex items-center justify-between p-3 rounded-lg bg-slate-700/40">
                         <div>
                             <p class="text-xs text-slate-400">Active employees</p>
-                            <h4 class="text-lg font-semibold text-white" id="hr-active">{{ $hrmStats['total_employees'] ?? 0 }}</h4>
+                            <h4 class="text-lg font-semibold text-white" id="hr-active">{{ $hrmStats['active_employees'] ?? ($hrmStats['total_employees'] ?? 0) }}</h4>
                         </div>
                         <span class="text-xs px-2 py-1 rounded-full bg-lime-500/10 text-lime-300">HRM</span>
                     </div>
@@ -183,8 +183,8 @@
             </div>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div class="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div class="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-3">
                 <!-- Quick Actions -->
                 <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
                     <h3 class="text-base font-semibold text-white mb-3">Finance Quick Actions</h3>
@@ -429,8 +429,8 @@
         const payrollEl = document.getElementById('hr-draft-payrolls');
         const anomalyEl = document.getElementById('hr-anomalies');
 
-        if (activeEl && typeof data.total_employees !== 'undefined') {
-            activeEl.textContent = data.total_employees;
+        if (activeEl && typeof data.active_employees !== 'undefined') {
+            activeEl.textContent = data.active_employees;
         }
         if (leaveEl && typeof data.pending_leaves !== 'undefined') {
             leaveEl.textContent = data.pending_leaves;

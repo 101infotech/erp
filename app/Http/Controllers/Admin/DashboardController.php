@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         $stats = [
             'total_sites' => \App\Models\Site::count(),
-            'total_team_members' => \App\Models\HrmEmployee::where('status', 'active')->count(),
+            'total_team_members' => \App\Models\HrmEmployee::count(),
             'total_news' => \App\Models\NewsMedia::count(),
             'total_careers' => \App\Models\Career::where('is_active', true)->count(),
             'total_case_studies' => \App\Models\CaseStudy::count(),
@@ -22,7 +22,8 @@ class DashboardController extends Controller
 
         // HRM Stats
         $hrmStats = [
-            'total_employees' => \App\Models\HrmEmployee::where('status', 'active')->count(),
+            'total_employees' => \App\Models\HrmEmployee::count(),
+            'active_employees' => \App\Models\HrmEmployee::where('status', 'active')->count(),
             'pending_leaves' => \App\Models\HrmLeaveRequest::where('status', 'pending')->count(),
             'draft_payrolls' => \App\Models\HrmPayrollRecord::where('status', 'draft')->count(),
             'approved_payrolls' => \App\Models\HrmPayrollRecord::where('status', 'approved')->count(),
