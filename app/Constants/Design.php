@@ -72,6 +72,11 @@ class Design
     public const MARGIN_X_MD = 'mx-2';   // 8px
     public const MARGIN_X_LG = 'mx-3';   // 12px
 
+    // Vertical margin only
+    public const MARGIN_Y_SM = 'my-1';   // 4px
+    public const MARGIN_Y_MD = 'my-2';   // 8px
+    public const MARGIN_Y_LG = 'my-3';   // 12px
+
     // ========== GAP SPACING (Flex & Grid) ==========
     public const GAP_SM = 'gap-1';       // 4px
     public const GAP_MD = 'gap-2';       // 8px
