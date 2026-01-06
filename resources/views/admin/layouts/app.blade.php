@@ -43,8 +43,7 @@
     <!-- Main Content Wrapper with proper margin -->
     <div style="margin-left: 80px; min-height: 100vh;">
         <!-- Header -->
-        <header
-            class="bg-white/90 dark:bg-slate-900 border-b border-l border-slate-800 sticky top-0 z-30">
+        <header class="bg-white/90 dark:bg-slate-900 border-b border-l border-slate-800 sticky top-0 z-30">
             <div class="flex justify-between items-center px-8 py-4">
                 <h2 class="text-xl font-semibold text-slate-900 dark:text-white">@yield('page-title')</h2>
                 <div class="flex items-center space-x-4">

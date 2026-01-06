@@ -32,7 +32,8 @@
     <div
         class="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl {{ $maxWidth }} w-full overflow-hidden transition-all transform">
         {{-- Header --}}
-        <div class="flex items-center justify-between {{ Design::MODAL_HEADER_PADDING }} border-b border-slate-700 bg-slate-800/50">
+        <div
+            class="flex items-center justify-between {{ Design::MODAL_HEADER_PADDING }} border-b border-slate-700 bg-slate-800/50">
             <div class="flex items-center gap-4 flex-1">
                 {{-- Icon --}}
                 @if($icon)
@@ -155,5 +156,5 @@
             {{ $footer }}
         </div>
         @endif
-</div>
+    </div>
 </div>

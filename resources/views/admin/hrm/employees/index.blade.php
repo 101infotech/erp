@@ -2,12 +2,14 @@
 
 @section('title', 'Employees')
 @section('page-title', 'Employees')
+@use('App\Constants\Design')
 
 @section('content')
-<div class="py-6">
+<div class="-mx-8 -mt-6 {{ Design::MARGIN_X_MD }} {{ Design::MARGIN_Y_SM }}">
     <!-- Header -->
-    <div class="mb-6">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+    <div class="{{ Design::MARGIN_Y_SM }}">
+        <div
+            class="flex flex-col lg:flex-row lg:items-center lg:justify-between {{ Design::GAP_MD }} {{ Design::MARGIN_Y_SM }}">
             <div>
                 <h2 class="text-lg font-semibold text-white">Employee HR Records</h2>
                 <p class="text-slate-400 text-sm mt-1">Manage employee information, positions, and departments</p>
@@ -20,9 +22,9 @@
                         class="text-lime-400 hover:text-lime-300 underline">Employees & Accounts</a>
                 </p>
             </div>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap {{ Design::GAP_SM }}">
                 <a href="{{ route('admin.users.index') }}"
-                    class="px-3 py-1.5 text-sm bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition flex items-center gap-1.5">
+                    class="{{ Design::BTN_SMALL_PADDING }} {{ Design::TEXT_SM }} bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition flex items-center {{ Design::GAP_SM }}">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -30,7 +32,7 @@
                     <span>Accounts & Jibble</span>
                 </a>
                 <a href="{{ route('admin.hrm.employees.create') }}"
-                    class="px-3 py-1.5 text-sm bg-lime-500 text-slate-950 font-semibold rounded-lg hover:bg-lime-400 transition flex items-center gap-1.5">
+                    class="{{ Design::BTN_SMALL_PADDING }} {{ Design::TEXT_SM }} bg-lime-500 text-slate-950 {{ Design::FONT_SEMIBOLD }} rounded-lg hover:bg-lime-400 transition flex items-center {{ Design::GAP_SM }}">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>

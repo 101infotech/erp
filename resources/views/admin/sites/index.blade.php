@@ -31,7 +31,9 @@
         <div class="{{ Design::CARD_PADDING }}">
             <div class="flex items-start justify-between {{ Design::MARGIN_Y_MD }}">
                 <div class="flex-1">
-                    <h3 class="{{ Design::TEXT_XL }} {{ Design::FONT_BOLD }} text-white group-hover:text-lime-400 transition">{{ $site->name }}</h3>
+                    <h3
+                        class="{{ Design::TEXT_XL }} {{ Design::FONT_BOLD }} text-white group-hover:text-lime-400 transition">
+                        {{ $site->name }}</h3>
                     <p class="{{ Design::TEXT_SM }} text-slate-400 {{ Design::MARGIN_Y_SM }}">{{ $site->slug }}</p>
                     @if($site->domain)
                     <a href="https://{{ $site->domain }}" target="_blank"
@@ -47,7 +49,8 @@
             </div>
 
             @if($site->description)
-            <p class="{{ Design::TEXT_SM }} text-slate-300 {{ Design::MARGIN_Y_MD }} {{ Design::MARGIN_Y_LG }}">{{ Str::limit($site->description, 100) }}</p>
+            <p class="{{ Design::TEXT_SM }} text-slate-300 {{ Design::MARGIN_Y_MD }} {{ Design::MARGIN_Y_LG }}">{{
+                Str::limit($site->description, 100) }}</p>
             @endif
 
             <a href="{{ route('admin.sites.dashboard', $site) }}"
@@ -63,13 +66,16 @@
         </div>
     </div>
     @empty
-    <div class="col-span-full bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl {{ Design::CARD_PADDING }} text-center">
-        <svg class="w-16 h-16 mx-auto {{ Design::MARGIN_Y_MD }} text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div
+        class="col-span-full bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl {{ Design::CARD_PADDING }} text-center">
+        <svg class="w-16 h-16 mx-auto {{ Design::MARGIN_Y_MD }} text-slate-600" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
         </svg>
         <p class="text-slate-400 {{ Design::TEXT_LG }}">No sites found</p>
-        <p class="text-slate-500 {{ Design::TEXT_SM }} {{ Design::MARGIN_Y_SM }}">Create your first site to get started</p>
+        <p class="text-slate-500 {{ Design::TEXT_SM }} {{ Design::MARGIN_Y_SM }}">Create your first site to get started
+        </p>
     </div>
     @endforelse
 </div>

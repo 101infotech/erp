@@ -95,8 +95,11 @@
                     <label class="block text-sm font-medium mb-2">Fiscal Year Start Month *</label>
                     <select name="fiscal_year_start_month" required
                         class="w-full px-4 py-2 border rounded-lg dark:bg-slate-700 dark:text-white">
-                        @foreach(['Baishakh' => 1, 'Jestha' => 2, 'Ashar' => 3, 'Shrawan' => 4, 'Bhadra' => 5, 'Ashwin' => 6, 'Kartik' => 7, 'Mangsir' => 8, 'Poush' => 9, 'Magh' => 10, 'Falgun' => 11, 'Chaitra' => 12] as $month => $num)
-                        <option value="{{ $num }}" {{ old('fiscal_year_start_month', $company->fiscal_year_start_month) == $num ? 'selected' : '' }}>{{ $month }}</option>
+                        @foreach(['Baishakh' => 1, 'Jestha' => 2, 'Ashar' => 3, 'Shrawan' => 4, 'Bhadra' => 5, 'Ashwin'
+                        => 6, 'Kartik' => 7, 'Mangsir' => 8, 'Poush' => 9, 'Magh' => 10, 'Falgun' => 11, 'Chaitra' =>
+                        12] as $month => $num)
+                        <option value="{{ $num }}" {{ old('fiscal_year_start_month', $company->fiscal_year_start_month)
+                            == $num ? 'selected' : '' }}>{{ $month }}</option>
                         @endforeach
                     </select>
                     @error('fiscal_year_start_month')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror

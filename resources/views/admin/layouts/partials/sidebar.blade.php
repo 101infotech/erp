@@ -20,7 +20,10 @@
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}"
                 @click.prevent="activeNav = null; window.location.href = '{{ route('dashboard') }}'"
-                class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors {{ request()->is('dashboard') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200' }}">
+                class="relative group w-12 h-12 flex items-center justify-center rounded-lg transition-colors {{ request()->is('dashboard') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200' }}">
+                <div style="left: calc(100% + 8px); top: 50%; transform: translateY(-50%);"
+                    class="absolute bg-slate-800 text-white text-xs font-medium py-1.5 px-3 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Dashboard</div>
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
@@ -30,8 +33,11 @@
 
             <!-- HRM -->
             <button @click="activeNav = activeNav === 'hrm' ? null : 'hrm'"
-                class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
+                class="relative group w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
                 :class="activeNav === 'hrm' || {{ request()->routeIs('admin.hrm.*') || request()->routeIs('admin.users.*') || request()->routeIs('admin.feedback.*') || request()->routeIs('admin.complaints.*') || request()->routeIs('admin.announcements.*') ? 'true' : 'false' }} ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'">
+                <div style="left: calc(100% + 8px); top: 50%; transform: translateY(-50%);"
+                    class="absolute bg-slate-800 text-white text-xs font-medium py-1.5 px-3 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Human Resources</div>
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
@@ -41,8 +47,11 @@
 
             <!-- Service -->
             <button @click="activeNav = activeNav === 'service' ? null : 'service'"
-                class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
+                class="relative group w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
                 :class="activeNav === 'service' || {{ request()->routeIs('admin.leads.*') || request()->routeIs('admin.services.*') || request()->routeIs('admin.sites.*') ? 'true' : 'false' }} ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'">
+                <div style="left: calc(100% + 8px); top: 50%; transform: translateY(-50%);"
+                    class="absolute bg-slate-800 text-white text-xs font-medium py-1.5 px-3 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Service</div>
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -52,8 +61,11 @@
 
             <!-- Finance -->
             <button @click="activeNav = activeNav === 'finance' ? null : 'finance'"
-                class="w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
+                class="relative group w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
                 :class="activeNav === 'finance' || {{ request()->routeIs('admin.finance.*') ? 'true' : 'false' }} ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'">
+                <div style="left: calc(100% + 8px); top: 50%; transform: translateY(-50%);"
+                    class="absolute bg-slate-800 text-white text-xs font-medium py-1.5 px-3 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Finance</div>
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
