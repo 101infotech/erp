@@ -93,11 +93,19 @@ Comprehensive guides, quick starts, and visual documentation.
 
 ## 🆕 Latest Updates (January 2026)
 
-### ✨ [FIX_SUMMARY_LAYOUT_SEPARATION.md](FIX_SUMMARY_LAYOUT_SEPARATION.md) - Navigation & Content Layout Fix ⭐ LATEST
+### ✨ [DASHBOARD_RESTRUCTURE_SUMMARY.md](DASHBOARD_RESTRUCTURE_SUMMARY.md) - Comprehensive Dashboard Restructure ⭐ LATEST
 
-**Fixed overlapping sections issue** between navigation and content areas!
+**Complete dashboard transformation with reusable components!**
 
--   ✅ **Proper flex-based layout separation**
+-   ✅ **Admin Dashboard restructure** with improved KPIs, business summary, quick actions
+-   ✅ **Employee Dashboard restructure** with better layout and organization
+-   ✅ **5 Reusable Blade components** for consistency and maintainability
+-   ✅ **Complete documentation** in COMPREHENSIVE_DASHBOARD_RESTRUCTURE.md
+-   ✅ **Better visual hierarchy** and user experience
+
+### 📘 [COMPREHENSIVE_DASHBOARD_RESTRUCTURE.md](COMPREHENSIVE_DASHBOARD_RESTRUCTURE.md) - Complete Architecture Guide
+
+Detailed specification for dashboard structure, components, data flow, and responsive design.
 -   ✅ **Icon bar + expandable detail panels** (no overlap)
 -   ✅ **Smooth Alpine.js transitions**
 -   ✅ **Content area uses full remaining width**
