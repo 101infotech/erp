@@ -5,14 +5,24 @@
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 -m-8 p-8 pt-6">
-    <!-- Welcome Section -->
+    <!-- ========== HEADER SECTION ========== -->
     <div class="mb-8">
-        <h1 class="text-2xl font-semibold text-white mb-2">Welcome back, {{ Auth::user()->name }}!</h1>
-        <p class="text-slate-400 text-sm">Here's what's happening with your business today.</p>
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-white mb-1">Welcome back, {{ Auth::user()->name }}!</h1>
+                <p class="text-slate-400 text-sm">{{ now()->format('l, F d, Y') }} • Here's what's happening with your business today.</p>
+            </div>
+            <div class="text-right">
+                <p class="text-xs text-slate-500 mb-1">System Status</p>
+                <p class="text-sm font-semibold text-green-400">✓ All Systems Operational</p>
+            </div>
+        </div>
     </div>
 
-    <!-- Top Stats Row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <!-- ========== KEY PERFORMANCE INDICATORS ========== -->
+    <div class="mb-8">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Key Metrics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Total Sites -->
         <div
             class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-blue-500/50 transition-colors">
@@ -88,10 +98,14 @@
         </div>
     </div>
 
-    <!-- Business Summary (Finance + HRM) -->
+    <!-- ========== BUSINESS SUMMARY SECTION ========== -->
     <div class="mb-8">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3">
-            <h2 class="text-lg font-semibold text-white">Business Summary</h2>
+        <x-dashboard-section-header 
+            title="Business Summary"
+            subtitle="Finance and HR snapshots"
+            action="{{ route('admin.finance.dashboard') }}"
+            actionLabel="View Finance Dashboard"
+        />
             <div class="flex items-center gap-3 text-xs font-medium">
                 <a href="{{ route('admin.finance.dashboard') }}"
                     class="text-lime-400 hover:text-lime-300 inline-flex items-center gap-2">Finance Dashboard
@@ -194,113 +208,110 @@
             </div>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-3">
-            <div class="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-3">
-                <!-- Quick Actions -->
-                <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                    <h3 class="text-base font-semibold text-white mb-3">Finance Quick Actions</h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <a href="{{ route('admin.finance.transactions.create') }}"
-                            class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
-                            <div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-white font-medium text-sm">New Transaction</p>
-                                <p class="text-slate-400 text-xs">Add entry</p>
-                            </div>
-                        </a>
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Finance Quick Actions -->
+            <div class="lg:col-span-2">
+                <x-dashboard-section-header 
+                    title="Quick Actions"
+                    subtitle="Finance operations"
+                />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
+                    <x-dashboard-quick-action
+                        title="New Transaction"
+                        subtitle="Add entry"
+                        color="cyan"
+                        href="{{ route('admin.finance.transactions.create') }}"
+                    >
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </x-dashboard-quick-action>
 
-                        <a href="{{ route('admin.finance.reports') }}"
-                            class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
-                            <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-white font-medium text-sm">Reports</p>
-                                <p class="text-slate-400 text-xs">View analytics</p>
-                            </div>
-                        </a>
+                    <x-dashboard-quick-action
+                        title="View Reports"
+                        subtitle="Analytics"
+                        color="purple"
+                        href="{{ route('admin.finance.reports') }}"
+                    >
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </x-dashboard-quick-action>
 
-                        <a href="{{ route('admin.finance.sales.create') }}"
-                            class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
-                            <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-white font-medium text-sm">New Sale</p>
-                                <p class="text-slate-400 text-xs">Create invoice</p>
-                            </div>
-                        </a>
+                    <x-dashboard-quick-action
+                        title="New Sale"
+                        subtitle="Create invoice"
+                        color="green"
+                        href="{{ route('admin.finance.sales.create') }}"
+                    >
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </x-dashboard-quick-action>
 
-                        <a href="{{ route('admin.finance.purchases.create') }}"
-                            class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
-                            <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-white font-medium text-sm">New Purchase</p>
-                                <p class="text-slate-400 text-xs">Record expense</p>
-                            </div>
-                        </a>
-                    </div>
+                    <x-dashboard-quick-action
+                        title="New Purchase"
+                        subtitle="Record expense"
+                        color="orange"
+                        href="{{ route('admin.finance.purchases.create') }}"
+                    >
+                        <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </x-dashboard-quick-action>
                 </div>
-
+            </div>
+            <!-- Recent Transactions & AI Insights -->
+            <div class="space-y-4">
                 <!-- Recent Transactions -->
-                <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-base font-semibold text-white">Recent Transactions</h3>
-                        <a href="{{ route('admin.finance.transactions.index') }}"
-                            class="text-lime-400 hover:text-lime-300 text-xs font-medium">View All →</a>
-                    </div>
+                <x-dashboard-card
+                    title="Recent Transactions"
+                    subtitle="Latest activity"
+                    icon='<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>'
+                    color="cyan"
+                    action="{{ route('admin.finance.transactions.index') }}"
+                    actionLabel="View All"
+                >
                     <div id="recent-transactions" class="space-y-3">
                         <p class="text-slate-400 text-center py-4 text-sm">Loading...</p>
                     </div>
-                </div>
-            </div>
+                </x-dashboard-card>
 
-            <!-- AI Insights -->
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 flex flex-col gap-3">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-base font-semibold text-white">AI Insights</h3>
-                    <span class="text-[10px] px-2 py-1 rounded-full bg-lime-500/10 text-lime-300">Beta</span>
-                </div>
-                <p class="text-sm text-slate-300" id="ai-insight-text">Analyzing finance and HRM signals...</p>
-                <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-700">
-                    <label class="text-xs text-slate-400">Ask AI</label>
-                    <div class="mt-2 flex gap-2">
-                        <input type="text"
-                            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500"
-                            placeholder="e.g. Where should we focus this week?">
-                        <button type="button"
-                            class="px-3 py-2 rounded-lg bg-lime-500 text-slate-950 text-sm font-semibold hover:bg-lime-400 transition">Send</button>
+                <!-- AI Insights -->
+                <x-dashboard-card
+                    title="AI Insights"
+                    subtitle="Powered insights"
+                    icon='<svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707.707M5.34 5.34l.707.707" />
+                    </svg>'
+                    color="lime"
+                >
+                    <div class="space-y-4">
+                        <p class="text-sm text-slate-300" id="ai-insight-text">Analyzing finance and HRM signals...</p>
+                        <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-700">
+                            <label class="text-xs text-slate-400">Ask AI</label>
+                            <div class="mt-2 flex gap-2">
+                                <input type="text"
+                                    class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500"
+                                    placeholder="e.g. Where should we focus?">
+                                <button type="button"
+                                    class="px-3 py-2 rounded-lg bg-lime-500 text-slate-950 text-sm font-semibold hover:bg-lime-400 transition">Send</button>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-2">Auto-refresh from live finance + HRM data.</p>
+                        </div>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-2">AI suggestions auto-refresh from live finance + HRM data.
-                    </p>
-                </div>
+                </x-dashboard-card>
             </div>
-        </div>
     </div>
 
-    <!-- Quick Access Modules -->
+    <!-- ========== QUICK ACCESS MODULES ========== -->
     <div class="mb-8">
-        <h2 class="text-lg font-semibold text-white mb-4">Quick Access</h2>
+        <x-dashboard-section-header 
+            title="Quick Access"
+            subtitle="Jump to modules"
+        />
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
             <!-- Sites Management -->
@@ -369,11 +380,14 @@
         </div>
     </div>
 
-    <!-- HRM Alerts (only if there are pending items) -->
+    <!-- ========== PENDING ACTIONS (Conditional) ========== -->
     @if(isset($hrmStats) && ($hrmStats['pending_leaves'] > 0 || $hrmStats['draft_payrolls'] > 0 ||
     $hrmStats['unreviewed_anomalies'] > 0))
     <div class="mb-8">
-        <h2 class="text-lg font-semibold text-white mb-4">Pending Actions</h2>
+        <x-dashboard-section-header 
+            title="Pending Actions"
+            subtitle="Requires your attention"
+        />
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
             @if($hrmStats['pending_leaves'] > 0)
