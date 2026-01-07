@@ -44,7 +44,7 @@ class DashboardController extends Controller
         try {
             $companyId = 1; // Default to first company
             $fiscalYear = '2081'; // Current BS fiscal year
-            
+
             // Check if company exists
             if (\App\Models\FinanceCompany::where('id', $companyId)->exists()) {
                 $financeData = $this->financeDashboardService->getDashboardData($companyId, $fiscalYear);

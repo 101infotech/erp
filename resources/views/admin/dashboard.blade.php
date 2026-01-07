@@ -433,7 +433,7 @@
 @push('scripts')
 <script>
     const hrmStats = @json($hrmStats ?? []);
-    const financeData = @json($financeData);
+    const financeData = @json($financeData ?? null);
 
     function updateAiInsight(finance, hrm) {
         const target = document.getElementById('ai-insight-text');
