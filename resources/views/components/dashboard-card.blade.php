@@ -25,10 +25,11 @@
         @endif
     </div>
     @endif
-    
+
     <div class="px-6 py-4">
         {{ $slot }}
     </div>
 </div>
 
-@props(['title' => null, 'subtitle' => null, 'icon' => null, 'color' => 'slate', 'action' => null, 'actionLabel' => null])
+@props(['title' => null, 'subtitle' => null, 'icon' => null, 'color' => 'slate', 'action' => null, 'actionLabel' =>
+null])

@@ -10,7 +10,8 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-white mb-1">Welcome back, {{ Auth::user()->name }}!</h1>
-                <p class="text-slate-400 text-sm">{{ now()->format('l, F d, Y') }} • Here's what's happening with your business today.</p>
+                <p class="text-slate-400 text-sm">{{ now()->format('l, F d, Y') }} • Here's what's happening with your
+                    business today.</p>
             </div>
             <div class="text-right">
                 <p class="text-xs text-slate-500 mb-1">System Status</p>
@@ -23,89 +24,85 @@
     <div class="mb-8">
         <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Key Metrics</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Total Sites -->
-        <div
-            class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-blue-500/50 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs mb-1.5">Total Sites</p>
-                    <h2 class="text-2xl font-bold text-white">{{ $stats['total_sites'] }}</h2>
-                    <p class="text-xs text-slate-500 mt-1">Active websites</p>
+            <!-- Total Sites -->
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-blue-500/50 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-400 text-xs mb-1.5">Total Sites</p>
+                        <h2 class="text-2xl font-bold text-white">{{ $stats['total_sites'] }}</h2>
+                        <p class="text-xs text-slate-500 mt-1">Active websites</p>
+                    </div>
+                    <div class="w-10 h-10 bg-slate-500/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                    </div>
                 </div>
-                <div class="w-10 h-10 bg-slate-500/10 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                    </svg>
+            </div>
+
+            <!-- Team Members -->
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700 hover:border-lime-500/50 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-400 text-xs mb-1.5">Team Members</p>
+                        <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ??
+                            $stats['total_team_members'] }}</h2>
+                        <p class="text-xs text-slate-500 mt-1">Total employees ({{ $hrmStats['active_employees'] ?? 0 }}
+                            active)</p>
+                    </div>
+                    <div class="w-10 h-10 bg-lime-500/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Blogs -->
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-yellow-500/50 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-400 text-xs mb-1.5">Total Blogs</p>
+                        <h2 class="text-2xl font-bold text-white">{{ $stats['total_blogs'] }}</h2>
+                        <p class="text-xs text-slate-500 mt-1">Published articles</p>
+                    </div>
+                    <div class="w-10 h-10 bg-yellow-500/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Contacts -->
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-orange-500/50 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-400 text-xs mb-1.5">New Contacts</p>
+                        <h2 class="text-2xl font-bold text-white">{{ $stats['new_contact_forms'] }}</h2>
+                        <p class="text-xs text-slate-500 mt-1">Last 7 days</p>
+                    </div>
+                    <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Team Members -->
-        <div
-            class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700 hover:border-lime-500/50 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs mb-1.5">Team Members</p>
-                    <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ??
-                        $stats['total_team_members'] }}</h2>
-                    <p class="text-xs text-slate-500 mt-1">Total employees ({{ $hrmStats['active_employees'] ?? 0 }}
-                        active)</p>
-                </div>
-                <div class="w-10 h-10 bg-lime-500/10 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Blogs -->
-        <div
-            class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-yellow-500/50 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs mb-1.5">Total Blogs</p>
-                    <h2 class="text-2xl font-bold text-white">{{ $stats['total_blogs'] }}</h2>
-                    <p class="text-xs text-slate-500 mt-1">Published articles</p>
-                </div>
-                <div class="w-10 h-10 bg-yellow-500/10 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- New Contacts -->
-        <div
-            class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-orange-500/50 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs mb-1.5">New Contacts</p>
-                    <h2 class="text-2xl font-bold text-white">{{ $stats['new_contact_forms'] }}</h2>
-                    <p class="text-xs text-slate-500 mt-1">Last 7 days</p>
-                </div>
-                <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== BUSINESS SUMMARY SECTION ========== -->
-    <div class="mb-8">
-        <x-dashboard-section-header 
-            title="Business Summary"
-            subtitle="Finance and HR snapshots"
-            action="{{ route('admin.finance.dashboard') }}"
-            actionLabel="View Finance Dashboard"
-        />
+        <!-- ========== BUSINESS SUMMARY SECTION ========== -->
+        <div class="mb-8">
+            <x-dashboard-section-header title="Business Summary" subtitle="Finance and HR snapshots"
+                action="{{ route('admin.finance.dashboard') }}" actionLabel="View Finance Dashboard" />
             <div class="flex items-center gap-3 text-xs font-medium">
                 <a href="{{ route('admin.finance.dashboard') }}"
                     class="text-lime-400 hover:text-lime-300 inline-flex items-center gap-2">Finance Dashboard
@@ -152,6 +149,39 @@
                         <p class="text-yellow-300 text-xs mb-1">Pending Receivables</p>
                         <h2 class="text-xl font-bold text-white" id="pending-payments">NPR 0</h2>
                         <p class="text-yellow-400 text-xs" id="pending-count">0 invoices pending</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="rounded-lg bg-slate-900/40 border border-cyan-500/20 p-3">
+                        <div class="flex items-start justify-between mb-2">
+                            <div>
+                                <p class="text-xs text-cyan-200/80">Receivables</p>
+                                <h4 class="text-lg font-semibold text-white" id="pending-sales-total">NPR 0</h4>
+                                <p class="text-[11px] text-slate-400" id="pending-sales-count">Pending invoices</p>
+                            </div>
+                            <span
+                                class="text-[11px] px-2 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">Sales</span>
+                        </div>
+                        <div id="pending-sales-list" class="space-y-2 text-xs text-slate-300">
+                            <p class="text-slate-500">Loading receivables...</p>
+                        </div>
+                    </div>
+
+                    <div class="rounded-lg bg-slate-900/40 border border-orange-500/20 p-3">
+                        <div class="flex items-start justify-between mb-2">
+                            <div>
+                                <p class="text-xs text-orange-200/80">Payables</p>
+                                <h4 class="text-lg font-semibold text-white" id="pending-purchases-total">NPR 0</h4>
+                                <p class="text-[11px] text-slate-400" id="pending-purchases-count">Pending vendor bills
+                                </p>
+                            </div>
+                            <span
+                                class="text-[11px] px-2 py-1 rounded-full bg-orange-500/10 text-orange-300 border border-orange-500/20">Purchases</span>
+                        </div>
+                        <div id="pending-purchases-list" class="space-y-2 text-xs text-slate-300">
+                            <p class="text-slate-500">Loading payables...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -211,52 +241,37 @@
         <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
             <!-- Finance Quick Actions -->
             <div class="lg:col-span-2">
-                <x-dashboard-section-header 
-                    title="Quick Actions"
-                    subtitle="Finance operations"
-                />
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                    <x-dashboard-quick-action
-                        title="New Transaction"
-                        subtitle="Add entry"
-                        color="cyan"
-                        href="{{ route('admin.finance.transactions.create') }}"
-                    >
+                <x-dashboard-section-header title="Quick Actions" subtitle="Finance operations" />
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
+                    <x-dashboard-quick-action title="New Transaction" subtitle="Add entry" color="cyan"
+                        href="{{ route('admin.finance.transactions.create') }}">
                         <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
                     </x-dashboard-quick-action>
 
-                    <x-dashboard-quick-action
-                        title="View Reports"
-                        subtitle="Analytics"
-                        color="purple"
-                        href="{{ route('admin.finance.reports') }}"
-                    >
+                    <x-dashboard-quick-action title="View Reports" subtitle="Analytics" color="purple"
+                        href="{{ route('admin.finance.reports') }}">
                         <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                     </x-dashboard-quick-action>
 
-                    <x-dashboard-quick-action
-                        title="New Sale"
-                        subtitle="Create invoice"
-                        color="green"
-                        href="{{ route('admin.finance.sales.create') }}"
-                    >
+                    <x-dashboard-quick-action title="New Sale" subtitle="Create invoice" color="green"
+                        href="{{ route('admin.finance.sales.create') }}">
                         <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                         </svg>
                     </x-dashboard-quick-action>
 
-                    <x-dashboard-quick-action
-                        title="New Purchase"
-                        subtitle="Record expense"
-                        color="orange"
-                        href="{{ route('admin.finance.purchases.create') }}"
-                    >
+                    <x-dashboard-quick-action title="New Purchase" subtitle="Record expense" color="orange"
+                        href="{{ route('admin.finance.purchases.create') }}">
                         <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                     </x-dashboard-quick-action>
                 </div>
@@ -264,30 +279,19 @@
             <!-- Recent Transactions & AI Insights -->
             <div class="space-y-4">
                 <!-- Recent Transactions -->
-                <x-dashboard-card
-                    title="Recent Transactions"
-                    subtitle="Latest activity"
-                    icon='<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <x-dashboard-card title="Recent Transactions" subtitle="Latest activity" icon='<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>'
-                    color="cyan"
-                    action="{{ route('admin.finance.transactions.index') }}"
-                    actionLabel="View All"
-                >
+                    </svg>' color="cyan" action="{{ route('admin.finance.transactions.index') }}"
+                    actionLabel="View All">
                     <div id="recent-transactions" class="space-y-3">
                         <p class="text-slate-400 text-center py-4 text-sm">Loading...</p>
                     </div>
                 </x-dashboard-card>
 
                 <!-- AI Insights -->
-                <x-dashboard-card
-                    title="AI Insights"
-                    subtitle="Powered insights"
-                    icon='<svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <x-dashboard-card title="AI Insights" subtitle="Powered insights" icon='<svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707.707M5.34 5.34l.707.707" />
-                    </svg>'
-                    color="lime"
-                >
+                    </svg>' color="lime">
                     <div class="space-y-4">
                         <p class="text-sm text-slate-300" id="ai-insight-text">Analyzing finance and HRM signals...</p>
                         <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-700">
@@ -304,149 +308,144 @@
                     </div>
                 </x-dashboard-card>
             </div>
-    </div>
-
-    <!-- ========== QUICK ACCESS MODULES ========== -->
-    <div class="mb-8">
-        <x-dashboard-section-header 
-            title="Quick Access"
-            subtitle="Jump to modules"
-        />
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-            <!-- Sites Management -->
-            <a href="{{ route('admin.sites.index') }}"
-                class="group bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-blue-500/20 hover:border-blue-500/40">
-                <div class="flex items-center justify-between mb-3">
-                    <span
-                        class="text-xs font-semibold text-blue-300 px-2.5 py-1 bg-black/20 rounded-full">#Management</span>
-                    <svg class="w-4 h-4 text-blue-300 group-hover:translate-x-1 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-white mb-2">Sites</h3>
-                <p class="text-xs text-blue-200/80">Manage websites</p>
-            </a>
-
-            <!-- HRM Module -->
-            <a href="{{ route('admin.hrm.employees.index') }}"
-                class="group bg-gradient-to-br from-lime-500/20 to-lime-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-lime-500/20 hover:border-lime-500/40">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-lime-300 px-2.5 py-1 bg-black/20 rounded-full">#HRM</span>
-                    <svg class="w-4 h-4 text-lime-300 group-hover:translate-x-1 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-white mb-2">HR Management</h3>
-                <p class="text-xs text-lime-200/80">Employees & payroll</p>
-            </a>
-
-            <!-- Attendance -->
-            <a href="{{ route('admin.hrm.attendance.index') }}"
-                class="group bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-purple-500/20 hover:border-purple-500/40">
-                <div class="flex items-center justify-between mb-3">
-                    <span
-                        class="text-xs font-semibold text-purple-300 px-2.5 py-1 bg-black/20 rounded-full">#Tracking</span>
-                    <svg class="w-4 h-4 text-purple-300 group-hover:translate-x-1 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-white mb-2">Attendance</h3>
-                <p class="text-xs text-purple-200/80">Track employee time</p>
-            </a>
-
-            <!-- Content -->
-            <a href="{{ route('admin.sites.index') }}"
-                class="group bg-gradient-to-br from-indigo-500/20 to-indigo-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-indigo-500/20 hover:border-indigo-500/40">
-                <div class="flex items-center justify-between mb-3">
-                    <span
-                        class="text-xs font-semibold text-indigo-300 px-2.5 py-1 bg-black/20 rounded-full">#Content</span>
-                    <svg class="w-4 h-4 text-indigo-300 group-hover:translate-x-1 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-white mb-2">Content</h3>
-                <p class="text-xs text-indigo-200/80">Blogs & media</p>
-            </a>
-
         </div>
-    </div>
 
-    <!-- ========== PENDING ACTIONS (Conditional) ========== -->
-    @if(isset($hrmStats) && ($hrmStats['pending_leaves'] > 0 || $hrmStats['draft_payrolls'] > 0 ||
-    $hrmStats['unreviewed_anomalies'] > 0))
-    <div class="mb-8">
-        <x-dashboard-section-header 
-            title="Pending Actions"
-            subtitle="Requires your attention"
-        />
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- ========== QUICK ACCESS MODULES ========== -->
+        <div class="mb-8">
+            <x-dashboard-section-header title="Quick Access" subtitle="Jump to modules" />
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-            @if($hrmStats['pending_leaves'] > 0)
-            <a href="{{ route('admin.hrm.leaves.index') }}?status=pending"
-                class="bg-yellow-500/10 rounded-xl p-4 border border-yellow-500/30 hover:border-yellow-500/50 transition group">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Sites Management -->
+                <a href="{{ route('admin.sites.index') }}"
+                    class="group bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-blue-500/20 hover:border-blue-500/40">
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="text-xs font-semibold text-blue-300 px-2.5 py-1 bg-black/20 rounded-full">#Management</span>
+                        <svg class="w-4 h-4 text-blue-300 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </div>
-                    <span class="text-2xl font-bold text-yellow-400">{{ $hrmStats['pending_leaves'] }}</span>
-                </div>
-                <h3 class="text-base font-semibold text-white">Pending Leave Requests</h3>
-            </a>
-            @endif
+                    <h3 class="text-lg font-bold text-white mb-2">Sites</h3>
+                    <p class="text-xs text-blue-200/80">Manage websites</p>
+                </a>
 
-            @if($hrmStats['draft_payrolls'] > 0)
-            <a href="{{ route('admin.hrm.payroll.index') }}?status=draft"
-                class="bg-slate-500/10 rounded-xl p-4 border border-blue-500/30 hover:border-blue-500/50 transition group">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-10 h-10 bg-slate-500/20 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- HRM Module -->
+                <a href="{{ route('admin.hrm.employees.index') }}"
+                    class="group bg-gradient-to-br from-lime-500/20 to-lime-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-lime-500/20 hover:border-lime-500/40">
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="text-xs font-semibold text-lime-300 px-2.5 py-1 bg-black/20 rounded-full">#HRM</span>
+                        <svg class="w-4 h-4 text-lime-300 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </div>
-                    <span class="text-2xl font-bold text-blue-400">{{ $hrmStats['draft_payrolls'] }}</span>
-                </div>
-                <h3 class="text-base font-semibold text-white">Draft Payrolls</h3>
-            </a>
-            @endif
+                    <h3 class="text-lg font-bold text-white mb-2">HR Management</h3>
+                    <p class="text-xs text-lime-200/80">Employees & payroll</p>
+                </a>
 
-            @if($hrmStats['unreviewed_anomalies'] > 0)
-            <a href="{{ route('admin.hrm.attendance.index') }}"
-                class="bg-red-500/10 rounded-xl p-4 border border-red-500/30 hover:border-red-500/50 transition group">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Attendance -->
+                <a href="{{ route('admin.hrm.attendance.index') }}"
+                    class="group bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-purple-500/20 hover:border-purple-500/40">
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="text-xs font-semibold text-purple-300 px-2.5 py-1 bg-black/20 rounded-full">#Tracking</span>
+                        <svg class="w-4 h-4 text-purple-300 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </div>
-                    <span class="text-2xl font-bold text-red-400">{{ $hrmStats['unreviewed_anomalies'] }}</span>
-                </div>
-                <h3 class="text-base font-semibold text-white">Attendance Anomalies</h3>
-            </a>
-            @endif
+                    <h3 class="text-lg font-bold text-white mb-2">Attendance</h3>
+                    <p class="text-xs text-purple-200/80">Track employee time</p>
+                </a>
 
+                <!-- Content -->
+                <a href="{{ route('admin.sites.index') }}"
+                    class="group bg-gradient-to-br from-indigo-500/20 to-indigo-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-indigo-500/20 hover:border-indigo-500/40">
+                    <div class="flex items-center justify-between mb-3">
+                        <span
+                            class="text-xs font-semibold text-indigo-300 px-2.5 py-1 bg-black/20 rounded-full">#Content</span>
+                        <svg class="w-4 h-4 text-indigo-300 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Content</h3>
+                    <p class="text-xs text-indigo-200/80">Blogs & media</p>
+                </a>
+
+            </div>
         </div>
+
+        <!-- ========== PENDING ACTIONS (Conditional) ========== -->
+        @if(isset($hrmStats) && ($hrmStats['pending_leaves'] > 0 || $hrmStats['draft_payrolls'] > 0 ||
+        $hrmStats['unreviewed_anomalies'] > 0))
+        <div class="mb-8">
+            <x-dashboard-section-header title="Pending Actions" subtitle="Requires your attention" />
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                @if($hrmStats['pending_leaves'] > 0)
+                <a href="{{ route('admin.hrm.leaves.index') }}?status=pending"
+                    class="bg-yellow-500/10 rounded-xl p-4 border border-yellow-500/30 hover:border-yellow-500/50 transition group">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold text-yellow-400">{{ $hrmStats['pending_leaves'] }}</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-white">Pending Leave Requests</h3>
+                </a>
+                @endif
+
+                @if($hrmStats['draft_payrolls'] > 0)
+                <a href="{{ route('admin.hrm.payroll.index') }}?status=draft"
+                    class="bg-slate-500/10 rounded-xl p-4 border border-blue-500/30 hover:border-blue-500/50 transition group">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-10 h-10 bg-slate-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold text-blue-400">{{ $hrmStats['draft_payrolls'] }}</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-white">Draft Payrolls</h3>
+                </a>
+                @endif
+
+                @if($hrmStats['unreviewed_anomalies'] > 0)
+                <a href="{{ route('admin.hrm.attendance.index') }}"
+                    class="bg-red-500/10 rounded-xl p-4 border border-red-500/30 hover:border-red-500/50 transition group">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold text-red-400">{{ $hrmStats['unreviewed_anomalies'] }}</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-white">Attendance Anomalies</h3>
+                </a>
+                @endif
+
+            </div>
+        </div>
+        @endif
+
     </div>
-    @endif
 
-</div>
-
-@push('scripts')
-<script>
-    const hrmStats = @json($hrmStats ?? []);
+    @push('scripts')
+    <script>
+        const hrmStats = @json($hrmStats ?? []);
     const financeData = @json($financeData ?? null);
 
     function updateAiInsight(finance, hrm) {
@@ -537,6 +536,58 @@
                 countEl.textContent = 'Pending invoices';
             }
 
+            // Receivables detail
+            const salesSummary = financeData.pending_payments?.sales;
+            if (salesSummary) {
+                const salesTotalEl = document.getElementById('pending-sales-total');
+                const salesCountEl = document.getElementById('pending-sales-count');
+                salesTotalEl && (salesTotalEl.textContent = 'NPR ' + parseFloat(salesSummary.total || 0).toLocaleString('en-NP', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                salesCountEl && (salesCountEl.textContent = (salesSummary.count ?? 0) + ' invoices pending');
+
+                const salesListEl = document.getElementById('pending-sales-list');
+                if (salesListEl) {
+                    if (Array.isArray(salesSummary.items) && salesSummary.items.length) {
+                        salesListEl.innerHTML = salesSummary.items.map(item => `
+                            <div class="flex items-center justify-between border border-slate-800/70 rounded-lg px-3 py-2 bg-slate-900/60">
+                                <div>
+                                    <p class="text-white font-medium">${item.customer || item.customer_name || 'Customer'}</p>
+                                    <p class="text-[11px] text-slate-400">${item.number || item.invoice_number || 'Invoice'} • ${item.date || 'N/A'}</p>
+                                </div>
+                                <span class="text-cyan-300 font-semibold">NPR ${parseFloat(item.amount || 0).toLocaleString('en-NP', { minimumFractionDigits: 2 })}</span>
+                            </div>
+                        `).join('');
+                    } else {
+                        salesListEl.innerHTML = '<p class="text-slate-500">All receivables cleared.</p>';
+                    }
+                }
+            }
+
+            // Payables detail
+            const purchaseSummary = financeData.pending_payments?.purchases;
+            if (purchaseSummary) {
+                const purchTotalEl = document.getElementById('pending-purchases-total');
+                const purchCountEl = document.getElementById('pending-purchases-count');
+                purchTotalEl && (purchTotalEl.textContent = 'NPR ' + parseFloat(purchaseSummary.total || 0).toLocaleString('en-NP', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                purchCountEl && (purchCountEl.textContent = (purchaseSummary.count ?? 0) + ' vendor bills pending');
+
+                const purchListEl = document.getElementById('pending-purchases-list');
+                if (purchListEl) {
+                    if (Array.isArray(purchaseSummary.items) && purchaseSummary.items.length) {
+                        purchListEl.innerHTML = purchaseSummary.items.map(item => `
+                            <div class="flex items-center justify-between border border-slate-800/70 rounded-lg px-3 py-2 bg-slate-900/60">
+                                <div>
+                                    <p class="text-white font-medium">${item.vendor || item.vendor_name || 'Vendor'}</p>
+                                    <p class="text-[11px] text-slate-400">${item.number || item.bill_number || 'Bill'} • ${item.date || 'N/A'}</p>
+                                </div>
+                                <span class="text-orange-300 font-semibold">NPR ${parseFloat(item.amount || 0).toLocaleString('en-NP', { minimumFractionDigits: 2 })}</span>
+                            </div>
+                        `).join('');
+                    } else {
+                        purchListEl.innerHTML = '<p class="text-slate-500">No pending payables.</p>';
+                    }
+                }
+            }
+
             // Update AI insight with mapped values
             updateAiInsight({
                 net_profit: netProfit || 0,
@@ -575,9 +626,18 @@
                 pending_receivables: 0,
                 pending_receivables_count: 0
             }, hrmStats);
+
+            const salesList = document.getElementById('pending-sales-list');
+            if (salesList) {
+                salesList.innerHTML = '<p class="text-slate-500">Connect finance module to view live receivables.</p>';
+            }
+            const purchasesList = document.getElementById('pending-purchases-list');
+            if (purchasesList) {
+                purchasesList.innerHTML = '<p class="text-slate-500">Connect finance module to view live payables.</p>';
+            }
         }
     });
-</script>
-@endpush
+    </script>
+    @endpush
 
-@endsection
+    @endsection

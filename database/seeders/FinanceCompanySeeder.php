@@ -57,7 +57,7 @@ class FinanceCompanySeeder extends Seeder
         foreach ($sisterCompanies as $company) {
             FinanceCompany::create([
                 'name' => $company['name'],
-                'type' => 'sister',
+                'type' => 'subsidiary',
                 'parent_company_id' => $holdingCompany->id,
                 'fiscal_year_start_month' => 4, // Same as holding
                 'pan_number' => $company['pan_number'],

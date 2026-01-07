@@ -7,7 +7,8 @@
         @endif
     </div>
     @if(isset($action) && isset($actionLabel))
-    <a href="{{ $action }}" class="text-lime-400 hover:text-lime-300 inline-flex items-center gap-2 text-sm font-medium">
+    <a href="{{ $action }}"
+        class="text-lime-400 hover:text-lime-300 inline-flex items-center gap-2 text-sm font-medium">
         {{ $actionLabel }}
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

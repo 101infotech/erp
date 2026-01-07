@@ -131,8 +131,16 @@
         notifications: [],
         unreadCount: 0,
         pollInterval: null,
+        role: '{{ auth()->user()->role ?? 'guest' }}',
+        unreadEndpoint: '{{ auth()->user()?->role === 'employee' ? route('employee.notifications.unread-count') : '' }}',
+        notificationsEndpoint: '{{ auth()->user()?->role === 'employee' ? route('employee.notifications.all') : '' }}',
 
         init() {
+            if (!this.unreadEndpoint) {
+                this.unreadCount = 0;
+                return;
+            }
+
             // Only load unread count for the bell (we navigate to the full page on click)
             this.loadUnreadCount();
             this.startPolling();
@@ -147,8 +155,23 @@
         // Hover handlers removed - click redirects to full notifications page
 
         async loadNotifications() {
+            if (!this.notificationsEndpoint) {
+                return;
+            }
+
             try {
-                const response = await fetch('{{ route('employee.notifications.all') }}');
+                const response = await fetch(this.notificationsEndpoint, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const contentType = response.headers.get('content-type') || '';
+
+                if (!response.ok || !contentType.includes('application/json')) {
+                    this.notifications = [];
+                    this.unreadCount = 0;
+                    this.stopPolling();
+                    return;
+                }
+
                 const data = await response.json();
                 this.notifications = data.notifications;
                 this.unreadCount = data.unread_count;
@@ -159,11 +182,29 @@
 
         async loadUnreadCount() {
             try {
-                const response = await fetch('{{ route('employee.notifications.unread-count') }}');
+                if (!this.unreadEndpoint) {
+                    this.unreadCount = 0;
+                    return;
+                }
+
+                const response = await fetch(this.unreadEndpoint, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const contentType = response.headers.get('content-type') || '';
+
+                if (!response.ok || !contentType.includes('application/json')) {
+                    console.warn('Unread endpoint unavailable; skipping polling.');
+                    this.unreadCount = 0;
+                    this.stopPolling();
+                    return;
+                }
+
                 const data = await response.json();
-                this.unreadCount = data.count;
+                this.unreadCount = data.count ?? 0;
             } catch (error) {
                 console.error('Failed to load unread count:', error);
+                this.unreadCount = 0;
+                this.stopPolling();
             }
         },
 
@@ -204,12 +245,24 @@
         },
 
         startPolling() {
+            if (!this.unreadEndpoint) {
+                return;
+            }
+
             // Poll for new notifications every 30 seconds
+            this.stopPolling();
             this.pollInterval = setInterval(() => {
                 if (!this.isOpen) {
                     this.loadUnreadCount();
                 }
             }, 30000);
+        },
+
+        stopPolling() {
+            if (this.pollInterval) {
+                clearInterval(this.pollInterval);
+                this.pollInterval = null;
+            }
         },
 
         formatDate(dateString) {

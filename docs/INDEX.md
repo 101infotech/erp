@@ -118,6 +118,12 @@ Detailed specification for dashboard structure, components, data flow, and respo
 
 -   ✅ **Collapsible module-based navigation** (HRM & Finance)
 -   ✅ **4 reusable Blade components** created
+
+### 🧪 Dashboard Data Seeding (Finance + HRM)
+
+-   ✅ `DatabaseSeeder` now seeds finance demo data (transactions, sales, purchases)
+-   ✅ New `HrmDemoDataSeeder` seeds HRM companies, departments, employees, attendance, payroll, leaves
+-   ▶️ Run `php artisan migrate:fresh --seed` to load the dashboard-ready sample dataset
 -   ✅ **Persistent state management** with localStorage
 -   ✅ **Smart auto-expansion** to active routes
 -   ✅ **Logical grouping** of menu items

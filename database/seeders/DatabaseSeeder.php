@@ -33,6 +33,10 @@ class DatabaseSeeder extends Seeder
             FinanceCategorySeeder::class,
             FinancePaymentMethodSeeder::class,
             FinanceAccountSeeder::class,
+            FinanceDataSeeder::class,
+
+            // HRM Demo Data for dashboards
+            HrmDemoDataSeeder::class,
         ]);
     }
 }
