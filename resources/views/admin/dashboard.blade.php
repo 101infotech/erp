@@ -40,12 +40,12 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+                            <div class="mb-12">
 
             <!-- Team Members -->
             <div
                 class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 border border-slate-700 hover:border-lime-500/50 transition-colors">
-                <div class="flex items-center justify-between">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div>
                         <p class="text-slate-400 text-xs mb-1.5">Team Members</p>
                         <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ??
@@ -240,7 +240,7 @@
 
         <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Finance Quick Actions -->
-            <div class="lg:col-span-2">
+              <div class="lg:col-span-2 space-y-4">
                 <x-dashboard-section-header title="Quick Actions" subtitle="Finance operations" />
                 <div
                     class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
@@ -278,7 +278,7 @@
             </div>
 
             <!-- Recent Transactions -->
-            <div>
+            <div class="space-y-4">
                 <x-dashboard-card title="Recent Transactions" subtitle="Latest activity" icon='<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>' color="cyan" action="{{ route('admin.finance.transactions.index') }}"
