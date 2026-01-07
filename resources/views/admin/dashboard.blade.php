@@ -6,7 +6,7 @@
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 -m-8 p-8 pt-6">
     <!-- ========== HEADER SECTION ========== -->
-    <div class="mb-8">
+    <div class="mb-12">
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-white mb-1">Welcome back, {{ Auth::user()->name }}!</h1>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- ========== KEY PERFORMANCE INDICATORS ========== -->
-    <div class="mb-8">
+    <div class="mb-12">
         <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Key Metrics</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Total Sites -->
@@ -238,7 +238,7 @@
             </div>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Finance Quick Actions -->
             <div class="lg:col-span-2">
                 <x-dashboard-section-header title="Quick Actions" subtitle="Finance operations" />
@@ -276,9 +276,9 @@
                     </x-dashboard-quick-action>
                 </div>
             </div>
-            <!-- Recent Transactions & AI Insights -->
-            <div class="space-y-4">
-                <!-- Recent Transactions -->
+
+            <!-- Recent Transactions -->
+            <div>
                 <x-dashboard-card title="Recent Transactions" subtitle="Latest activity" icon='<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>' color="cyan" action="{{ route('admin.finance.transactions.index') }}"
@@ -287,31 +287,11 @@
                         <p class="text-slate-400 text-center py-4 text-sm">Loading...</p>
                     </div>
                 </x-dashboard-card>
-
-                <!-- AI Insights -->
-                <x-dashboard-card title="AI Insights" subtitle="Powered insights" icon='<svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707.707M5.34 5.34l.707.707" />
-                    </svg>' color="lime">
-                    <div class="space-y-4">
-                        <p class="text-sm text-slate-300" id="ai-insight-text">Analyzing finance and HRM signals...</p>
-                        <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-700">
-                            <label class="text-xs text-slate-400">Ask AI</label>
-                            <div class="mt-2 flex gap-2">
-                                <input type="text"
-                                    class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500"
-                                    placeholder="e.g. Where should we focus?">
-                                <button type="button"
-                                    class="px-3 py-2 rounded-lg bg-lime-500 text-slate-950 text-sm font-semibold hover:bg-lime-400 transition">Send</button>
-                            </div>
-                            <p class="text-[11px] text-slate-500 mt-2">Auto-refresh from live finance + HRM data.</p>
-                        </div>
-                    </div>
-                </x-dashboard-card>
             </div>
         </div>
 
         <!-- ========== QUICK ACCESS MODULES ========== -->
-        <div class="mb-8">
+        <div class="mb-12">
             <x-dashboard-section-header title="Quick Access" subtitle="Jump to modules" />
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
@@ -385,7 +365,7 @@
         <!-- ========== PENDING ACTIONS (Conditional) ========== -->
         @if(isset($hrmStats) && ($hrmStats['pending_leaves'] > 0 || $hrmStats['draft_payrolls'] > 0 ||
         $hrmStats['unreviewed_anomalies'] > 0))
-        <div class="mb-8">
+        <div class="mb-12">
             <x-dashboard-section-header title="Pending Actions" subtitle="Requires your attention" />
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
@@ -441,6 +421,89 @@
         </div>
         @endif
 
+        <!-- ========== AI INSIGHTS SECTION (Full Width) ========== -->
+        <div class="mb-6">
+            <div class="bg-gradient-to-r from-lime-950/20 via-slate-900 to-lime-950/20 rounded-2xl border border-lime-500/20 overflow-hidden backdrop-blur-sm">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-lime-500/5 to-transparent px-6 py-4 border-b border-lime-500/10">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-lime-500/10 border border-lime-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707.707M5.34 5.34l.707.707" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-white">AI Insights</h2>
+                                <p class="text-xs text-slate-400">Powered by real-time analytics</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-lime-500/10 border border-lime-500/20 text-xs font-medium text-lime-300">Live Monitor</span>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6 space-y-5">
+                    <!-- Main Insight -->
+                    <div class="bg-gradient-to-r from-slate-900/40 to-slate-800/40 rounded-xl p-4 border border-lime-500/10">
+                        <p class="text-sm text-slate-300 leading-relaxed" id="ai-insight-text">
+                            Analyzing finance and HRM signals...
+                        </p>
+                        <div class="mt-3 flex items-center gap-2 text-[11px] text-lime-300/70">
+                            <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
+                            <span>Auto-updating from live data</span>
+                        </div>
+                    </div>
+
+                    <!-- AI Chat Interface -->
+                    <div class="space-y-3">
+                        <label class="text-xs font-medium text-slate-400 block">Ask AI for Recommendations</label>
+                        <div class="flex gap-2">
+                            <div class="flex-1 relative">
+                                <input type="text" id="ai-query-input"
+                                    class="w-full bg-slate-900/60 border border-slate-700/50 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-lime-500/50 focus:ring-1 focus:ring-lime-500/20 transition"
+                                    placeholder="e.g., Where should we focus spending? What's the revenue trend?">
+                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs pointer-events-none">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <button type="button" id="ai-send-btn"
+                                class="px-5 py-3 rounded-lg bg-gradient-to-r from-lime-500 to-lime-600 text-slate-950 text-sm font-semibold hover:from-lime-400 hover:to-lime-500 transition-all duration-200 hover:shadow-lg hover:shadow-lime-500/20 flex items-center gap-2">
+                                <span>Send</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                            <svg class="w-3 h-3 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+                            Analyzes finance trends, HRM metrics, and provides actionable recommendations in real-time
+                        </p>
+                    </div>
+
+                    <!-- Quick Insights Grid (Optional) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-700/30">
+                        <button class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
+                            <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">Performance</p>
+                            <p class="text-xs text-slate-500 group-hover:text-slate-400">How's our cash flow?</p>
+                        </button>
+                        <button class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
+                            <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">Efficiency</p>
+                            <p class="text-xs text-slate-500 group-hover:text-slate-400">Where are we spending most?</p>
+                        </button>
+                        <button class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
+                            <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">Growth</p>
+                            <p class="text-xs text-slate-500 group-hover:text-slate-400">Next opportunities?</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     @push('scripts')
@@ -455,27 +518,27 @@
         const insights = [];
 
         if (finance.net_profit > 0) {
-            insights.push(`Net profit up: NPR ${parseFloat(finance.net_profit).toLocaleString('en-NP', { maximumFractionDigits: 0 })}`);
+            insights.push(`💰 Net profit up: <strong>NPR ${parseFloat(finance.net_profit).toLocaleString('en-NP', { maximumFractionDigits: 0 })}</strong> — maintain current spending patterns.`);
         } else if (finance.net_profit < 0) {
-            insights.push('Net loss detected — tighten expenses.');
+            insights.push('⚠️ <strong>Net loss detected</strong> — Review expenses immediately and optimize operational costs.');
         }
 
         if (finance.pending_receivables_count > 0) {
-            insights.push(`${finance.pending_receivables_count} invoices pending; prioritize collections.`);
+            insights.push(`📊 <strong>${finance.pending_receivables_count} invoices pending</strong> (NPR ${parseFloat(finance.pending_receivables || 0).toLocaleString('en-NP', { maximumFractionDigits: 0 })}). Prioritize collections.`);
         }
 
         if (hrm.pending_leaves > 0) {
-            insights.push(`${hrm.pending_leaves} leave requests awaiting approval.`);
+            insights.push(`👤 <strong>${hrm.pending_leaves} leave requests</strong> awaiting your approval.`);
         }
         if (hrm.unreviewed_anomalies > 0) {
-            insights.push('Attendance anomalies need a quick review.');
+            insights.push('🔔 <strong>Attendance anomalies</strong> need quick review to maintain team accountability.');
         }
 
         if (!insights.length) {
-            insights.push('All clear. Monitoring live finance and HRM signals.');
+            insights.push('✅ <strong>All systems green.</strong> Monitoring live finance and HRM signals. Everything is running smoothly!');
         }
 
-        target.textContent = insights.join(' • ');
+        target.innerHTML = insights.join(' • ');
     }
 
     // Load Finance Data from server-side
@@ -635,6 +698,27 @@
             if (purchasesList) {
                 purchasesList.innerHTML = '<p class="text-slate-500">Connect finance module to view live payables.</p>';
             }
+        }
+
+        // AI Send Button Handler
+        const sendBtn = document.getElementById('ai-send-btn');
+        const queryInput = document.getElementById('ai-query-input');
+        if (sendBtn && queryInput) {
+            sendBtn.addEventListener('click', function() {
+                const query = queryInput.value.trim();
+                if (query) {
+                    console.log('AI Query:', query);
+                    // Placeholder for AI API integration
+                    queryInput.value = '';
+                    queryInput.focus();
+                }
+            });
+            
+            queryInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && queryInput.value.trim()) {
+                    sendBtn.click();
+                }
+            });
         }
     });
     </script>
