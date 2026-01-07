@@ -38,6 +38,17 @@ Feature documentation including implementation guides and quick references.
 -   **Create User Account for Employee** ⭐ NEW
 -   **Cascading Delete (User & Employee)** ⭐ NEW
 
+### 🎨 [DASHBOARD_UI_IMPROVEMENTS.md](DASHBOARD_UI_IMPROVEMENTS.md) ⭐ LATEST
+
+Comprehensive dashboard redesign with improved spacing, AI Insights relocation, and enhanced styling.
+
+-   Layout restructuring with consistent spacing
+-   Full-width AI Insights section with chat interface
+-   Enhanced visual hierarchy and typography
+-   Responsive design improvements
+-   Interactive elements (suggestions, queries)
+-   Live data population from finance and HRM modules
+
 ### 🐛 [FIXES/](FIXES/)
 
 Bug fixes, issue resolutions, and optimization documents.
