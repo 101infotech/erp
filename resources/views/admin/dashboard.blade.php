@@ -100,7 +100,7 @@
         </div>
 
         <!-- ========== BUSINESS SUMMARY SECTION ========== -->
-        <div class="mb-8">
+        <div class="mb-12">
             <x-dashboard-section-header title="Business Summary" subtitle="Finance and HR snapshots"
                 action="{{ route('admin.finance.dashboard') }}" actionLabel="View Finance Dashboard" />
             <div class="flex items-center gap-3 text-xs font-medium">
@@ -120,7 +120,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Finance Summary -->
             <div class="lg:col-span-2 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
                 <div class="flex items-center justify-between mb-3">
