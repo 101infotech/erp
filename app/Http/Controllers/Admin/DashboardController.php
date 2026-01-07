@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\Finance\FinanceDashboardService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    protected FinanceDashboardService $financeDashboardService;
+
+    public function __construct(FinanceDashboardService $financeDashboardService)
+    {
+        $this->financeDashboardService = $financeDashboardService;
+    }
+
     public function index()
     {
         $stats = [
@@ -31,6 +39,21 @@ class DashboardController extends Controller
             'unreviewed_anomalies' => \App\Models\HrmAttendanceAnomaly::where('reviewed', false)->count(),
         ];
 
+        // Finance Data - fetch server-side to avoid auth issues
+        $financeData = null;
+        try {
+            $companyId = 1; // Default to first company
+            $fiscalYear = '2081'; // Current BS fiscal year
+            
+            // Check if company exists
+            if (\App\Models\FinanceCompany::where('id', $companyId)->exists()) {
+                $financeData = $this->financeDashboardService->getDashboardData($companyId, $fiscalYear);
+            }
+        } catch (\Exception $e) {
+            \Log::warning('Failed to fetch finance dashboard data: ' . $e->getMessage());
+            $financeData = null;
+        }
+
         $recentContacts = \App\Models\ContactForm::with('site')
             ->latest()
             ->take(5)
@@ -48,6 +71,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'hrmStats', 'recentContacts', 'recentBookings', 'pendingLeaves'));
+        return view('admin.dashboard', compact('stats', 'hrmStats', 'financeData', 'recentContacts', 'recentBookings', 'pendingLeaves'));
     }
 }

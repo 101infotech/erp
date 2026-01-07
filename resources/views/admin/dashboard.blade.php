@@ -37,8 +37,10 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs mb-1.5">Team Members</p>
-                    <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ?? $stats['total_team_members'] }}</h2>
-                    <p class="text-xs text-slate-500 mt-1">Total employees ({{ $hrmStats['active_employees'] ?? 0 }} active)</p>
+                    <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ??
+                        $stats['total_team_members'] }}</h2>
+                    <p class="text-xs text-slate-500 mt-1">Total employees ({{ $hrmStats['active_employees'] ?? 0 }}
+                        active)</p>
                 </div>
                 <div class="w-10 h-10 bg-lime-500/10 rounded-xl flex items-center justify-center">
                     <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,30 +156,39 @@
                     <div class="flex items-center justify-between p-3 rounded-lg bg-slate-700/40">
                         <div>
                             <p class="text-xs text-slate-400">Active employees</p>
-                            <h4 class="text-lg font-semibold text-white" id="hr-active">{{ $hrmStats['active_employees'] ?? ($hrmStats['total_employees'] ?? 0) }}</h4>
+                            <h4 class="text-lg font-semibold text-white" id="hr-active">{{ $hrmStats['active_employees']
+                                ?? ($hrmStats['total_employees'] ?? 0) }}</h4>
                         </div>
                         <span class="text-xs px-2 py-1 rounded-full bg-lime-500/10 text-lime-300">HRM</span>
                     </div>
-                    <div class="flex items-center justify-between p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
                         <div>
                             <p class="text-xs text-yellow-200">Pending leaves</p>
-                            <h4 class="text-lg font-semibold text-white" id="hr-pending-leaves">{{ $hrmStats['pending_leaves'] ?? 0 }}</h4>
+                            <h4 class="text-lg font-semibold text-white" id="hr-pending-leaves">{{
+                                $hrmStats['pending_leaves'] ?? 0 }}</h4>
                         </div>
-                        <a href="{{ route('admin.hrm.leaves.index') }}" class="text-xs text-yellow-300 hover:text-yellow-200">Review</a>
+                        <a href="{{ route('admin.hrm.leaves.index') }}"
+                            class="text-xs text-yellow-300 hover:text-yellow-200">Review</a>
                     </div>
-                    <div class="flex items-center justify-between p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
                         <div>
                             <p class="text-xs text-blue-200">Draft payrolls</p>
-                            <h4 class="text-lg font-semibold text-white" id="hr-draft-payrolls">{{ $hrmStats['draft_payrolls'] ?? 0 }}</h4>
+                            <h4 class="text-lg font-semibold text-white" id="hr-draft-payrolls">{{
+                                $hrmStats['draft_payrolls'] ?? 0 }}</h4>
                         </div>
-                        <a href="{{ route('admin.hrm.payroll.index') }}" class="text-xs text-blue-300 hover:text-blue-200">Open</a>
+                        <a href="{{ route('admin.hrm.payroll.index') }}"
+                            class="text-xs text-blue-300 hover:text-blue-200">Open</a>
                     </div>
                     <div class="flex items-center justify-between p-3 rounded-lg bg-red-500/5 border border-red-500/20">
                         <div>
                             <p class="text-xs text-red-200">Attendance flags</p>
-                            <h4 class="text-lg font-semibold text-white" id="hr-anomalies">{{ $hrmStats['unreviewed_anomalies'] ?? 0 }}</h4>
+                            <h4 class="text-lg font-semibold text-white" id="hr-anomalies">{{
+                                $hrmStats['unreviewed_anomalies'] ?? 0 }}</h4>
                         </div>
-                        <a href="{{ route('admin.hrm.attendance.index') }}" class="text-xs text-red-300 hover:text-red-200">Investigate</a>
+                        <a href="{{ route('admin.hrm.attendance.index') }}"
+                            class="text-xs text-red-300 hover:text-red-200">Investigate</a>
                     </div>
                 </div>
             </div>
@@ -192,7 +203,8 @@
                         <a href="{{ route('admin.finance.transactions.create') }}"
                             class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
                             <div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4v16m8-8H4" />
                                 </svg>
@@ -206,7 +218,8 @@
                         <a href="{{ route('admin.finance.reports') }}"
                             class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
                             <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
@@ -220,7 +233,8 @@
                         <a href="{{ route('admin.finance.sales.create') }}"
                             class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
                             <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                 </svg>
@@ -234,7 +248,8 @@
                         <a href="{{ route('admin.finance.purchases.create') }}"
                             class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition-colors">
                             <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
@@ -270,10 +285,14 @@
                 <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-700">
                     <label class="text-xs text-slate-400">Ask AI</label>
                     <div class="mt-2 flex gap-2">
-                        <input type="text" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" placeholder="e.g. Where should we focus this week?">
-                        <button type="button" class="px-3 py-2 rounded-lg bg-lime-500 text-slate-950 text-sm font-semibold hover:bg-lime-400 transition">Send</button>
+                        <input type="text"
+                            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500"
+                            placeholder="e.g. Where should we focus this week?">
+                        <button type="button"
+                            class="px-3 py-2 rounded-lg bg-lime-500 text-slate-950 text-sm font-semibold hover:bg-lime-400 transition">Send</button>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-2">AI suggestions auto-refresh from live finance + HRM data.</p>
+                    <p class="text-[11px] text-slate-500 mt-2">AI suggestions auto-refresh from live finance + HRM data.
+                    </p>
                 </div>
             </div>
         </div>
@@ -414,34 +433,7 @@
 @push('scripts')
 <script>
     const hrmStats = @json($hrmStats ?? []);
-    const emptyFinanceSnapshot = {
-        net_profit: 0,
-        profit_margin: 0,
-        pending_receivables: 0,
-        pending_receivables_count: 0,
-        total_revenue: 0,
-        total_expenses: 0
-    };
-
-    function renderHrmSummary(data) {
-        const activeEl = document.getElementById('hr-active');
-        const leaveEl = document.getElementById('hr-pending-leaves');
-        const payrollEl = document.getElementById('hr-draft-payrolls');
-        const anomalyEl = document.getElementById('hr-anomalies');
-
-        if (activeEl && typeof data.active_employees !== 'undefined') {
-            activeEl.textContent = data.active_employees;
-        }
-        if (leaveEl && typeof data.pending_leaves !== 'undefined') {
-            leaveEl.textContent = data.pending_leaves;
-        }
-        if (payrollEl && typeof data.draft_payrolls !== 'undefined') {
-            payrollEl.textContent = data.draft_payrolls;
-        }
-        if (anomalyEl && typeof data.unreviewed_anomalies !== 'undefined') {
-            anomalyEl.textContent = data.unreviewed_anomalies;
-        }
-    }
+    const financeData = @json($financeData);
 
     function updateAiInsight(finance, hrm) {
         const target = document.getElementById('ai-insight-text');
@@ -473,122 +465,103 @@
         target.textContent = insights.join(' • ');
     }
 
-    // Load Finance Data Comprehensively
+    // Load Finance Data from server-side
     document.addEventListener('DOMContentLoaded', function() {
-        renderHrmSummary(hrmStats);
-        updateAiInsight(emptyFinanceSnapshot, hrmStats);
+        if (financeData && financeData.kpis) {
+            const kpis = financeData.kpis;
+            
+            // Update Total Revenue
+            const revenueEl = document.getElementById('total-revenue');
+            if (revenueEl) {
+                const revenueTotal = kpis.revenue?.total ?? 0;
+                revenueEl.textContent = 'NPR ' + parseFloat(revenueTotal).toLocaleString('en-NP', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
 
-        const companyId = 1; // First company
-        const fiscalYear = '2081'; // Current BS year
+            // Update Total Expenses
+            const expensesEl = document.getElementById('total-expenses');
+            if (expensesEl) {
+                const expenseTotal = kpis.expense?.total ?? 0;
+                expensesEl.textContent = 'NPR ' + parseFloat(expenseTotal).toLocaleString('en-NP', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
 
-        // Fetch KPIs (includes revenue, expenses, profit, margin)
-        fetch(`/api/v1/finance/dashboard/kpis?company_id=${companyId}&fiscal_year=${fiscalYear}`, {
-                credentials: 'same-origin',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.data) {
-                    // Update Total Revenue
-                    const revenueEl = document.getElementById('total-revenue');
-                    if (revenueEl) {
-                        revenueEl.textContent = 'NPR ' + parseFloat(data.data.total_revenue || 0).toLocaleString(
-                            'en-NP', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            });
-                    }
+            // Update Net Profit & Margin
+            const profitEl = document.getElementById('net-profit');
+            const marginEl = document.getElementById('profit-margin');
+            const netProfit = kpis.profit?.net ?? 0;
+            const profitMargin = kpis.profit?.margin ?? 0;
+            if (profitEl) {
+                profitEl.textContent = 'NPR ' + parseFloat(netProfit).toLocaleString('en-NP', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+            if (marginEl) {
+                marginEl.textContent = parseFloat(profitMargin).toFixed(1) + '% margin';
+            }
 
-                    // Update Total Expenses
-                    const expensesEl = document.getElementById('total-expenses');
-                    if (expensesEl) {
-                        expensesEl.textContent = 'NPR ' + parseFloat(data.data.total_expenses || 0).toLocaleString(
-                            'en-NP', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            });
-                    }
+            // Update Pending Receivables using Sales Pending total
+            const pendingEl = document.getElementById('pending-payments');
+            const countEl = document.getElementById('pending-count');
+            const pendingTotal = kpis.sales?.pending ?? 0;
+            if (pendingEl) {
+                pendingEl.textContent = 'NPR ' + parseFloat(pendingTotal).toLocaleString('en-NP', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+            
+            // Update count from pending_payments if available
+            if (financeData.pending_payments?.sales?.count !== undefined) {
+                countEl && (countEl.textContent = financeData.pending_payments.sales.count + ' invoices pending');
+            } else if (countEl) {
+                countEl.textContent = 'Pending invoices';
+            }
 
-                    // Update Net Profit
-                    const profitEl = document.getElementById('net-profit');
-                    const marginEl = document.getElementById('profit-margin');
-                    if (profitEl) {
-                        profitEl.textContent = 'NPR ' + parseFloat(data.data.net_profit || 0).toLocaleString('en-NP', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        });
-                    }
-                    if (marginEl && data.data.profit_margin) {
-                        marginEl.textContent = parseFloat(data.data.profit_margin).toFixed(1) + '% margin';
-                    }
+            // Update AI insight with mapped values
+            updateAiInsight({
+                net_profit: netProfit || 0,
+                profit_margin: profitMargin || 0,
+                pending_receivables: pendingTotal || 0,
+                pending_receivables_count: financeData.pending_payments?.sales?.count || 0
+            }, hrmStats);
 
-                    // Update Pending Payments
-                    const pendingEl = document.getElementById('pending-payments');
-                    const countEl = document.getElementById('pending-count');
-                    if (pendingEl && data.data.pending_receivables) {
-                        pendingEl.textContent = 'NPR ' + parseFloat(data.data.pending_receivables).toLocaleString(
-                            'en-NP', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            });
-                    }
-                    if (countEl && typeof data.data.pending_receivables_count !== 'undefined') {
-                        countEl.textContent = data.data.pending_receivables_count + ' invoices pending';
-                    }
-
-                    updateAiInsight({
-                        net_profit: data.data.net_profit || 0,
-                        profit_margin: data.data.profit_margin || 0,
-                        pending_receivables: data.data.pending_receivables || 0,
-                        pending_receivables_count: data.data.pending_receivables_count || 0
-                    }, hrmStats);
-                }
-            })
-            .catch(error => console.error('Error loading finance KPIs:', error));
-
-        // Fetch Recent Transactions
-        fetch(`/api/v1/finance/transactions?company_id=${companyId}&fiscal_year=${fiscalYear}&limit=5`, {
-                credentials: 'same-origin',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.data && data.data.length > 0) {
-                    const transactionsEl = document.getElementById('recent-transactions');
-                    if (transactionsEl) {
-                        transactionsEl.innerHTML = data.data.map(txn => `
+            // Populate Recent Transactions
+            if (Array.isArray(financeData.recent_transactions)) {
+                const transactionsEl = document.getElementById('recent-transactions');
+                if (transactionsEl) {
+                    const items = financeData.recent_transactions;
+                    if (items.length > 0) {
+                        transactionsEl.innerHTML = items.map(txn => `
                             <div class="flex items-center justify-between pb-3 border-b border-slate-700/50 last:border-0">
                                 <div class="flex-1">
                                     <p class="font-medium text-white">${txn.description || 'Transaction'}</p>
-                                    <p class="text-xs text-slate-500">${txn.transaction_date_bs || 'N/A'}</p>
+                                    <p class="text-xs text-slate-500">${txn.date || 'N/A'}</p>
                                 </div>
-                                <span class="font-semibold ${txn.transaction_type === 'income' ? 'text-green-400' : 'text-red-400'}">
-                                    ${txn.transaction_type === 'income' ? '+' : '-'} NPR ${parseFloat(txn.amount || 0).toLocaleString('en-NP', { minimumFractionDigits: 2 })}
+                                <span class="font-semibold ${txn.type === 'income' ? 'text-green-400' : 'text-red-400'}">
+                                    ${txn.type === 'income' ? '+' : '-'} NPR ${parseFloat(txn.amount || 0).toLocaleString('en-NP', { minimumFractionDigits: 2 })}
                                 </span>
                             </div>
                         `).join('');
-                    }
-                } else {
-                    const transactionsEl = document.getElementById('recent-transactions');
-                    if (transactionsEl) {
-                        transactionsEl.innerHTML =
-                            '<p class="text-slate-400 text-center py-4 text-sm">No recent transactions</p>';
+                    } else {
+                        transactionsEl.innerHTML = '<p class="text-slate-400 text-center py-4 text-sm">No recent transactions</p>';
                     }
                 }
-            })
-            .catch(error => {
-                console.error('Error loading transactions:', error);
-                const transactionsEl = document.getElementById('recent-transactions');
-                if (transactionsEl) {
-                    transactionsEl.innerHTML = '<p class="text-slate-400 text-center py-4 text-sm">Error loading transactions</p>';
-                }
-            });
+            }
+        } else {
+            // No finance data available
+            updateAiInsight({
+                net_profit: 0,
+                profit_margin: 0,
+                pending_receivables: 0,
+                pending_receivables_count: 0
+            }, hrmStats);
+        }
     });
 </script>
 @endpush
