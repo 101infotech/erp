@@ -19,6 +19,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'can.manage.leads' => \App\Http\Middleware\EnsureCanManageLeads::class,
             'role' => \App\Http\Middleware\CheckRole::class,
             'permission' => \App\Http\Middleware\CheckPermission::class,
+            'maintenance' => \App\Http\Middleware\CheckMaintenanceMode::class,
+        ]);
+
+        // Apply maintenance mode check to web and api routes
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckMaintenanceMode::class,
+        ]);
+
+        $middleware->api(append: [
+            \App\Http\Middleware\CheckMaintenanceMode::class,
         ]);
 
         // Enable stateful API requests (session-based authentication for same-origin requests)

@@ -126,6 +126,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
+        // Maintenance Mode Management
+        Route::get('/maintenance', function () {
+            return view('admin.maintenance.index');
+        })->name('maintenance.index');
+
         // Roles & Permissions Management
         Route::resource('roles', App\Http\Controllers\Admin\RoleController::class)->only(['index', 'edit', 'update']);
         Route::get('roles/{role}/users', [App\Http\Controllers\Admin\RoleController::class, 'users'])->name('roles.users');

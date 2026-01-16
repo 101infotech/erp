@@ -27,10 +27,19 @@ use App\Http\Controllers\Api\LeadPaymentController;
 use App\Http\Controllers\Api\LeadDocumentController;
 use App\Http\Controllers\Api\LeadStageController;
 use App\Http\Controllers\Api\LeadAnalyticsController;
+use App\Http\Controllers\MaintenanceModeController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+// Maintenance Mode Management (Admin Only)
+Route::middleware(['auth:sanctum'])->prefix('maintenance')->group(function () {
+    Route::get('status', [MaintenanceModeController::class, 'status'])->name('maintenance.status');
+    Route::post('enable', [MaintenanceModeController::class, 'enable'])->name('maintenance.enable');
+    Route::post('disable', [MaintenanceModeController::class, 'disable'])->name('maintenance.disable');
+    Route::post('message', [MaintenanceModeController::class, 'updateMessage'])->name('maintenance.message');
+});
 
 // Public API Routes (v1) - Production-Ready for Brand Bird Agency
 Route::prefix('v1')->group(function () {

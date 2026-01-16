@@ -73,6 +73,22 @@
                 </svg>
             </button>
 
+            <!-- Settings -->
+            <button @click="activeNav = activeNav === 'settings' ? null : 'settings'"
+                class="relative group w-12 h-12 flex items-center justify-center rounded-lg transition-colors"
+                :class="activeNav === 'settings' || {{ request()->routeIs('admin.maintenance.*') || request()->routeIs('admin.roles.*') ? 'true' : 'false' }} ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'">
+                <div style="left: calc(100% + 8px); top: 50%; transform: translateY(-50%);"
+                    class="absolute bg-slate-800 text-white text-xs font-medium py-1.5 px-3 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Settings</div>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </button>
+
         </nav>
 
     </aside>
@@ -429,7 +445,7 @@
         </div>
 
         <!-- Configuration -->
-        <div x-data="{ open: true }" class="mb-6">
+        <div x-data="{ open: false }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Configuration</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -455,7 +471,7 @@
         </div>
 
         <!-- Accounting -->
-        <div x-data="{ open: true }" class="mb-6">
+        <div x-data="{ open: false }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Accounting</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -489,7 +505,7 @@
         </div>
 
         <!-- Sales & Purchases -->
-        <div x-data="{ open: true }" class="mb-6">
+        <div x-data="{ open: false }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sales & Purchases</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -541,7 +557,7 @@
         </div>
 
         <!-- Reports & Analysis -->
-        <div x-data="{ open: true }" class="mb-6">
+        <div x-data="{ open: false }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Reports & Analysis</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -581,6 +597,58 @@
                     </svg>
                     <span>Reports</span>
                 </a>
+            </div>
+        </div>
+    </div>
+
+        <!-- Settings Detail Panel -->
+        <div x-show="activeNav === 'settings'" class="{{ Design::SIDEBAR_SECTION_PADDING }}">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="{{ Design::TEXT_LG }} {{ Design::FONT_SEMIBOLD }} text-white">System Settings</h2>
+                <button @click="activeNav = null" class="text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- System Configuration -->
+            <div x-data="{ open: false }" class="mb-6">
+                <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">System</h3>
+                    <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    </svg>
+                    <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-collapse class="mt-2 space-y-1">
+                    <a href="{{ route('admin.maintenance.index') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.maintenance.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span>Maintenance Mode</span>
+                    </a>
+                    <a href="{{ route('admin.roles.index') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.roles.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                            </path>
+                        </svg>
+                        <span>Roles & Permissions</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
