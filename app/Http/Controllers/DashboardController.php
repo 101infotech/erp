@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\CalendarEvent;
 use App\Models\User;
+use App\Constants\PermissionConstants;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +21,12 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Redirect admin to admin dashboard
-        if ($user->role === 'admin') {
+        // Redirect users based on role hierarchy
+        if ($user->hasRole(['super_admin', 'admin'])) {
             return redirect()->route('admin.dashboard');
         }
 
-        // Redirect regular users to employee dashboard
+        // Redirect to employee dashboard for staff
         return redirect()->route('employee.dashboard');
     }
 
@@ -34,6 +35,11 @@ class DashboardController extends Controller
      */
     public function admin()
     {
+        $user = Auth::user();
+
+        // Get user permissions for module visibility
+        $moduleAccess = $this->getUserModuleAccess($user);
+
         $stats = [
             'total_sites' => \App\Models\Site::count(),
             'total_team_members' => \App\Models\TeamMember::count(),
@@ -51,7 +57,121 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'recentContacts', 'recentBookings'));
+        // Get finance data if user has permission
+        $financeData = [];
+        if ($user->hasPermission(PermissionConstants::VIEW_FINANCES)) {
+            $financeData = $this->getFinanceData();
+        }
+
+        // Get HRM stats if user has permission
+        $hrmStats = [];
+        if ($user->hasPermission(PermissionConstants::VIEW_EMPLOYEES)) {
+            $hrmStats = $this->getHrmStats();
+        }
+
+        // Get pending leaves if user has permission
+        $pendingLeaves = collect();
+        if ($user->hasPermission(PermissionConstants::APPROVE_LEAVE_REQUESTS)) {
+            $pendingLeaves = $this->getPendingLeaves();
+        }
+
+        return view('admin.dashboard', compact(
+            'stats',
+            'recentContacts',
+            'recentBookings',
+            'financeData',
+            'hrmStats',
+            'pendingLeaves',
+            'moduleAccess'
+        ));
+    }
+
+    /**
+     * Get user's accessible modules based on permissions
+     */
+    private function getUserModuleAccess($user)
+    {
+        return [
+            'leads' => $user->hasPermission(PermissionConstants::VIEW_LEADS),
+            'finance' => $user->hasPermission(PermissionConstants::VIEW_FINANCES),
+            'hrm' => $user->hasPermission(PermissionConstants::VIEW_EMPLOYEES),
+            'projects' => $user->hasPermission(PermissionConstants::VIEW_PROJECTS),
+            'admin' => $user->hasPermission(PermissionConstants::MANAGE_USERS),
+        ];
+    }
+
+    /**
+     * Get finance dashboard data
+     */
+    private function getFinanceData()
+    {
+        try {
+            $totalRevenue = \App\Models\FinanceTransaction::where('type', 'income')->sum('amount');
+            $totalExpenses = \App\Models\FinanceTransaction::where('type', 'expense')->sum('amount');
+            $pendingReceivables = \App\Models\FinanceTransaction::where('status', 'pending')
+                ->where('type', 'income')
+                ->sum('amount');
+
+            return [
+                'total_revenue' => $totalRevenue,
+                'total_expenses' => $totalExpenses,
+                'pending_receivables' => $pendingReceivables,
+                'net_profit' => $totalRevenue - $totalExpenses,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'total_revenue' => 0,
+                'total_expenses' => 0,
+                'pending_receivables' => 0,
+                'net_profit' => 0,
+            ];
+        }
+    }
+
+    /**
+     * Get HRM statistics
+     */
+    private function getHrmStats()
+    {
+        try {
+            $totalEmployees = \App\Models\HrmEmployee::count();
+            $activeEmployees = \App\Models\HrmEmployee::where('status', 'active')->count();
+            $totalDepartments = \App\Models\HrmDepartment::count();
+            $onLeaveToday = \App\Models\HrmLeaveRequest::where('from_date', '<=', now()->toDateString())
+                ->where('to_date', '>=', now()->toDateString())
+                ->where('status', 'approved')
+                ->count();
+
+            return [
+                'total_employees' => $totalEmployees,
+                'active_employees' => $activeEmployees,
+                'total_departments' => $totalDepartments,
+                'on_leave_today' => $onLeaveToday,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'total_employees' => 0,
+                'active_employees' => 0,
+                'total_departments' => 0,
+                'on_leave_today' => 0,
+            ];
+        }
+    }
+
+    /**
+     * Get pending leave requests
+     */
+    private function getPendingLeaves()
+    {
+        try {
+            return \App\Models\HrmLeaveRequest::where('status', 'pending')
+                ->with('employee')
+                ->latest()
+                ->limit(5)
+                ->get();
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 
     /**

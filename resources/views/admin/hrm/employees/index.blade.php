@@ -5,11 +5,10 @@
 @use('App\Constants\Design')
 
 @section('content')
-<div class="-mx-8 -mt-6 {{ Design::MARGIN_X_MD }} {{ Design::MARGIN_Y_SM }}">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <!-- Header -->
-    <div class="{{ Design::MARGIN_Y_SM }}">
-        <div
-            class="flex flex-col lg:flex-row lg:items-center lg:justify-between {{ Design::GAP_MD }} {{ Design::MARGIN_Y_SM }}">
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-6">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
             <div>
                 <h2 class="text-lg font-semibold text-white">Employee HR Records</h2>
                 <p class="text-slate-400 text-sm mt-1">Manage employee information, positions, and departments</p>
@@ -22,9 +21,9 @@
                         class="text-lime-400 hover:text-lime-300 underline">Employees & Accounts</a>
                 </p>
             </div>
-            <div class="flex flex-wrap {{ Design::GAP_SM }}">
+            <div class="flex flex-wrap gap-2">
                 <a href="{{ route('admin.users.index') }}"
-                    class="{{ Design::BTN_SMALL_PADDING }} {{ Design::TEXT_SM }} bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition flex items-center {{ Design::GAP_SM }}">
+                    class="px-3 py-1.5 text-sm bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition flex items-center gap-2">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />

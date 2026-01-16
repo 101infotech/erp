@@ -36,6 +36,7 @@
                                 <th class="px-4 py-3 text-left">Quantity</th>
                                 <th class="px-4 py-3 text-left">Status</th>
                                 <th class="px-4 py-3 text-left">Submitted</th>
+                                <th class="px-4 py-3 text-left">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-700">
@@ -63,6 +64,10 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">{{ $req->created_at->format('M d, Y') }}</td>
+                                <td class="px-4 py-3">
+                                    <a href="{{ route('employee.resource-requests.show', $req->id) }}"
+                                        class="text-blue-400 hover:text-blue-300 text-sm font-semibold">View</a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -464,61 +464,50 @@
         </div>
     </div>
 
+    @push('scripts')
     <script>
-        function uploadAvatar(input) {
+        window.uploadAvatar = function(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 const formData = new FormData();
                 formData.append('avatar', file);
-                formData.append('_token', '{{ csrf_token() }}');
-
-                fetch('{{ route("employee.profile.avatar.upload") }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update avatar image
-                        const avatarEl = document.getElementById('profileAvatar');
-                        if (avatarEl.tagName === 'IMG') {
-                            avatarEl.src = data.avatar_url;
+                
+                window.axios.post('{{ route("employee.profile.avatar.upload") }}', formData)
+                    .then(response => {
+                        const data = response.data;
+                        if (data.success) {
+                            const avatarEl = document.getElementById('profileAvatar');
+                            if (avatarEl.tagName === 'IMG') {
+                                avatarEl.src = data.avatar_url;
+                            } else {
+                                const newImg = document.createElement('img');
+                                newImg.id = 'profileAvatar';
+                                newImg.src = data.avatar_url;
+                                newImg.alt = '{{ $employee->name }}';
+                                newImg.className = 'w-32 h-32 rounded-2xl border-4 border-slate-600 object-cover shadow-lg';
+                                avatarEl.parentNode.replaceChild(newImg, avatarEl);
+                            }
+                            
+                            document.querySelectorAll('.user-avatar-img').forEach(img => {
+                                img.src = data.avatar_url;
+                            });
+                            
+                            window.showNotification('success', data.message);
                         } else {
-                            // Replace div with img
-                            const newImg = document.createElement('img');
-                            newImg.id = 'profileAvatar';
-                            newImg.src = data.avatar_url;
-                            newImg.alt = '{{ $employee->name }}';
-                            newImg.className = 'w-32 h-32 rounded-2xl border-4 border-slate-600 object-cover shadow-lg';
-                            avatarEl.parentNode.replaceChild(newImg, avatarEl);
+                            window.showNotification('error', data.error || 'Failed to upload image');
                         }
-                        
-                        // Update all avatar instances in the page (sidebar, etc.)
-                        document.querySelectorAll('.user-avatar-img').forEach(img => {
-                            img.src = data.avatar_url;
-                        });
-                        
-                        // Show success message
-                        showNotification('success', data.message);
-                    } else {
-                        showNotification('error', data.error || 'Failed to upload image');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('error', 'An error occurred while uploading the image');
-                })
-                .finally(() => {
-                    input.value = ''; // Reset input
-                });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        window.showNotification('error', 'An error occurred while uploading the image');
+                    })
+                    .finally(() => {
+                        input.value = '';
+                    });
             }
-        }
-
-        function showNotification(type, message) {
+        };
+        
+        window.showNotification = function(type, message) {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${
                 type === 'success' ? 'bg-green-500' : 'bg-red-500'
@@ -531,6 +520,7 @@
                 notification.style.opacity = '0';
                 setTimeout(() => notification.remove(), 300);
             }, 3000);
-        }
+        };
     </script>
+    @endpush
 </x-app-layout>

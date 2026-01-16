@@ -4,7 +4,7 @@
 @section('page-title', 'Organization Management')
 
 @section('content')
-<div class="space-y-6">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <!-- Header -->
     <div>
         <h1 class="text-3xl font-bold text-white">Organization Management</h1>

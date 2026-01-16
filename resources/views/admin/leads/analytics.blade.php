@@ -8,9 +8,9 @@
 @endpush
 
 @section('content')
-<div class="space-y-6">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <!-- Header -->
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
         <div>
             <h2 class="text-2xl font-bold text-white">Leads Analytics & Insights</h2>
             <p class="text-slate-400 mt-1">Track performance, conversions, and revenue metrics</p>
@@ -18,9 +18,10 @@
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('admin.leads.index') }}"
                 class="px-4 py-2 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-600 transition flex items-center space-x-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
                 </svg>
                 <span>Back to Leads</span>
             </a>
@@ -28,7 +29,7 @@
     </div>
 
     <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Total Leads -->
         <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6">
             <div class="flex items-center justify-between">
@@ -38,9 +39,10 @@
                     <p class="text-sm text-lime-400 mt-1">All time</p>
                 </div>
                 <div class="w-12 h-12 bg-lime-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    <svg class="w-6 h-6 text-lime-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
                     </svg>
                 </div>
             </div>
@@ -86,7 +88,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-400 text-xs uppercase tracking-wider">Total Revenue</p>
-                    <p class="text-3xl font-bold text-white mt-2">${{
+                    <p class="text-3xl font-bold text-white mt-2">Rs. {{
                         number_format($analytics['revenue']['total_revenue'], 0) }}</p>
                     <p class="text-sm text-blue-400 mt-1">From inspections</p>
                 </div>
@@ -190,18 +192,18 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
                 <p class="text-slate-400 text-sm mb-2">Total Revenue</p>
-                <p class="text-2xl font-bold text-lime-400">${{ number_format($analytics['revenue']['total_revenue'], 2)
+                <p class="text-2xl font-bold text-lime-400">Rs. {{ number_format($analytics['revenue']['total_revenue'])
                     }}</p>
             </div>
             <div>
                 <p class="text-slate-400 text-sm mb-2">Average Per Lead</p>
-                <p class="text-2xl font-bold text-white">${{ number_format($analytics['revenue']['average_charge'], 2)
+                <p class="text-2xl font-bold text-white">Rs. {{ number_format($analytics['revenue']['average_charge'])
                     }}</p>
             </div>
             <div>
                 <p class="text-slate-400 text-sm mb-2">Highest Charge</p>
-                <p class="text-2xl font-bold text-emerald-400">${{
-                    number_format($analytics['revenue']['highest_charge'], 2) }}</p>
+                <p class="text-2xl font-bold text-emerald-400">Rs. {{
+                    number_format($analytics['revenue']['highest_charge']) }}</p>
             </div>
             <div>
                 <p class="text-slate-400 text-sm mb-2">Paid Inspections</p>
@@ -210,7 +212,6 @@
         </div>
     </div>
 </div>
-@endsection
 
 @push('scripts')
 <script>
@@ -351,3 +352,4 @@
     });
 </script>
 @endpush
+@endsection

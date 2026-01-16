@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         // Redirect admin users to admin dashboard
-        if ($user->role === 'admin') {
+        if ($user->hasRole(['super_admin', 'admin'])) {
             return redirect()->route('admin.dashboard');
         }
 

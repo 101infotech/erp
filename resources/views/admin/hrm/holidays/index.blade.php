@@ -4,7 +4,7 @@
 @section('page-title', 'Company Holidays')
 
 @section('content')
-<div class="space-y-6">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
         <div>
             <h2 class="text-2xl font-bold text-white">Holidays</h2>

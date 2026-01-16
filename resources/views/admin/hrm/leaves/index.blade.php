@@ -4,7 +4,7 @@
 @section('page-title', 'Leave Management')
 
 @section('content')
-<div class="space-y-5 py-4">
+<div class="px-6 md:px-8 space-y-5 py-4">
     <!-- Header -->
     <div class="flex justify-between items-center">
         <div>

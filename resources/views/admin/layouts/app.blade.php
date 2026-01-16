@@ -41,9 +41,10 @@
     @include('admin.layouts.partials.sidebar')
 
     <!-- Main Content Wrapper with proper margin -->
-    <div style="margin-left: 80px; min-height: 100vh;">
+    <div style="margin-left: 80px; min-height: 100vh; width: calc(100% - 80px);">
         <!-- Header -->
-        <header class="bg-white/90 dark:bg-slate-900 border-b border-l border-slate-800 sticky top-0 z-30">
+        <header id="mainHeader"
+            class="bg-white/90 dark:bg-slate-900 border-b border-l border-slate-800 sticky top-0 z-30">
             <div class="flex justify-between items-center px-8 py-4">
                 <h2 class="text-xl font-semibold text-slate-900 dark:text-white">@yield('page-title')</h2>
                 <div class="flex items-center space-x-4">
@@ -156,7 +157,7 @@
         </header>
 
         <!-- Page Content -->
-        <main class="p-8 flex-1 bg-slate-50 dark:bg-slate-950">
+        <main id="pageMain" class="flex-1 bg-slate-50 dark:bg-slate-950 w-full px-4 sm:px-6 lg:px-8 py-6">
             @if(session('success'))
             <div
                 class="mb-6 bg-lime-100 dark:bg-lime-900/20 border border-lime-300 dark:border-lime-700 text-lime-800 dark:text-lime-300 px-4 py-3 rounded">
@@ -216,6 +217,8 @@
             }
         });
     </script>
+
+
 
     @stack('scripts')
 </body>

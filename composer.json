@@ -10,6 +10,7 @@
         "anuzpandey/laravel-nepali-date": "^2.3",
         "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^12.0",
+        "laravel/nightwatch": "^1.21",
         "laravel/sanctum": "^4.2",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1",

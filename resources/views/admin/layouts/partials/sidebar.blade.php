@@ -288,10 +288,15 @@
                 </button>
             </div>
 
-            <!-- Leads Management -->
+            <!-- Pipeline & Leads -->
             <div x-data="{ open: true }" class="mb-6">
                 <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Leads Management</h3>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pipeline</h3>
+                    </div>
                     <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
@@ -303,31 +308,52 @@
                     </svg>
                 </button>
                 <div x-show="open" x-collapse class="mt-2 space-y-1">
-                    <a href="{{ route('admin.leads.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.leads.*') && !request()->routeIs('admin.leads.analytics') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
-                            </path>
+                    <a href="{{ route('admin.leads.dashboard') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.leads.dashboard') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
                         </svg>
-                        <span>Service Leads</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{{ route('admin.leads.index') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.leads.index') || (request()->routeIs('admin.leads.*') && !request()->routeIs('admin.leads.dashboard') && !request()->routeIs('admin.leads.analytics')) ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6" />
+                            <line x1="8" y1="12" x2="21" y2="12" />
+                            <line x1="8" y1="18" x2="21" y2="18" />
+                            <line x1="3" y1="6" x2="3.01" y2="6" />
+                            <line x1="3" y1="12" x2="3.01" y2="12" />
+                            <line x1="3" y1="18" x2="3.01" y2="18" />
+                        </svg>
+                        <span>All Leads</span>
                     </a>
                     <a href="{{ route('admin.leads.analytics') }}"
                         class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.leads.analytics') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                            </path>
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 17" />
+                            <polyline points="17 6 23 6 23 12" />
                         </svg>
                         <span>Analytics</span>
                     </a>
                 </div>
             </div>
 
-            <!-- Service Configuration -->
+            <!-- Service Settings -->
             <div x-data="{ open: true }" class="mb-6">
                 <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Configuration</h3>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Settings</h3>
+                    </div>
                     <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
@@ -339,6 +365,15 @@
                     </svg>
                 </button>
                 <div x-show="open" x-collapse class="mt-2 space-y-1">
+                    <a href="{{ route('admin.services.index') }}"
+                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.services.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                        <span>Service Types</span>
+                    </a>
                     <a href="{{ route('admin.sites.index') }}"
                         class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.sites.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -346,207 +381,196 @@
                                 d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9">
                             </path>
                         </svg>
-                        <span>Sites</span>
-                    </a>
-                    <a href="{{ route('admin.services.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.services.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
-                        </svg>
-                        <span>Services</span>
+                        <span>Sites / Branches</span>
                     </a>
                 </div>
             </div>
+
+        </div>
+    </div>
+
+    <!-- Finance Detail Panel -->
+    <div x-show="activeNav === 'finance'" class="{{ Design::SIDEBAR_SECTION_PADDING }}">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="{{ Design::TEXT_LG }} {{ Design::FONT_SEMIBOLD }} text-white">Finance</h2>
+            <button @click="activeNav = null" class="text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
         </div>
 
-        <!-- Finance Detail Panel -->
-        <div x-show="activeNav === 'finance'" class="{{ Design::SIDEBAR_SECTION_PADDING }}">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="{{ Design::TEXT_LG }} {{ Design::FONT_SEMIBOLD }} text-white">Finance</h2>
-                <button @click="activeNav = null" class="text-slate-400 hover:text-white">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
+        <!-- Finance Dashboard -->
+        <div class="mb-6">
+            <a href="{{ route('admin.finance.dashboard') }}"
+                class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.dashboard') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                    </path>
+                </svg>
+                <span>Finance Dashboard</span>
+            </a>
+        </div>
 
-            <!-- Finance Dashboard -->
-            <div class="mb-6">
-                <a href="{{ route('admin.finance.dashboard') }}"
-                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.dashboard') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+        <!-- Configuration -->
+        <div x-data="{ open: true }" class="mb-6">
+            <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Configuration</h3>
+                <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                </svg>
+                <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+            </button>
+            <div x-show="open" x-collapse class="mt-2 space-y-1">
+                <a href="{{ route('admin.finance.companies.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.companies.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                         </path>
                     </svg>
-                    <span>Finance Dashboard</span>
+                    <span>Companies</span>
                 </a>
             </div>
+        </div>
 
-            <!-- Configuration -->
-            <div x-data="{ open: true }" class="mb-6">
-                <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Configuration</h3>
-                    <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                    </svg>
-                    <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
+        <!-- Accounting -->
+        <div x-data="{ open: true }" class="mb-6">
+            <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Accounting</h3>
+                <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                </svg>
+                <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+            </button>
+            <div x-show="open" x-collapse class="mt-2 space-y-1">
+                <a href="{{ route('admin.finance.accounts.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.accounts.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+                        </path>
                     </svg>
-                </button>
-                <div x-show="open" x-collapse class="mt-2 space-y-1">
-                    <a href="{{ route('admin.finance.companies.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.companies.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                            </path>
-                        </svg>
-                        <span>Companies</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Accounting -->
-            <div x-data="{ open: true }" class="mb-6">
-                <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Accounting</h3>
-                    <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                    </svg>
-                    <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
+                    <span>Accounts</span>
+                </a>
+                <a href="{{ route('admin.finance.transactions.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.transactions.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                     </svg>
-                </button>
-                <div x-show="open" x-collapse class="mt-2 space-y-1">
-                    <a href="{{ route('admin.finance.accounts.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.accounts.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
-                            </path>
-                        </svg>
-                        <span>Accounts</span>
-                    </a>
-                    <a href="{{ route('admin.finance.transactions.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.transactions.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                        </svg>
-                        <span>Transactions</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Sales & Purchases -->
-            <div x-data="{ open: true }" class="mb-6">
-                <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sales & Purchases</h3>
-                    <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                    </svg>
-                    <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                </button>
-                <div x-show="open" x-collapse class="mt-2 space-y-1">
-                    <a href="{{ route('admin.finance.sales.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.sales.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                        </svg>
-                        <span>Sales</span>
-                    </a>
-                    <a href="{{ route('admin.finance.purchases.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.purchases.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                            </path>
-                        </svg>
-                        <span>Purchases</span>
-                    </a>
-                    <a href="{{ route('admin.finance.customers.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.customers.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                            </path>
-                        </svg>
-                        <span>Customers</span>
-                    </a>
-                    <a href="{{ route('admin.finance.vendors.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.vendors.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                            </path>
-                        </svg>
-                        <span>Vendors</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Reports & Analysis -->
-            <div x-data="{ open: true }" class="mb-6">
-                <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Reports & Analysis</h3>
-                    <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                    </svg>
-                    <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                </button>
-                <div x-show="open" x-collapse class="mt-2 space-y-1">
-                    <a href="{{ route('admin.finance.budgets.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.budgets.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                        <span>Budgets</span>
-                    </a>
-                    <a href="{{ route('admin.finance.recurring-expenses.index') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.recurring-expenses.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
-                        </svg>
-                        <span>Recurring Expenses</span>
-                    </a>
-                    <a href="{{ route('admin.finance.reports') }}"
-                        class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.reports') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                            </path>
-                        </svg>
-                        <span>Reports</span>
-                    </a>
-                </div>
+                    <span>Transactions</span>
+                </a>
             </div>
         </div>
 
+        <!-- Sales & Purchases -->
+        <div x-data="{ open: true }" class="mb-6">
+            <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sales & Purchases</h3>
+                <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                </svg>
+                <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+            </button>
+            <div x-show="open" x-collapse class="mt-2 space-y-1">
+                <a href="{{ route('admin.finance.sales.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.sales.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                    <span>Sales</span>
+                </a>
+                <a href="{{ route('admin.finance.purchases.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.purchases.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                        </path>
+                    </svg>
+                    <span>Purchases</span>
+                </a>
+                <a href="{{ route('admin.finance.customers.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.customers.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                        </path>
+                    </svg>
+                    <span>Customers</span>
+                </a>
+                <a href="{{ route('admin.finance.vendors.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.vendors.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                        </path>
+                    </svg>
+                    <span>Vendors</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Reports & Analysis -->
+        <div x-data="{ open: true }" class="mb-6">
+            <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Reports & Analysis</h3>
+                <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                </svg>
+                <svg x-show="!open" x-cloak class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+            </button>
+            <div x-show="open" x-collapse class="mt-2 space-y-1">
+                <a href="{{ route('admin.finance.budgets.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.budgets.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span>Budgets</span>
+                </a>
+                <a href="{{ route('admin.finance.recurring-expenses.index') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.recurring-expenses.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                    <span>Recurring Expenses</span>
+                </a>
+                <a href="{{ route('admin.finance.reports') }}"
+                    class="{{ Design::MENU_ITEM }} {{ request()->routeIs('admin.finance.reports') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60 hover:text-white' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    <span>Reports</span>
+                </a>
+            </div>
+        </div>
     </div>
+
+</div>
 
 </div>

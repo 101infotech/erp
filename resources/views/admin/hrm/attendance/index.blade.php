@@ -4,9 +4,9 @@
 @section('page-title', 'Attendance Records')
 
 @section('content')
-<div class="py-6">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <!-- Header -->
-    <div class="mb-6">
+    <div>
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
             <div>
                 <h2 class="text-lg font-semibold text-white">Attendance Records</h2>

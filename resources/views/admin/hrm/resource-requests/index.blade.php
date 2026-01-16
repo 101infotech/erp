@@ -4,7 +4,7 @@
 @section('page-title', 'Resource Requests')
 
 @section('content')
-<div class="space-y-6">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-center">
         <div>

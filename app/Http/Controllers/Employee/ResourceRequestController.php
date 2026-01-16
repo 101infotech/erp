@@ -85,6 +85,23 @@ class ResourceRequestController extends Controller
         }
     }
 
+    public function show(HrmResourceRequest $resourceRequest)
+    {
+        $employee = $this->currentEmployee();
+        if (!$employee) {
+            return redirect()->route('employee.resource-requests.index')
+                ->with('error', 'No employee profile linked to your account.');
+        }
+
+        // Check if the request belongs to the current employee
+        if ($resourceRequest->employee_id !== $employee->id) {
+            return redirect()->route('employee.resource-requests.index')
+                ->with('error', 'Unauthorized access.');
+        }
+
+        return view('employee.resource-requests.show', compact('resourceRequest'));
+    }
+
     private function currentEmployee(): ?HrmEmployee
     {
         $user = Auth::user();

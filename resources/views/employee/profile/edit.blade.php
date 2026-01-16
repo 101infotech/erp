@@ -329,115 +329,124 @@
     </div>
 
     @push('scripts')
+    @push('scripts')
     <script>
-        // Avatar Upload
-        const avatarInput = document.getElementById('avatar-input');
-        const avatarPreview = document.getElementById('avatar-preview');
-        const uploadSpinner = document.getElementById('upload-spinner');
-        const uploadMessage = document.getElementById('upload-message');
-        const removeAvatarBtn = document.getElementById('remove-avatar');
-
-        avatarInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            // Validate file size (2MB)
-            if (file.size > 2 * 1024 * 1024) {
-                showMessage('File size must be less than 2MB', 'error');
-                avatarInput.value = '';
-                return;
-            }
-
-            // Show loading
-            uploadSpinner.style.display = 'flex';
-
-            const formData = new FormData();
-            formData.append('avatar', file);
-            formData.append('_token', '{{ csrf_token() }}');
-
-            try {
-                const response = await fetch('{{ route("employee.profile.avatar.upload") }}', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // Update preview
-                    if (avatarPreview.tagName === 'IMG') {
-                        avatarPreview.src = data.avatar_url;
-                    } else {
-                        // Replace div with img
-                        const img = document.createElement('img');
-                        img.id = 'avatar-preview';
-                        img.src = data.avatar_url;
-                        img.alt = 'Profile Picture';
-                        img.className = 'w-32 h-32 rounded-full object-cover border-4 border-lime-400';
-                        avatarPreview.parentNode.replaceChild(img, avatarPreview);
-                    }
-
-                    showMessage(data.message, 'success');
-                    
-                    // Reload page after 1 second to update nav avatar
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    showMessage(data.error || 'Upload failed', 'error');
+        window.profileAvatar = {
+            init() {
+                const avatarInput = document.getElementById('avatar-input');
+                const removeAvatarBtn = document.getElementById('remove-avatar');
+                
+                if (avatarInput) {
+                    avatarInput.addEventListener('change', async (e) => {
+                        await this.handleAvatarChange(e);
+                    });
                 }
+                
+                if (removeAvatarBtn) {
+                    removeAvatarBtn.addEventListener('click', () => {
+                        window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'remove-avatar' }));
+                    });
+                }
+            },
+            
+            async handleAvatarChange(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const avatarInput = document.getElementById('avatar-input');
+                const avatarPreview = document.getElementById('avatar-preview');
+                const uploadSpinner = document.getElementById('upload-spinner');
+                const uploadMessage = document.getElementById('upload-message');
+                
+                // Validate file size (2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    this.showMessage('File size must be less than 2MB', 'error');
+                    avatarInput.value = '';
+                    return;
+                }
+                
+                // Show loading
+                uploadSpinner.style.display = 'flex';
+                
+                const formData = new FormData();
+                formData.append('avatar', file);
+                
+                try {
+                    const response = await window.axios.post('{{ route("employee.profile.avatar.upload") }}', formData);
+                    const data = response.data;
+                    
+                    if (data.success) {
+                        // Update preview
+                        if (avatarPreview.tagName === 'IMG') {
+                            avatarPreview.src = data.avatar_url;
+                        } else {
+                            const img = document.createElement('img');
+                            img.id = 'avatar-preview';
+                            img.src = data.avatar_url;
+                            img.alt = 'Profile Picture';
+                            img.className = 'w-32 h-32 rounded-full object-cover border-4 border-lime-400';
+                            avatarPreview.parentNode.replaceChild(img, avatarPreview);
+                        }
+                        
+                        this.showMessage(data.message, 'success');
+                        setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                        this.showMessage(data.error || 'Upload failed', 'error');
+                    }
                 } catch (error) {
-                    showMessage('An error occurred during upload', 'error');
+                    this.showMessage('An error occurred during upload', 'error');
                 } finally {
                     uploadSpinner.style.display = 'none';
                     avatarInput.value = '';
                 }
-            });        // Remove Avatar
-        if (removeAvatarBtn) {
-            removeAvatarBtn.addEventListener('click', () => {
-                window.dispatchEvent(new CustomEvent('open-confirm', { detail: 'remove-avatar' }));
-            });
-        }
-
-        // Attach the removal function to window for the dialog
-        window.confirmRemoveAvatar = async function() {
-            uploadSpinner.style.display = 'flex';
-
-            try {
-                const response = await fetch('{{ route("employee.profile.avatar.delete") }}', {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                        }
-                    });
-
-                    const data = await response.json();
-
+            },
+            
+            async removeAvatar() {
+                const uploadSpinner = document.getElementById('upload-spinner');
+                uploadSpinner.style.display = 'flex';
+                
+                try {
+                    const response = await window.axios.delete('{{ route("employee.profile.avatar.delete") }}');
+                    const data = response.data;
+                    
                     if (data.success) {
-                        showMessage(data.message, 'success');
-                        // Reload page after 1 second
+                        this.showMessage(data.message, 'success');
                         setTimeout(() => window.location.reload(), 1000);
                     } else {
-                        showMessage(data.error || 'Failed to remove avatar', 'error');
+                        this.showMessage(data.error || 'Failed to remove avatar', 'error');
                     }
                 } catch (error) {
-                    showMessage('An error occurred', 'error');
+                    this.showMessage('An error occurred', 'error');
                 } finally {
                     uploadSpinner.style.display = 'none';
                 }
-        }
-
-        function showMessage(message, type) {
-            uploadMessage.textContent = message;
-            uploadMessage.className = `mt-3 p-3 rounded-lg text-sm ${
-                type === 'success' 
-                    ? 'bg-lime-500/10 text-lime-400 border border-lime-500/30' 
-                    : 'bg-red-500/10 text-red-400 border border-red-500/30'
-            }`;
-            uploadMessage.classList.remove('hidden');
-
-            setTimeout(() => {
-                uploadMessage.classList.add('hidden');
-            }, 5000);
+            },
+            
+            showMessage(message, type) {
+                const uploadMessage = document.getElementById('upload-message');
+                uploadMessage.textContent = message;
+                uploadMessage.className = `mt-3 p-3 rounded-lg text-sm ${
+                    type === 'success' 
+                        ? 'bg-lime-500/10 text-lime-400 border border-lime-500/30' 
+                        : 'bg-red-500/10 text-red-400 border border-red-500/30'
+                }`;
+                uploadMessage.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    uploadMessage.classList.add('hidden');
+                }, 5000);
+            }
+        };
+        
+        window.confirmRemoveAvatar = function() {
+            window.profileAvatar.removeAvatar();
+        };
+        
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => window.profileAvatar.init());
+        } else {
+            window.profileAvatar.init();
         }
     </script>
 

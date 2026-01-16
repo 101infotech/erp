@@ -1,68 +1,114 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-        <!-- Info Message -->
-        <div class="mb-4 p-4 bg-slate-800 border border-slate-700 rounded-lg">
-            <div class="flex items-start">
-                <svg class="w-5 h-5 text-lime-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                        clip-rule="evenodd" />
-                </svg>
-                <div>
-                    <p class="text-sm text-slate-300 font-medium">Employee Registration</p>
-                    <p class="text-xs text-slate-400 mt-1">Only employees registered in our HRM system can create
-                        accounts. Your email must match the one in our records.</p>
-                </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }} - Register</title>
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+
+<body class="font-sans text-slate-100 antialiased">
+    <div class="min-h-screen flex items-center justify-center bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-md space-y-8">
+            <!-- Logo -->
+            <div class="text-center">
+                <a href="/" class="inline-block">
+                    <x-application-logo class="w-16 h-16 mx-auto fill-current text-primary-500" />
+                </a>
+                <h2 class="mt-6 text-3xl font-bold text-white">Create your account</h2>
+                <p class="mt-2 text-sm text-slate-400">Join our team to get started</p>
             </div>
+
+            <!-- Registration Card -->
+            <x-ui.card class="mt-8">
+                <!-- Info Alert -->
+                <x-ui.alert variant="info" class="mb-6">
+                    <strong class="block mb-1">Employee Registration</strong>
+                    <span class="text-xs">Only employees registered in our HRM system can create accounts. Your email must match the one in our records.</span>
+                </x-ui.alert>
+
+                <form method="POST" action="{{ route('register') }}" class="space-y-5">
+                    @csrf
+
+                    <!-- Name -->
+                    <x-ui.input
+                        id="name"
+                        name="name"
+                        type="text"
+                        label="Full Name"
+                        :value="old('name')"
+                        :required="true"
+                        :error="$errors->first('name')"
+                        placeholder="John Doe"
+                        autofocus
+                        autocomplete="name"
+                    />
+
+                    <!-- Email Address -->
+                    <x-ui.input
+                        id="email"
+                        name="email"
+                        type="email"
+                        label="Email Address"
+                        :value="old('email')"
+                        :required="true"
+                        :error="$errors->first('email')"
+                        placeholder="you@example.com"
+                        autocomplete="username"
+                        help="Must match your company email"
+                    />
+
+                    <!-- Password -->
+                    <x-ui.input
+                        id="password"
+                        name="password"
+                        type="password"
+                        label="Password"
+                        :required="true"
+                        :error="$errors->first('password')"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                        help="Minimum 8 characters"
+                    />
+
+                    <!-- Confirm Password -->
+                    <x-ui.input
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        type="password"
+                        label="Confirm Password"
+                        :required="true"
+                        :error="$errors->first('password_confirmation')"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                    />
+
+                    <!-- Submit Button -->
+                    <x-ui.button type="submit" class="w-full" size="lg">
+                        Create Account
+                    </x-ui.button>
+
+                    <!-- Link to Login -->
+                    <div class="text-center text-sm">
+                        <span class="text-slate-400">Already have an account?</span>
+                        <a href="{{ route('login') }}" class="ml-1 text-primary-400 hover:text-primary-300 transition-colors font-medium">
+                            Sign in
+                        </a>
+                    </div>
+                </form>
+            </x-ui.card>
+
+            <!-- Footer -->
+            <p class="text-center text-xs text-slate-500">
+                {{ config('app.name') }} © {{ date('Y') }}. All rights reserved.
+            </p>
         </div>
+    </div>
+</body>
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
-                autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-                autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-slate-400 hover:text-lime-400 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
-                href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</html>

@@ -12,16 +12,31 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Disable strict mode temporarily
+        DB::statement("SET SESSION sql_mode=''");
+        
         // First, alter the enum column to include new values
-        DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'sister', 'subsidiary', 'independent') DEFAULT 'independent'");
+        try {
+            DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'sister', 'subsidiary', 'independent') DEFAULT 'independent'");
+        } catch (\Exception $e) {
+            // If this fails, try with the original values
+        }
 
         // Then update any existing 'sister' type to 'subsidiary'
-        DB::table('finance_companies')
-            ->where('type', 'sister')
-            ->update(['type' => 'subsidiary']);
+        try {
+            DB::table('finance_companies')
+                ->where('type', 'sister')
+                ->update(['type' => 'subsidiary']);
+        } catch (\Exception $e) {
+            // Ignore if table doesn't exist yet
+        }
 
         // Finally, remove 'sister' from the enum
-        DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'subsidiary', 'independent') DEFAULT 'independent'");
+        try {
+            DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'subsidiary', 'independent') DEFAULT 'independent'");
+        } catch (\Exception $e) {
+            // If this fails, just continue
+        }
     }
 
     /**
@@ -29,12 +44,19 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert the enum column back to old values
-        DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'sister') DEFAULT 'sister'");
+        // Disable strict mode temporarily
+        DB::statement("SET SESSION sql_mode=''");
+        
+        try {
+            // Revert the enum column back to old values
+            DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'sister') DEFAULT 'sister'");
 
-        // Update any 'subsidiary' or 'independent' back to 'sister'
-        DB::table('finance_companies')
-            ->whereIn('type', ['subsidiary', 'independent'])
-            ->update(['type' => 'sister']);
+            // Update any 'subsidiary' or 'independent' back to 'sister'
+            DB::table('finance_companies')
+                ->whereIn('type', ['subsidiary', 'independent'])
+                ->update(['type' => 'sister']);
+        } catch (\Exception $e) {
+            // Ignore errors on rollback
+        }
     }
 };

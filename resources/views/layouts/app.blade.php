@@ -8,14 +8,11 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     @stack('styles')
+    @stack('scripts')
 </head>
 
 <body class="font-sans antialiased bg-slate-950">
@@ -38,7 +35,7 @@
             <!-- Page Heading -->
             @isset($header)
             <header class="bg-slate-900 shadow-lg border-b border-slate-800">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                     <div class="text-white">
                         {{ $header }}
                     </div>
@@ -47,7 +44,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main class="bg-slate-950">
+            <main class="bg-slate-950 p-4 sm:p-6 lg:p-8">
                 @yield('content')
                 {{ $slot ?? '' }}
             </main>

@@ -21,6 +21,12 @@ use App\Http\Controllers\Api\Finance\FinanceSaleController;
 use App\Http\Controllers\Api\Finance\FinancePurchaseController;
 use App\Http\Controllers\Api\Finance\FinanceDocumentController;
 use App\Http\Controllers\Api\Finance\FinanceReportController;
+use App\Http\Controllers\Api\ServiceLeadController;
+use App\Http\Controllers\Api\LeadFollowUpController;
+use App\Http\Controllers\Api\LeadPaymentController;
+use App\Http\Controllers\Api\LeadDocumentController;
+use App\Http\Controllers\Api\LeadStageController;
+use App\Http\Controllers\Api\LeadAnalyticsController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -188,5 +194,71 @@ Route::prefix('v1')->group(function () {
         Route::get('dashboard', [FinanceReportController::class, 'dashboard'])->name('finance.dashboard');
         Route::get('dashboard/kpis', [FinanceReportController::class, 'kpis'])->name('finance.dashboard.kpis');
         Route::get('dashboard/revenue-trends', [FinanceReportController::class, 'revenueTrends'])->name('finance.dashboard.revenue-trends');
+    });
+
+    // Enhanced Leads Module - Complete Pipeline Management
+    Route::prefix('leads/enhanced')->middleware('auth:sanctum')->group(function () {
+        // Service Leads (Core CRUD)
+        Route::get('/', [ServiceLeadController::class, 'index'])->name('leads.enhanced.index');
+        Route::post('/', [ServiceLeadController::class, 'store'])->name('leads.enhanced.store');
+        Route::get('/{lead}', [ServiceLeadController::class, 'show'])->name('leads.enhanced.show');
+        Route::put('/{lead}', [ServiceLeadController::class, 'update'])->name('leads.enhanced.update');
+        Route::delete('/{lead}', [ServiceLeadController::class, 'destroy'])->name('leads.enhanced.destroy');
+
+        // Special Lead Queries
+        Route::get('/special/needing-follow-up', [ServiceLeadController::class, 'needingFollowUp'])->name('leads.enhanced.needing-follow-up');
+        Route::get('/special/pending-payment', [ServiceLeadController::class, 'pendingPayment'])->name('leads.enhanced.pending-payment');
+        Route::get('/special/statistics', [ServiceLeadController::class, 'statistics'])->name('leads.enhanced.statistics');
+
+        // Bulk Operations
+        Route::post('/bulk/update', [ServiceLeadController::class, 'bulkUpdate'])->name('leads.enhanced.bulk-update');
+        Route::post('/bulk/delete', [ServiceLeadController::class, 'bulkDelete'])->name('leads.enhanced.bulk-delete');
+
+        // Stage Transitions
+        Route::post('/{lead}/transition', [ServiceLeadController::class, 'transitionStage'])->name('leads.enhanced.transition-stage');
+
+        // Lead Stages
+        Route::get('/stages/all', [LeadStageController::class, 'index'])->name('leads.enhanced.stages.index');
+        Route::get('/stages/{stage}', [LeadStageController::class, 'show'])->name('leads.enhanced.stages.show');
+        Route::get('/stages/pipeline/view', [LeadStageController::class, 'pipeline'])->name('leads.enhanced.stages.pipeline');
+        Route::get('/stages/{stage}/transition-info', [LeadStageController::class, 'transitionInfo'])->name('leads.enhanced.stages.transition-info');
+        Route::get('/stages/{stage}/metrics', [LeadStageController::class, 'metrics'])->name('leads.enhanced.stages.metrics');
+
+        // Follow-ups (Nested under Lead)
+        Route::get('/{lead}/follow-ups', [LeadFollowUpController::class, 'index'])->name('leads.enhanced.follow-ups.index');
+        Route::post('/{lead}/follow-ups', [LeadFollowUpController::class, 'store'])->name('leads.enhanced.follow-ups.store');
+        Route::get('/{lead}/follow-ups/{followUp}', [LeadFollowUpController::class, 'show'])->name('leads.enhanced.follow-ups.show');
+        Route::put('/{lead}/follow-ups/{followUp}', [LeadFollowUpController::class, 'update'])->name('leads.enhanced.follow-ups.update');
+        Route::delete('/{lead}/follow-ups/{followUp}', [LeadFollowUpController::class, 'destroy'])->name('leads.enhanced.follow-ups.destroy');
+        Route::get('/follow-ups/pending/all', [LeadFollowUpController::class, 'pending'])->name('leads.enhanced.follow-ups.pending');
+        Route::get('/follow-ups/by-type/{type}', [LeadFollowUpController::class, 'byType'])->name('leads.enhanced.follow-ups.by-type');
+
+        // Payments (Nested under Lead)
+        Route::get('/{lead}/payments', [LeadPaymentController::class, 'index'])->name('leads.enhanced.payments.index');
+        Route::post('/{lead}/payments', [LeadPaymentController::class, 'store'])->name('leads.enhanced.payments.store');
+        Route::get('/{lead}/payments/{payment}', [LeadPaymentController::class, 'show'])->name('leads.enhanced.payments.show');
+        Route::put('/{lead}/payments/{payment}', [LeadPaymentController::class, 'update'])->name('leads.enhanced.payments.update');
+        Route::delete('/{lead}/payments/{payment}', [LeadPaymentController::class, 'destroy'])->name('leads.enhanced.payments.destroy');
+        Route::get('/{lead}/payments/summary/view', [LeadPaymentController::class, 'summary'])->name('leads.enhanced.payments.summary');
+
+        // Documents (Nested under Lead)
+        Route::get('/{lead}/documents', [LeadDocumentController::class, 'index'])->name('leads.enhanced.documents.index');
+        Route::post('/{lead}/documents', [LeadDocumentController::class, 'store'])->name('leads.enhanced.documents.store');
+        Route::get('/{lead}/documents/{document}', [LeadDocumentController::class, 'show'])->name('leads.enhanced.documents.show');
+        Route::put('/{lead}/documents/{document}', [LeadDocumentController::class, 'update'])->name('leads.enhanced.documents.update');
+        Route::delete('/{lead}/documents/{document}', [LeadDocumentController::class, 'destroy'])->name('leads.enhanced.documents.destroy');
+        Route::post('/{lead}/documents/{document}/restore', [LeadDocumentController::class, 'restore'])->name('leads.enhanced.documents.restore');
+        Route::get('/documents/by-type/{type}', [LeadDocumentController::class, 'byType'])->name('leads.enhanced.documents.by-type');
+        Route::get('/{lead}/documents/{document}/download', [LeadDocumentController::class, 'download'])->name('leads.enhanced.documents.download');
+
+        // Analytics & Reporting
+        Route::get('/analytics/dashboard', [LeadAnalyticsController::class, 'dashboard'])->name('leads.enhanced.analytics.dashboard');
+        Route::get('/analytics/pipeline', [LeadAnalyticsController::class, 'pipeline'])->name('leads.enhanced.analytics.pipeline');
+        Route::get('/analytics/sales-team', [LeadAnalyticsController::class, 'salesTeam'])->name('leads.enhanced.analytics.sales-team');
+        Route::get('/analytics/payments', [LeadAnalyticsController::class, 'payments'])->name('leads.enhanced.analytics.payments');
+        Route::get('/analytics/follow-ups', [LeadAnalyticsController::class, 'followUps'])->name('leads.enhanced.analytics.follow-ups');
+        Route::get('/analytics/by-priority', [LeadAnalyticsController::class, 'byPriority'])->name('leads.enhanced.analytics.by-priority');
+        Route::get('/analytics/by-source', [LeadAnalyticsController::class, 'bySource'])->name('leads.enhanced.analytics.by-source');
+        Route::get('/analytics/closures', [LeadAnalyticsController::class, 'closures'])->name('leads.enhanced.analytics.closures');
     });
 });

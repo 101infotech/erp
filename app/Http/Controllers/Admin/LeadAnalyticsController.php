@@ -14,6 +14,16 @@ class LeadAnalyticsController extends Controller
     /**
      * Display analytics dashboard
      */
+    public function dashboard(Request $request)
+    {
+        $analytics = $this->getAnalyticsData($request);
+
+        return view('admin.leads.dashboard', ['analytics' => $analytics]);
+    }
+
+    /**
+     * Display analytics dashboard
+     */
     public function index(Request $request)
     {
         $analytics = $this->getAnalyticsData($request);

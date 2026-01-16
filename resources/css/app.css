@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Import Design Tokens */
+@import './design-tokens.css';
 
 @tailwind base;
 @tailwind components;
@@ -6,6 +9,29 @@
 
 @layer base {
     body {
-        font-family: 'Montserrat', sans-serif;
+        font-family: var(--font-sans);
+        @apply bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white antialiased;
     }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        @apply bg-slate-900;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        @apply bg-slate-700 rounded-full;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-slate-600;
+    }
+}
+
+@layer components {
+    /* Component utilities will be added here */
 }

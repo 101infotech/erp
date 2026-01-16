@@ -4,7 +4,7 @@
 @section('page-title', 'Company Details')
 
 @section('content')
-<div class="space-y-6">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <!-- Header -->
     <div class="flex items-center gap-3 mb-6">
         <a href="{{ route('admin.hrm.organization.index') }}" class="group">

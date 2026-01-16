@@ -1,8 +1,15 @@
 <x-app-layout>
-    <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    @php
+    use App\Constants\PermissionConstants;
+    $canViewHRM = auth()->user()->hasPermission(PermissionConstants::VIEW_EMPLOYEES);
+    $canViewFinance = auth()->user()->hasPermission(PermissionConstants::VIEW_FINANCES);
+    $canViewLeads = auth()->user()->hasPermission(PermissionConstants::VIEW_LEADS);
+    $canViewProjects = auth()->user()->hasPermission(PermissionConstants::VIEW_PROJECTS);
+    @endphp
+    <div class="min-h-screen bg-slate-900">
         <!-- Top Navigation -->
         <nav class="bg-slate-900/50 backdrop-blur-sm border-b border-slate-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="w-full px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <!-- Logo & Nav Items -->
                     <div class="flex items-center space-x-8">
@@ -17,13 +24,21 @@
                         <div class="hidden md:flex space-x-4">
                             <a href="#"
                                 class="px-4 py-2 bg-lime-400 text-slate-900 rounded-full font-semibold text-sm">Dashboard</a>
+                            @if($canViewProjects)
                             <a href="#"
                                 class="px-4 py-2 text-slate-300 hover:text-white font-medium text-sm">Projects</a>
-                            <a href="#" class="px-4 py-2 text-slate-300 hover:text-white font-medium text-sm">Knowledge
+                            @endif
+                            @if($canViewLeads)
+                            <a href="#" class="px-4 py-2 text-slate-300 hover:text-white font-medium text-sm">Leads
                                 base</a>
-                            <a href="#" class="px-4 py-2 text-slate-300 hover:text-white font-medium text-sm">Users</a>
+                            @endif
+                            @if($canViewHRM)
+                            <a href="#" class="px-4 py-2 text-slate-300 hover:text-white font-medium text-sm">Team</a>
+                            @endif
+                            @if($canViewFinance)
                             <a href="#"
-                                class="px-4 py-2 text-slate-300 hover:text-white font-medium text-sm">Analytics</a>
+                                class="px-4 py-2 text-slate-300 hover:text-white font-medium text-sm">Finance</a>
+                            @endif
                         </div>
                     </div>
 
@@ -45,9 +60,9 @@
         </nav>
 
         <!-- Main Content -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-8">
             <!-- Admin Access Banner (if admin) -->
-            @if(Auth::user()->role === 'admin')
+            @if(Auth::user()->hasRole(['super_admin', 'admin']))
             <div class="mb-6 bg-gradient-to-r from-lime-500/10 to-lime-600/10 border border-lime-500/30 rounded-lg p-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">

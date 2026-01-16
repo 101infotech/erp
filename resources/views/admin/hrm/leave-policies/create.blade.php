@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header -->
-    <div class="mb-6">
+<div class="px-6 md:px-8 py-6">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Header -->
         <div class="flex items-center space-x-3 mb-2">
             <a href="{{ route('admin.hrm.leave-policies.index') }}" class="text-slate-400 hover:text-white transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

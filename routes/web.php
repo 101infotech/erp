@@ -46,7 +46,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Employee Self-Service Portal
@@ -82,6 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/resource-requests', [EmployeeResourceRequestController::class, 'index'])->name('resource-requests.index');
         Route::get('/resource-requests/create', [EmployeeResourceRequestController::class, 'create'])->name('resource-requests.create');
         Route::post('/resource-requests', [EmployeeResourceRequestController::class, 'store'])->name('resource-requests.store');
+        Route::get('/resource-requests/{resourceRequest}', [EmployeeResourceRequestController::class, 'show'])->name('resource-requests.show');
 
         // Expense Claims (employee self-service)
         Route::get('/expense-claims', [EmployeeExpenseClaimController::class, 'index'])->name('expense-claims.index');
@@ -174,6 +175,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Leads Management with Permission-based Access Control
         Route::prefix('leads')->name('leads.')->group(function () {
+            // Dashboard route
+            Route::get('/dashboard', [\App\Http\Controllers\Admin\LeadAnalyticsController::class, 'dashboard'])
+                ->middleware('can.manage.leads:view')
+                ->name('dashboard');
+
             // Utility routes (must come before /{lead} routes)
             Route::get('/statuses', [\App\Http\Controllers\Admin\ServiceLeadController::class, 'statuses'])
                 ->middleware('can.manage.leads:view')

@@ -4,7 +4,7 @@
 @section('page-title', 'Attendance Calendar')
 
 @section('content')
-<div class="space-y-6">
+<div class="px-6 md:px-8 py-6 space-y-6">
     <form method="GET"
         class="bg-slate-800/50 border border-slate-700 rounded-lg p-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div class="flex items-center gap-2">
