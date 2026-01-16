@@ -17,7 +17,7 @@ class ServiceLeadSeeder extends Seeder
     {
         // Get admin user for assignment
         $admin = User::where('email', 'admin@example.com')->first() ?? User::first();
-        
+
         // Get lead stages
         $stages = LeadStage::all();
         $leadCaptureStage = $stages->where('stage_number', 1)->first();

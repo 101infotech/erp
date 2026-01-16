@@ -46,12 +46,12 @@ class LeadAnalyticsController extends Controller
         // Summary statistics (all time for overview)
         $totalLeads = ServiceLead::count();
         $activeLeads = ServiceLead::where('status', 'active')->count();
-        
+
         // Count leads that have been converted (booking confirmed or paid)
-        $positiveClients = ServiceLead::where(function($query) {
+        $positiveClients = ServiceLead::where(function ($query) {
             $query->whereNotNull('booking_confirmed_at')
-                  ->orWhere('payment_status', 'paid')
-                  ->orWhere('payment_status', 'partial');
+                ->orWhere('payment_status', 'paid')
+                ->orWhere('payment_status', 'partial');
         })->count();
 
         $conversionRate = $totalLeads > 0 ? round(($positiveClients / $totalLeads) * 100, 2) : 0;

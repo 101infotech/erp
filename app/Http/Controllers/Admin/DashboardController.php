@@ -60,7 +60,7 @@ class DashboardController extends Controller
             'open_leads' => 0,
             'recent_leads' => collect(),
         ];
-        
+
         \Log::info('Dashboard: leadsStats initialized', ['leadsStats' => $leadsStats]);
 
         // Load all stats
@@ -187,7 +187,7 @@ class DashboardController extends Controller
                     ->latest()
                     ->take(5)
                     ->get();
-                
+
                 \Log::info('Leads loaded successfully', [
                     'total_leads' => $leadsStats['total_leads'],
                     'open_leads' => $leadsStats['open_leads'],

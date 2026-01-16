@@ -430,3 +430,4 @@ class DashboardController extends Controller
             'recent_leads' => collect(),
         ];
     }
+}

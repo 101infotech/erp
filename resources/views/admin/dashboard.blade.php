@@ -10,7 +10,8 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-white mb-1">Welcome back, {{ Auth::user()->name }}!</h1>
-                <p class="text-slate-400 text-sm">{{ now()->format('l, F d, Y') }} • Here's what's happening with your business today.</p>
+                <p class="text-slate-400 text-sm">{{ now()->format('l, F d, Y') }} • Here's what's happening with your
+                    business today.</p>
             </div>
             <div class="text-right">
                 <p class="text-xs text-slate-500 mb-1">System Status</p>
@@ -20,7 +21,8 @@
     </div>
 
     <!-- ========== PRIORITY 1: PENDING ACTIONS (High Priority) ========== -->
-    @if(isset($hrmStats) && (($hrmStats['pending_leaves'] ?? 0) > 0 || ($hrmStats['draft_payrolls'] ?? 0) > 0 || ($hrmStats['unreviewed_anomalies'] ?? 0) > 0))
+    @if(isset($hrmStats) && (($hrmStats['pending_leaves'] ?? 0) > 0 || ($hrmStats['draft_payrolls'] ?? 0) > 0 ||
+    ($hrmStats['unreviewed_anomalies'] ?? 0) > 0))
     <div>
         <x-dashboard-section-header title="⚡ Pending Actions" subtitle="Requires immediate attention" />
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -80,11 +82,13 @@
         <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Key Metrics</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Team Members -->
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-lime-500/50 transition-colors">
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-lime-500/50 transition-colors">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-slate-400 text-xs mb-1.5">Team Members</p>
-                        <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ?? $stats['total_team_members'] }}</h2>
+                        <h2 class="text-2xl font-bold text-white">{{ $hrmStats['total_employees'] ??
+                            $stats['total_team_members'] }}</h2>
                         <p class="text-xs text-slate-500 mt-1">{{ $hrmStats['active_employees'] ?? 0 }} active</p>
                     </div>
                     <div class="w-10 h-10 bg-lime-500/10 rounded-xl flex items-center justify-center">
@@ -97,7 +101,8 @@
             </div>
 
             <!-- Total Sites -->
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-blue-500/50 transition-colors">
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-blue-500/50 transition-colors">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-slate-400 text-xs mb-1.5">Total Sites</p>
@@ -114,7 +119,8 @@
             </div>
 
             <!-- New Contacts -->
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-orange-500/50 transition-colors">
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-orange-500/50 transition-colors">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-slate-400 text-xs mb-1.5">New Contacts</p>
@@ -131,7 +137,8 @@
             </div>
 
             <!-- Total Blogs -->
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-yellow-500/50 transition-colors">
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 hover:border-yellow-500/50 transition-colors">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-slate-400 text-xs mb-1.5">Total Blogs</p>
@@ -222,30 +229,37 @@
                     <div class="flex items-center justify-between p-3 rounded-lg bg-slate-700/40">
                         <div>
                             <p class="text-xs text-slate-400">Active employees</p>
-                            <h4 class="text-lg font-semibold text-white">{{ $hrmStats['active_employees'] ?? ($hrmStats['total_employees'] ?? 0) }}</h4>
+                            <h4 class="text-lg font-semibold text-white">{{ $hrmStats['active_employees'] ??
+                                ($hrmStats['total_employees'] ?? 0) }}</h4>
                         </div>
                         <span class="text-xs px-2 py-1 rounded-full bg-lime-500/10 text-lime-300">HRM</span>
                     </div>
-                    <div class="flex items-center justify-between p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
                         <div>
                             <p class="text-xs text-yellow-200">Pending leaves</p>
                             <h4 class="text-lg font-semibold text-white">{{ $hrmStats['pending_leaves'] ?? 0 }}</h4>
                         </div>
-                        <a href="{{ route('admin.hrm.leaves.index') }}" class="text-xs text-yellow-300 hover:text-yellow-200">Review</a>
+                        <a href="{{ route('admin.hrm.leaves.index') }}"
+                            class="text-xs text-yellow-300 hover:text-yellow-200">Review</a>
                     </div>
-                    <div class="flex items-center justify-between p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
                         <div>
                             <p class="text-xs text-blue-200">Draft payrolls</p>
                             <h4 class="text-lg font-semibold text-white">{{ $hrmStats['draft_payrolls'] ?? 0 }}</h4>
                         </div>
-                        <a href="{{ route('admin.hrm.payroll.index') }}" class="text-xs text-blue-300 hover:text-blue-200">Open</a>
+                        <a href="{{ route('admin.hrm.payroll.index') }}"
+                            class="text-xs text-blue-300 hover:text-blue-200">Open</a>
                     </div>
                     <div class="flex items-center justify-between p-3 rounded-lg bg-red-500/5 border border-red-500/20">
                         <div>
                             <p class="text-xs text-red-200">Attendance flags</p>
-                            <h4 class="text-lg font-semibold text-white">{{ $hrmStats['unreviewed_anomalies'] ?? 0 }}</h4>
+                            <h4 class="text-lg font-semibold text-white">{{ $hrmStats['unreviewed_anomalies'] ?? 0 }}
+                            </h4>
                         </div>
-                        <a href="{{ route('admin.hrm.attendance.index') }}" class="text-xs text-red-300 hover:text-red-200">Investigate</a>
+                        <a href="{{ route('admin.hrm.attendance.index') }}"
+                            class="text-xs text-red-300 hover:text-red-200">Investigate</a>
                     </div>
                 </div>
             </div>
@@ -258,72 +272,82 @@
             action="{{ route('admin.leads.dashboard') }}" actionLabel="View Full Dashboard" />
         <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
             @if(isset($leadsStats) && isset($leadsStats['total_leads']) && $leadsStats['total_leads'] > 0)
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-slate-700/40 rounded-lg p-4">
-                        <p class="text-slate-400 text-xs mb-1">Total Leads</p>
-                        <h3 class="text-2xl font-bold text-white">{{ $leadsStats['total_leads'] }}</h3>
-                    </div>
-                    <div class="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                        <p class="text-green-300 text-xs mb-1">Open Leads</p>
-                        <h3 class="text-2xl font-bold text-white">{{ $leadsStats['open_leads'] }}</h3>
-                    </div>
-                    <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-                        <p class="text-blue-300 text-xs mb-1">Conversion Rate</p>
-                        <h3 class="text-2xl font-bold text-white">{{ $leadsStats['total_leads'] > 0 ? round(($leadsStats['total_leads'] - $leadsStats['open_leads']) / $leadsStats['total_leads'] * 100) : 0 }}%</h3>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-slate-700/40 rounded-lg p-4">
+                    <p class="text-slate-400 text-xs mb-1">Total Leads</p>
+                    <h3 class="text-2xl font-bold text-white">{{ $leadsStats['total_leads'] }}</h3>
                 </div>
+                <div class="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+                    <p class="text-green-300 text-xs mb-1">Open Leads</p>
+                    <h3 class="text-2xl font-bold text-white">{{ $leadsStats['open_leads'] }}</h3>
+                </div>
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+                    <p class="text-blue-300 text-xs mb-1">Conversion Rate</p>
+                    <h3 class="text-2xl font-bold text-white">{{ $leadsStats['total_leads'] > 0 ?
+                        round(($leadsStats['total_leads'] - $leadsStats['open_leads']) / $leadsStats['total_leads'] *
+                        100) : 0 }}%</h3>
+                </div>
+            </div>
 
-                @if($leadsStats['recent_leads']->count() > 0)
-                <div>
-                    <h4 class="text-sm font-semibold text-slate-300 mb-3">Recent Leads</h4>
-                    <div class="space-y-3">
-                        @foreach($leadsStats['recent_leads'] as $lead)
-                        <a href="{{ route('admin.leads.index') }}" class="flex items-center justify-between p-4 bg-slate-900/40 rounded-lg border border-slate-700 hover:border-slate-600 transition">
-                            <div class="flex-1">
-                                <h5 class="font-semibold text-white">{{ $lead->client_name }}</h5>
-                                <p class="text-sm text-slate-400">{{ $lead->service_requested }} • {{ $lead->location }}</p>
-                                <div class="flex items-center gap-2 mt-1">
-                                    @if($lead->leadStage)
-                                    <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-300">{{ $lead->leadStage->stage_name }}</span>
-                                    @endif
-                                    <span class="text-xs px-2 py-0.5 rounded bg-{{ $lead->priority === 'high' ? 'red' : ($lead->priority === 'medium' ? 'yellow' : 'slate') }}-500/10 text-{{ $lead->priority === 'high' ? 'red' : ($lead->priority === 'medium' ? 'yellow' : 'slate') }}-300">
-                                        {{ ucfirst($lead->priority) }} Priority
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs text-slate-500">{{ $lead->created_at->diffForHumans() }}</p>
-                                @if($lead->quoted_amount)
-                                <p class="text-sm font-semibold text-lime-400 mt-1">NPR {{ number_format($lead->quoted_amount) }}</p>
+            @if($leadsStats['recent_leads']->count() > 0)
+            <div>
+                <h4 class="text-sm font-semibold text-slate-300 mb-3">Recent Leads</h4>
+                <div class="space-y-3">
+                    @foreach($leadsStats['recent_leads'] as $lead)
+                    <a href="{{ route('admin.leads.index') }}"
+                        class="flex items-center justify-between p-4 bg-slate-900/40 rounded-lg border border-slate-700 hover:border-slate-600 transition">
+                        <div class="flex-1">
+                            <h5 class="font-semibold text-white">{{ $lead->client_name }}</h5>
+                            <p class="text-sm text-slate-400">{{ $lead->service_requested }} • {{ $lead->location }}</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                @if($lead->leadStage)
+                                <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-300">{{
+                                    $lead->leadStage->stage_name }}</span>
                                 @endif
+                                <span
+                                    class="text-xs px-2 py-0.5 rounded bg-{{ $lead->priority === 'high' ? 'red' : ($lead->priority === 'medium' ? 'yellow' : 'slate') }}-500/10 text-{{ $lead->priority === 'high' ? 'red' : ($lead->priority === 'medium' ? 'yellow' : 'slate') }}-300">
+                                    {{ ucfirst($lead->priority) }} Priority
+                                </span>
                             </div>
-                        </a>
-                        @endforeach
-                    </div>
-                    <div class="mt-4 text-center">
-                        <a href="{{ route('admin.leads.index') }}" class="inline-flex items-center gap-2 text-sm text-lime-400 hover:text-lime-300">
-                            View All Leads
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-500">{{ $lead->created_at->diffForHumans() }}</p>
+                            @if($lead->quoted_amount)
+                            <p class="text-sm font-semibold text-lime-400 mt-1">NPR {{
+                                number_format($lead->quoted_amount) }}</p>
+                            @endif
+                        </div>
+                    </a>
+                    @endforeach
                 </div>
-                @endif
-            @else
-                <div class="text-center py-12">
-                    <svg class="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <h3 class="text-lg font-semibold text-white mb-2">No Leads Yet</h3>
-                    <p class="text-slate-400 mb-4">Start tracking your sales pipeline by creating your first lead.</p>
-                    <a href="{{ route('admin.leads.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-lime-500 text-slate-900 rounded-lg font-semibold hover:bg-lime-400 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                <div class="mt-4 text-center">
+                    <a href="{{ route('admin.leads.index') }}"
+                        class="inline-flex items-center gap-2 text-sm text-lime-400 hover:text-lime-300">
+                        View All Leads
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
-                        Create First Lead
                     </a>
                 </div>
+            </div>
+            @endif
+            @else
+            <div class="text-center py-12">
+                <svg class="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="text-lg font-semibold text-white mb-2">No Leads Yet</h3>
+                <p class="text-slate-400 mb-4">Start tracking your sales pipeline by creating your first lead.</p>
+                <a href="{{ route('admin.leads.create') }}"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-lime-500 text-slate-900 rounded-lg font-semibold hover:bg-lime-400 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create First Lead
+                </a>
+            </div>
             @endif
         </div>
     </div>
@@ -336,7 +360,8 @@
                 class="group bg-gradient-to-br from-rose-500/20 to-rose-600/10 rounded-xl p-4 hover:scale-105 transition border border-rose-500/20 hover:border-rose-500/40">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-sm font-semibold text-rose-300">Leads Center</span>
-                    <svg class="w-4 h-4 text-rose-400 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-rose-400 group-hover:translate-x-1 transition" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 </div>
@@ -346,9 +371,12 @@
             <a href="{{ route('admin.sites.index') }}"
                 class="group bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 hover:scale-105 transition border border-blue-500/20 hover:border-blue-500/40">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-blue-300 px-2.5 py-1 bg-black/20 rounded-full">#Management</span>
-                    <svg class="w-4 h-4 text-blue-300 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <span
+                        class="text-xs font-semibold text-blue-300 px-2.5 py-1 bg-black/20 rounded-full">#Management</span>
+                    <svg class="w-4 h-4 text-blue-300 group-hover:translate-x-1 transition" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">Sites</h3>
@@ -359,8 +387,10 @@
                 class="group bg-gradient-to-br from-lime-500/20 to-lime-600/10 rounded-xl p-4 hover:scale-105 transition border border-lime-500/20 hover:border-lime-500/40">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-xs font-semibold text-lime-300 px-2.5 py-1 bg-black/20 rounded-full">#HRM</span>
-                    <svg class="w-4 h-4 text-lime-300 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <svg class="w-4 h-4 text-lime-300 group-hover:translate-x-1 transition" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">HR Management</h3>
@@ -370,9 +400,12 @@
             <a href="{{ route('admin.hrm.attendance.index') }}"
                 class="group bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 hover:scale-105 transition border border-purple-500/20 hover:border-purple-500/40">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-purple-300 px-2.5 py-1 bg-black/20 rounded-full">#Tracking</span>
-                    <svg class="w-4 h-4 text-purple-300 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <span
+                        class="text-xs font-semibold text-purple-300 px-2.5 py-1 bg-black/20 rounded-full">#Tracking</span>
+                    <svg class="w-4 h-4 text-purple-300 group-hover:translate-x-1 transition" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">Attendance</h3>
@@ -383,11 +416,13 @@
 
     <!-- ========== PRIORITY 6: AI INSIGHTS ========== -->
     <div>
-        <div class="bg-gradient-to-r from-lime-950/20 via-slate-900 to-lime-950/20 rounded-2xl border border-lime-500/20 overflow-hidden">
+        <div
+            class="bg-gradient-to-r from-lime-950/20 via-slate-900 to-lime-950/20 rounded-2xl border border-lime-500/20 overflow-hidden">
             <div class="bg-gradient-to-r from-lime-500/5 to-transparent px-6 py-4 border-b border-lime-500/10">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-lime-500/10 border border-lime-500/20 flex items-center justify-center">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-lime-500/10 border border-lime-500/20 flex items-center justify-center">
                             <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707.707M5.34 5.34l.707.707" />
@@ -398,12 +433,15 @@
                             <p class="text-xs text-slate-400">Powered by real-time analytics</p>
                         </div>
                     </div>
-                    <span class="px-3 py-1 rounded-full bg-lime-500/10 border border-lime-500/20 text-xs font-medium text-lime-300">Live Monitor</span>
+                    <span
+                        class="px-3 py-1 rounded-full bg-lime-500/10 border border-lime-500/20 text-xs font-medium text-lime-300">Live
+                        Monitor</span>
                 </div>
             </div>
 
             <div class="p-6">
-                <div class="bg-gradient-to-r from-slate-900/40 to-slate-800/40 rounded-xl p-4 border border-lime-500/10">
+                <div
+                    class="bg-gradient-to-r from-slate-900/40 to-slate-800/40 rounded-xl p-4 border border-lime-500/10">
                     <p class="text-sm text-slate-300 leading-relaxed" id="ai-insight-text">
                         ✅ <strong>All systems green.</strong> Monitoring live finance and HRM signals.
                     </p>
