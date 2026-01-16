@@ -47,7 +47,7 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('finance_manager');
-        
+
         $this->assertTrue($user->hasRole('finance_manager'));
     }
 
@@ -59,7 +59,7 @@ class RolePermissionTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('finance_manager');
         $user->assignRole('hr_manager');
-        
+
         $this->assertTrue($user->hasRole('finance_manager'));
         $this->assertTrue($user->hasRole('hr_manager'));
     }
@@ -71,7 +71,7 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('finance_manager');
-        
+
         $this->assertTrue($user->hasPermission(PermissionConstants::VIEW_FINANCES));
     }
 
@@ -82,7 +82,7 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->givePermissionTo(PermissionConstants::VIEW_FINANCES);
-        
+
         $this->assertTrue($user->hasPermission(PermissionConstants::VIEW_FINANCES));
     }
 
@@ -92,7 +92,7 @@ class RolePermissionTest extends TestCase
     public function test_user_without_permission_returns_false(): void
     {
         $user = User::factory()->create();
-        
+
         $this->assertFalse($user->hasPermission(PermissionConstants::VIEW_FINANCES));
     }
 
@@ -103,11 +103,11 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('finance_manager');
-        
+
         $permissions = [
             PermissionConstants::VIEW_FINANCES,
         ];
-        
+
         $this->assertTrue($user->hasAllPermissions($permissions));
     }
 
@@ -119,7 +119,7 @@ class RolePermissionTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('finance_manager');
         $user->assignRole('hr_manager');
-        
+
         $this->assertTrue($user->hasAllRoles(['finance_manager', 'hr_manager']));
     }
 
@@ -130,7 +130,7 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('super_admin');
-        
+
         $this->assertTrue($user->isSuperAdmin());
     }
 
@@ -141,7 +141,7 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('admin');
-        
+
         $this->assertTrue($user->isAdmin());
     }
 
@@ -152,11 +152,11 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->givePermissionTo(PermissionConstants::VIEW_FINANCES);
-        
+
         $this->assertTrue($user->hasPermission(PermissionConstants::VIEW_FINANCES));
-        
+
         $user->revokePermissionTo(PermissionConstants::VIEW_FINANCES);
-        
+
         $this->assertFalse($user->hasPermission(PermissionConstants::VIEW_FINANCES));
     }
 
@@ -167,11 +167,11 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('finance_manager');
-        
+
         $this->assertTrue($user->hasRole('finance_manager'));
-        
+
         $user->removeRole('finance_manager');
-        
+
         $this->assertFalse($user->hasRole('finance_manager'));
     }
 
@@ -194,7 +194,7 @@ class RolePermissionTest extends TestCase
             'project_manager',
             'team_lead',
         ];
-        
+
         foreach ($expected_roles as $role) {
             $exists = Role::where('slug', $role)->exists();
             $this->assertTrue($exists, "Role '{$role}' does not exist");

@@ -13,9 +13,8 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Seed roles and permissions for each test
         $this->seed(RolesAndPermissionsSeeder::class);
     }
 }
-
