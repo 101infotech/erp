@@ -14,7 +14,7 @@ return new class extends Migration
     {
         // Disable strict mode temporarily
         DB::statement("SET SESSION sql_mode=''");
-
+        
         // First, alter the enum column to include new values
         try {
             DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'sister', 'subsidiary', 'independent') DEFAULT 'independent'");
@@ -46,7 +46,7 @@ return new class extends Migration
     {
         // Disable strict mode temporarily
         DB::statement("SET SESSION sql_mode=''");
-
+        
         try {
             // Revert the enum column back to old values
             DB::statement("ALTER TABLE finance_companies MODIFY COLUMN type ENUM('holding', 'sister') DEFAULT 'sister'");

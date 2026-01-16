@@ -78,49 +78,40 @@ return new class extends Migration
             // Drop foreign keys
             try {
                 $table->dropForeign(['lead_owner_id']);
-            } catch (\Exception $e) {
-            }
-
+            } catch (\Exception $e) {}
+            
             try {
                 $table->dropForeign(['lead_stage_id']);
-            } catch (\Exception $e) {
-            }
-
+            } catch (\Exception $e) {}
+            
             try {
                 $table->dropForeign(['site_visit_assigned_to_id']);
-            } catch (\Exception $e) {
-            }
+            } catch (\Exception $e) {}
 
             // Drop indexes
             try {
                 $table->dropIndex(['lead_owner_id']);
-            } catch (\Exception $e) {
-            }
-
+            } catch (\Exception $e) {}
+            
             try {
                 $table->dropIndex(['lead_stage_id']);
-            } catch (\Exception $e) {
-            }
-
+            } catch (\Exception $e) {}
+            
             try {
                 $table->dropIndex(['priority']);
-            } catch (\Exception $e) {
-            }
-
+            } catch (\Exception $e) {}
+            
             try {
                 $table->dropIndex(['payment_status']);
-            } catch (\Exception $e) {
-            }
-
+            } catch (\Exception $e) {}
+            
             try {
                 $table->dropIndex(['lead_owner_id', 'lead_stage_id']);
-            } catch (\Exception $e) {
-            }
-
+            } catch (\Exception $e) {}
+            
             try {
                 $table->dropIndex(['priority', 'lead_stage_id']);
-            } catch (\Exception $e) {
-            }
+            } catch (\Exception $e) {}
 
             $table->dropColumn([
                 'lead_source',

@@ -20,17 +20,6 @@
         </div>
         <div class="flex items-center gap-2">
             @if($jibbleEmployee)
-            <!-- Employee Profile Button -->
-            <a href="{{ route('admin.hrm.employees.show', $jibbleEmployee) }}"
-                class="group relative px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white rounded-lg font-medium hover:from-teal-500 hover:to-teal-400 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-200 inline-flex items-center">
-                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span class="text-sm">Employee Profile</span>
-            </a>
-
             <!-- Timesheet Button -->
             <a href="{{ route('admin.hrm.attendance.employee', $jibbleEmployee) }}"
                 class="group relative px-5 py-2.5 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-600 hover:shadow-lg hover:shadow-slate-500/20 border border-slate-600 hover:border-slate-500 transition-all duration-200 inline-flex items-center">
@@ -51,7 +40,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                <span class="text-sm">Edit User</span>
+                <span class="text-sm">Edit</span>
             </a>
 
             <!-- Password Options Dropdown -->
@@ -63,7 +52,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                     </svg>
-                    <span class="text-sm">Password Options</span>
+                    <span class="text-sm">Password</span>
                     <svg class="w-4 h-4 ml-2 group-hover:translate-y-0.5 transition-transform duration-200" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -152,7 +141,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <span class="text-sm">{{ $user->can_access_leads ? 'Disable' : 'Enable' }} Leads Access</span>
+                    <span class="text-sm">{{ $user->can_access_leads ? 'Disable' : 'Enable' }} Leads</span>
                 </button>
             </form>
             @endif
@@ -170,7 +159,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    <span class="text-sm">Delete User</span>
+                    <span class="text-sm">Delete</span>
                 </button>
             </form>
             @endif
