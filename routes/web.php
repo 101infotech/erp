@@ -126,8 +126,13 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
-        // Admin Profile
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        // Roles & Permissions Management
+        Route::resource('roles', App\Http\Controllers\Admin\RoleController::class)->only(['index', 'edit', 'update']);
+        Route::get('roles/{role}/users', [App\Http\Controllers\Admin\RoleController::class, 'users'])->name('roles.users');
+        Route::post('roles/{role}/users', [App\Http\Controllers\Admin\RoleController::class, 'syncUsers'])->name('roles.users.sync');
+
+        // Profile routes
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         Route::resource('sites', SiteController::class);

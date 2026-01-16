@@ -45,16 +45,22 @@ class LeadAnalyticsController extends Controller
     {
         // Summary statistics (all time for overview)
         $totalLeads = ServiceLead::count();
-        $activeLeads = ServiceLead::active()->count();
-        $positiveClients = ServiceLead::where('status', 'Positive')->count();
+        $activeLeads = ServiceLead::where('status', 'active')->count();
+        
+        // Count leads that have been converted (booking confirmed or paid)
+        $positiveClients = ServiceLead::where(function($query) {
+            $query->whereNotNull('booking_confirmed_at')
+                  ->orWhere('payment_status', 'paid')
+                  ->orWhere('payment_status', 'partial');
+        })->count();
 
         $conversionRate = $totalLeads > 0 ? round(($positiveClients / $totalLeads) * 100, 2) : 0;
 
-        // Revenue metrics
-        $totalRevenue = ServiceLead::whereNotNull('inspection_charge')->sum('inspection_charge') ?? 0;
-        $paidInspections = ServiceLead::whereNotNull('inspection_charge')->where('inspection_charge', '>', 0)->count();
+        // Revenue metrics - use quoted_amount instead of inspection_charge
+        $totalRevenue = ServiceLead::whereNotNull('quoted_amount')->sum('quoted_amount') ?? 0;
+        $paidInspections = ServiceLead::whereNotNull('quoted_amount')->where('quoted_amount', '>', 0)->count();
         $averageCharge = $paidInspections > 0 ? round($totalRevenue / $paidInspections, 2) : 0;
-        $highestCharge = ServiceLead::max('inspection_charge') ?? 0;
+        $highestCharge = ServiceLead::max('quoted_amount') ?? 0;
 
         // Status distribution
         $statusDistribution = ServiceLead::select('status', DB::raw('count(*) as count'))
@@ -73,7 +79,7 @@ class LeadAnalyticsController extends Controller
             DB::raw('YEAR(created_at) as year'),
             DB::raw('MONTH(created_at) as month_num'),
             DB::raw('count(*) as count'),
-            DB::raw('SUM(CASE WHEN status IN ("Positive", "Reports Sent") THEN 1 ELSE 0 END) as completed')
+            DB::raw('SUM(CASE WHEN booking_confirmed_at IS NOT NULL OR payment_status IN ("paid", "partial") THEN 1 ELSE 0 END) as completed')
         )
             ->where('created_at', '>=', now()->subMonths(6))
             ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
@@ -85,40 +91,44 @@ class LeadAnalyticsController extends Controller
                 return $row;
             });
 
-        // Staff performance
+        // Staff performance - use site_visit_assigned_to_id instead
         $staffPerformance = ServiceLead::select(
-            'inspection_assigned_to',
+            'site_visit_assigned_to_id',
             DB::raw('count(*) as total_leads'),
-            DB::raw('SUM(CASE WHEN status IN ("Positive", "Reports Sent") THEN 1 ELSE 0 END) as completed_leads')
+            DB::raw('SUM(CASE WHEN booking_confirmed_at IS NOT NULL OR payment_status IN ("paid", "partial") THEN 1 ELSE 0 END) as completed_leads')
         )
-            ->whereNotNull('inspection_assigned_to')
-            ->groupBy('inspection_assigned_to')
-            ->with('assignedTo:id,name')
+            ->whereNotNull('site_visit_assigned_to_id')
+            ->groupBy('site_visit_assigned_to_id')
             ->get()
             ->map(function ($item) {
+                $user = \App\Models\User::find($item->site_visit_assigned_to_id);
                 return (object) [
-                    'assigned_to_name' => $item->assignedTo->name ?? 'Unknown',
+                    'assigned_to_name' => $user->name ?? 'Unknown',
                     'total_leads' => $item->total_leads,
                     'completed_leads' => $item->completed_leads,
                 ];
             });
 
+        // Recent leads
+        $recentLeads = ServiceLead::with(['leadStage', 'leadOwner'])
+            ->latest()
+            ->take(10)
+            ->get();
+
         return [
-            'summary' => [
-                'total_leads' => $totalLeads,
-                'active_leads' => $activeLeads,
-                'conversion_rate' => $conversionRate,
-            ],
-            'revenue' => [
-                'total_revenue' => $totalRevenue,
-                'average_charge' => $averageCharge,
-                'highest_charge' => $highestCharge,
-                'paid_inspections' => $paidInspections,
-            ],
+            'total_leads' => $totalLeads,
+            'active_leads' => $activeLeads,
+            'positive_clients' => $positiveClients,
+            'conversion_rate' => $conversionRate,
+            'total_revenue' => $totalRevenue,
+            'average_charge' => $averageCharge,
+            'highest_charge' => $highestCharge,
+            'paid_inspections' => $paidInspections,
             'status_distribution' => $statusDistribution,
             'services' => $services,
             'monthly_trends' => $monthlyTrends,
             'staff_performance' => $staffPerformance,
+            'recent_leads' => $recentLeads,
         ];
     }
 

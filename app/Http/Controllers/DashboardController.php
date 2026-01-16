@@ -75,6 +75,16 @@ class DashboardController extends Controller
             $pendingLeaves = $this->getPendingLeaves();
         }
 
+        // Get leads stats if user has permission
+        $leadsStats = [
+            'total_leads' => 0,
+            'open_leads' => 0,
+            'recent_leads' => collect(),
+        ];
+        if ($user->hasPermission(PermissionConstants::VIEW_LEADS)) {
+            $leadsStats = $this->getLeadsStats();
+        }
+
         return view('admin.dashboard', compact(
             'stats',
             'recentContacts',
@@ -82,7 +92,8 @@ class DashboardController extends Controller
             'financeData',
             'hrmStats',
             'pendingLeaves',
-            'moduleAccess'
+            'moduleAccess',
+            'leadsStats'
         ));
     }
 
@@ -179,25 +190,29 @@ class DashboardController extends Controller
     {
         try {
             $totalEmployees = \App\Models\HrmEmployee::count();
-            $activeEmployees = \App\Models\HrmEmployee::where('status', 'active')->count();
+            $activeEmployees = \App\Models\HrmEmployee::active()->count();
             $totalDepartments = \App\Models\HrmDepartment::count();
-            $onLeaveToday = \App\Models\HrmLeaveRequest::where('from_date', '<=', now()->toDateString())
-                ->where('to_date', '>=', now()->toDateString())
-                ->where('status', 'approved')
-                ->count();
+
+            $pendingLeaves = \App\Models\HrmLeaveRequest::pending()->count();
+            $draftPayrolls = \App\Models\HrmPayrollRecord::draft()->count();
+            $unreviewedAnomalies = \App\Models\HrmAttendanceAnomaly::unreviewed()->count();
 
             return [
                 'total_employees' => $totalEmployees,
                 'active_employees' => $activeEmployees,
                 'total_departments' => $totalDepartments,
-                'on_leave_today' => $onLeaveToday,
+                'pending_leaves' => $pendingLeaves,
+                'draft_payrolls' => $draftPayrolls,
+                'unreviewed_anomalies' => $unreviewedAnomalies,
             ];
         } catch (\Exception $e) {
             return [
                 'total_employees' => 0,
                 'active_employees' => 0,
                 'total_departments' => 0,
-                'on_leave_today' => 0,
+                'pending_leaves' => 0,
+                'draft_payrolls' => 0,
+                'unreviewed_anomalies' => 0,
             ];
         }
     }
@@ -384,4 +399,34 @@ class DashboardController extends Controller
 
         return response()->json($result);
     }
-}
+
+    /**
+     * Get leads statistics
+     */
+    private function getLeadsStats()
+    {
+        try {
+            if (class_exists(\App\Models\ServiceLead::class)) {
+                $totalLeads = \App\Models\ServiceLead::count();
+                $openLeads = \App\Models\ServiceLead::where('status', 'active')->count();
+                $recentLeads = \App\Models\ServiceLead::with(['leadStage', 'leadOwner'])
+                    ->latest()
+                    ->take(5)
+                    ->get();
+
+                return [
+                    'total_leads' => $totalLeads,
+                    'open_leads' => $openLeads,
+                    'recent_leads' => $recentLeads,
+                ];
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to load leads stats: ' . $e->getMessage());
+        }
+
+        return [
+            'total_leads' => 0,
+            'open_leads' => 0,
+            'recent_leads' => collect(),
+        ];
+    }

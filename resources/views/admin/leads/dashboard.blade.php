@@ -218,7 +218,7 @@
     // Display status distribution
     const statusDistribution = @json($analytics['status_distribution'] ?? []);
     const statusContainer = document.getElementById('status-distribution');
-    const totalLeads = @json($analytics['summary']['total_leads'] ?? 0);
+    const totalLeads = @json($analytics['total_leads'] ?? 0);
     
     if (statusDistribution && statusDistribution.length > 0) {
         statusContainer.innerHTML = statusDistribution.map(item => `
