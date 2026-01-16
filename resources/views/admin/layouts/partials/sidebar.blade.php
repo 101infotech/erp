@@ -445,7 +445,7 @@
         </div>
 
         <!-- Configuration -->
-        <div x-data="{ open: false }" class="mb-6">
+        <div x-data="{ open: true }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Configuration</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -471,7 +471,7 @@
         </div>
 
         <!-- Accounting -->
-        <div x-data="{ open: false }" class="mb-6">
+        <div x-data="{ open: true }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Accounting</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -505,7 +505,7 @@
         </div>
 
         <!-- Sales & Purchases -->
-        <div x-data="{ open: false }" class="mb-6">
+        <div x-data="{ open: true }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sales & Purchases</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -557,7 +557,7 @@
         </div>
 
         <!-- Reports & Analysis -->
-        <div x-data="{ open: false }" class="mb-6">
+        <div x-data="{ open: true }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Reports & Analysis</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -614,7 +614,7 @@
         </div>
 
         <!-- System Configuration -->
-        <div x-data="{ open: false }" class="mb-6">
+        <div x-data="{ open: true }" class="mb-6">
             <button @click="open = !open" class="w-full flex items-center justify-between py-2 text-left">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">System</h3>
                 <svg x-show="open" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

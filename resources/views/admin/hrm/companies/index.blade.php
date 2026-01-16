@@ -12,37 +12,43 @@
         </a>
     </div>
 
-    <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-lg overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-700">
-            <thead class="bg-slate-900">
+    <div
+        class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+            <thead class="bg-slate-50 dark:bg-slate-900">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Company
+                    <th
+                        class="px-6 py-3 text-left text-xs font-medium text-slate-900 dark:text-slate-400 uppercase tracking-wider">
+                        Company
                         Name
                     </th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider hidden md:table-cell">
+                        class="px-6 py-3 text-left text-xs font-medium text-slate-900 dark:text-slate-400 uppercase tracking-wider hidden md:table-cell">
                         Contact Email</th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider hidden sm:table-cell">
+                        class="px-6 py-3 text-left text-xs font-medium text-slate-900 dark:text-slate-400 uppercase tracking-wider hidden sm:table-cell">
                         Employees</th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider hidden lg:table-cell">
+                        class="px-6 py-3 text-left text-xs font-medium text-slate-900 dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                         Departments</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">Actions
+                    <th
+                        class="px-6 py-3 text-right text-xs font-medium text-slate-900 dark:text-slate-400 uppercase tracking-wider">
+                        Actions
                     </th>
                 </tr>
             </thead>
-            <tbody class="bg-slate-800 divide-y divide-slate-700">
+            <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
                 @forelse($companies as $company)
-                <tr class="hover:bg-slate-700">
+                <tr class="hover:bg-slate-100 dark:hover:bg-slate-700">
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-white">{{ $company->name }}</div>
-                        <div class="text-sm text-slate-400">{{ $company->address }}</div>
+                        <div class="text-sm font-medium text-slate-900 dark:text-white">{{ $company->name }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">{{ $company->address }}</div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300 hidden md:table-cell">
+                    <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 hidden md:table-cell">
                         {{ $company->contact_email ?? 'N/A' }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-white hidden sm:table-cell">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white hidden sm:table-cell">
                         {{ $company->employees_count }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-white hidden lg:table-cell">
@@ -59,7 +65,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-slate-400">
+                    <td colspan="5" class="px-6 py-4 text-center text-slate-600 dark:text-slate-400">
                         No companies found. <a href="{{ route('admin.hrm.companies.create') }}"
                             class="text-lime-400 hover:text-lime-300">Add your first company</a>
                     </td>

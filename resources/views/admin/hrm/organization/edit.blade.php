@@ -16,7 +16,7 @@
             <h2 class="text-2xl font-bold text-white">Edit Company</h2>
         </div>
 
-        <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
             <form method="POST" action="{{ route('admin.hrm.organization.companies.update', $company) }}"
                 class="space-y-6">
                 @csrf

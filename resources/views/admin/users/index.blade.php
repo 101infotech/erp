@@ -84,13 +84,14 @@
     </div>
 
     <!-- Filters -->
-    <form method="GET" class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
+    <form method="GET"
+        class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg p-4">
         <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or email..."
-                class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white placeholder-slate-400 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
 
             <select name="status"
-                class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 <option value="">All Status</option>
                 <option value="active" {{ request('status')=='active' ? 'selected' : '' }}>Active</option>
                 <option value="inactive" {{ request('status')=='inactive' ? 'selected' : '' }}>Inactive</option>
@@ -98,14 +99,14 @@
             </select>
 
             <select name="role"
-                class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 <option value="">All Roles</option>
                 <option value="admin" {{ request('role')=='admin' ? 'selected' : '' }}>Admin</option>
                 <option value="user" {{ request('role')=='user' ? 'selected' : '' }}>User</option>
             </select>
 
             <select name="company_id"
-                class="px-3 py-2 text-sm bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                class="px-3 py-2 text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 <option value="">All Companies</option>
                 @foreach($companies as $company)
                 <option value="{{ $company->id }}" {{ request('company_id')==$company->id ? 'selected' : '' }}>
@@ -122,31 +123,36 @@
     </form>
 
     <!-- Desktop Table View -->
-    <div class="hidden lg:block bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg overflow-hidden">
+    <div
+        class="hidden lg:block bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-slate-900">
+                <thead class="bg-slate-50 dark:bg-slate-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-6 py-3 text-left text-xs font-medium text-slate-900 dark:text-slate-300 uppercase tracking-wider">
                             Employee
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-6 py-3 text-left text-xs font-medium text-slate-900 dark:text-slate-300 uppercase tracking-wider">
                             Company / Department</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-6 py-3 text-left text-xs font-medium text-slate-900 dark:text-slate-300 uppercase tracking-wider">
                             Account
                         </th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <th
+                            class="px-6 py-3 text-right text-xs font-medium text-slate-900 dark:text-slate-300 uppercase tracking-wider">
                             Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-slate-800/50 divide-y divide-slate-700">
+                <tbody class="bg-white dark:bg-slate-800/50 divide-y divide-slate-200 dark:divide-slate-700">
                     @forelse($users as $employee)
                     @php
                     $user = $employee->user; // Get the related user account if exists
                     $displayName = $user ? $user->name : $employee->name;
                     $displayEmail = $user ? $user->email : $employee->email;
                     @endphp
-                    <tr class="hover:bg-slate-700/50 transition">
+                    <tr class="hover:bg-slate-100 dark:hover:bg-slate-700/50 transition">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-12 w-12">
@@ -163,21 +169,26 @@
                                     @endif
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-white">{{ $displayName }}</div>
+                                    <div class="text-sm font-medium text-slate-900 dark:text-white">{{ $displayName }}
+                                    </div>
                                     @if($displayEmail)
-                                    <div class="text-xs text-slate-400 mt-0.5">{{ $displayEmail }}</div>
+                                    <div class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{{ $displayEmail }}
+                                    </div>
                                     @else
                                     <div class="text-xs text-orange-400 mt-0.5">⚠️ No email</div>
                                     @endif
                                     @if($employee->position)
-                                    <div class="text-xs text-slate-500 mt-1">{{ $employee->position }}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-500 mt-1">{{ $employee->position
+                                        }}</div>
                                     @endif
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-white">{{ $employee->company->name ?? 'N/A' }}</div>
-                            <div class="text-xs text-slate-400">{{ $employee->department->name ?? 'No Department' }}
+                            <div class="text-sm text-slate-900 dark:text-white">{{ $employee->company->name ?? 'N/A' }}
+                            </div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">{{ $employee->department->name ??
+                                'No Department' }}
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -195,7 +206,8 @@
                             </div>
                             @else
                             <div class="flex flex-col gap-2">
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-400">
+                                <span
+                                    class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400">
                                     <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

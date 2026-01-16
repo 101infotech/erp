@@ -14,32 +14,33 @@
         <h2 class="text-2xl font-bold text-white">Create New User</h2>
     </div>
 
-    <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
         <form action="{{ route('admin.users.store') }}" method="POST" class="space-y-6">
             @csrf
 
             <div>
-                <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Name</label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 @error('name')
                 <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                <label for="email"
+                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email</label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 @error('email')
                 <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="role" class="block text-sm font-medium text-slate-300 mb-2">Role</label>
+                <label for="role" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Role</label>
                 <select name="role" id="role" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                     <option value="user" {{ old('role')==='user' ? 'selected' : '' }}>User</option>
                     <option value="admin" {{ old('role')==='admin' ? 'selected' : '' }}>Admin</option>
                 </select>
@@ -49,19 +50,21 @@
             </div>
 
             <div>
-                <label for="password" class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                <label for="password"
+                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Password</label>
                 <input type="password" name="password" id="password" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 @error('password')
                 <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="password_confirmation" class="block text-sm font-medium text-slate-300 mb-2">Confirm
+                <label for="password_confirmation"
+                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Confirm
                     Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
             </div>
 
             <div class="flex items-center justify-end space-x-3 pt-4">

@@ -59,7 +59,7 @@
                     </svg>
                 </button>
                 <div id="password-menu"
-                    class="hidden absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl overflow-hidden z-50">
+                    class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl overflow-hidden z-50">
                     <!-- Set New Password -->
                     <button type="button" onclick="openSetPasswordModal()"
                         class="group/item w-full text-left px-5 py-4 text-sm text-slate-300 hover:bg-slate-700/80 hover:text-white border-b border-slate-700/50 transition-all duration-150">
@@ -169,7 +169,7 @@
     <!-- User Info Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Profile Card -->
-        <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
             <div class="flex flex-col items-center text-center">
                 <div class="w-24 h-24 bg-lime-500/20 rounded-full flex items-center justify-center mb-4">
                     <span class="text-lime-400 font-bold text-3xl">{{ substr($user->name, 0, 2) }}</span>
@@ -217,7 +217,8 @@
         </div>
 
         <!-- Jibble Profile -->
-        <div class="lg:col-span-2 bg-slate-800 border border-slate-700 rounded-lg p-6">
+        <div
+            class="lg:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
             <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -277,7 +278,7 @@
 
     <!-- Recent Attendance -->
     @if($jibbleEmployee && $recentAttendance && $recentAttendance->count() > 0)
-    <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
         <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
             <svg class="w-5 h-5 mr-2 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -338,7 +339,8 @@
 <!-- Set Password Modal -->
 <div id="setPasswordModal"
     class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-xl max-w-md w-full">
+    <div
+        class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl max-w-md w-full">
         <div class="flex items-center justify-between p-6 border-b border-slate-700">
             <h3 class="text-xl font-semibold text-white">Set New Password</h3>
             <button onclick="closeSetPasswordModal()" class="text-slate-400 hover:text-white">

@@ -14,33 +14,34 @@
         <h2 class="text-2xl font-bold text-white">Edit User: {{ $user->name }}</h2>
     </div>
 
-    <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
         <form action="{{ route('admin.users.update', $user) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
 
             <div>
-                <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Name</label>
                 <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 @error('name')
                 <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                <label for="email"
+                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email</label>
                 <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                 @error('email')
                 <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="role" class="block text-sm font-medium text-slate-300 mb-2">Role</label>
+                <label for="role" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Role</label>
                 <select name="role" id="role" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                     <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>User</option>
                     <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
                 </select>
@@ -50,9 +51,10 @@
             </div>
 
             <div>
-                <label for="status" class="block text-sm font-medium text-slate-300 mb-2">Status</label>
+                <label for="status"
+                    class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Status</label>
                 <select name="status" id="status" required
-                    class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                    class="w-full px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                     <option value="active" {{ old('status', $user->status ?? 'active') === 'active' ? 'selected' : ''
                         }}>Active</option>
                     <option value="inactive" {{ old('status', $user->status) === 'inactive' ? 'selected' : ''

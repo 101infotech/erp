@@ -14,14 +14,14 @@
             </div>
             <div class="flex items-center gap-4">
                 <select id="company-filter"
-                    class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:border-lime-500 focus:ring-1 focus:ring-lime-500">
+                    class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:border-lime-500 focus:ring-1 focus:ring-lime-500">
                     <option value="">All Companies</option>
                     <!-- Will be populated dynamically -->
                 </select>
                 <input type="date" id="date-from"
-                    class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:border-lime-500 focus:ring-1 focus:ring-lime-500">
+                    class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:border-lime-500 focus:ring-1 focus:ring-lime-500">
                 <input type="date" id="date-to"
-                    class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:border-lime-500 focus:ring-1 focus:ring-lime-500">
+                    class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:border-lime-500 focus:ring-1 focus:ring-lime-500">
             </div>
         </div>
     </div>

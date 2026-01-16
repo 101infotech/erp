@@ -100,26 +100,26 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- ========== BUSINESS SUMMARY SECTION ========== -->
-        <div class="mb-12">
-            <x-dashboard-section-header title="Business Summary" subtitle="Finance and HR snapshots"
-                action="{{ route('admin.finance.dashboard') }}" actionLabel="View Finance Dashboard" />
-            <div class="flex items-center gap-3 text-xs font-medium">
-                <a href="{{ route('admin.finance.dashboard') }}"
-                    class="text-lime-400 hover:text-lime-300 inline-flex items-center gap-2">Finance Dashboard
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
-                <span class="text-slate-700 dark:text-slate-600">|</span>
-                <a href="{{ route('admin.hrm.employees.index') }}"
-                    class="text-blue-300 hover:text-blue-200 inline-flex items-center gap-2">HRM Hub
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
-            </div>
+    <!-- ========== BUSINESS SUMMARY SECTION ========== -->
+    <div class="mb-12">
+        <x-dashboard-section-header title="Business Summary" subtitle="Finance and HR snapshots"
+            action="{{ route('admin.finance.dashboard') }}" actionLabel="View Finance Dashboard" />
+        <div class="flex items-center gap-3 text-xs font-medium mb-6">
+            <a href="{{ route('admin.finance.dashboard') }}"
+                class="text-lime-400 hover:text-lime-300 inline-flex items-center gap-2">Finance Dashboard
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+            <span class="text-slate-700 dark:text-slate-600">|</span>
+            <a href="{{ route('admin.hrm.employees.index') }}"
+                class="text-blue-300 hover:text-blue-200 inline-flex items-center gap-2">HRM Hub
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -243,13 +243,16 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Finance Quick Actions -->
-            <div class="lg:col-span-2 space-y-4">
-                <x-dashboard-section-header title="Quick Actions" subtitle="Finance operations" />
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
+    <!-- ========== QUICK ACTIONS & RECENT TRANSACTIONS ========== -->
+    <div class="mt-12 grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Finance Quick Actions -->
+        <div class="lg:col-span-2 space-y-4">
+            <x-dashboard-section-header title="Finance Operations" subtitle="Manage transactions and reports" />
+            <div
+                class="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+                <div class="grid grid-cols-1 gap-3">
                     <x-dashboard-quick-action title="New Transaction" subtitle="Add entry" color="cyan"
                         href="{{ route('admin.finance.transactions.create') }}">
                         <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -282,286 +285,298 @@
                     </x-dashboard-quick-action>
                 </div>
             </div>
+        </div>
 
-            <!-- Recent Transactions -->
-            <div class="space-y-4 mt-6 lg:mt-10">
-                <x-dashboard-card title="Recent Transactions" subtitle="Latest activity" icon='<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Recent Transactions -->
+        <div class="lg:col-span-2 space-y-4">
+            <x-dashboard-card title="Recent Transactions" subtitle="Latest activity" icon='<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>' color="cyan" action="{{ route('admin.finance.transactions.index') }}"
-                    actionLabel="View All">
-                    <div id="recent-transactions" class="space-y-3">
-                        <p class="text-slate-400 text-center py-4 text-sm">Loading...</p>
-                    </div>
-                </x-dashboard-card>
-            </div>
-        </div>
-
-        <!-- ========== LEADS CENTER SECTION ========== -->
-        <div class="mb-12">
-            <x-dashboard-section-header title="Leads Center" subtitle="Manage and track sales leads"
-                action="{{ route('admin.leads.dashboard') }}" actionLabel="View Full Leads Dashboard" />
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-                <div id="leads-dashboard-container" class="min-h-96">
-                    <p class="text-slate-400 text-center py-8">Loading Leads Module...</p>
+                actionLabel="View All">
+                <div id="recent-transactions" class="space-y-3">
+                    <p class="text-slate-400 text-center py-4 text-sm">Loading...</p>
                 </div>
-            </div>
+            </x-dashboard-card>
         </div>
-
-        <!-- ========== QUICK ACCESS MODULES ========== -->
-        <div class="mb-12">
-            <x-dashboard-section-header title="Quick Access" subtitle="Jump to modules" />
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-                <!-- Leads Management -->
-                <a href="{{ route('admin.leads.dashboard') }}"
-                    class="group bg-gradient-to-br from-rose-500/20 to-rose-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-rose-500/20 hover:border-rose-500/40">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-semibold text-rose-300">Leads Center</span>
-                        <svg class="w-4 h-4 text-rose-400 group-hover:translate-x-1 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                    <p class="text-xs text-slate-400">Track sales pipeline</p>
-                    <p class="text-rose-300 text-xs mt-2 font-medium" id="leads-count">Loading...</p>
-                </a>
-
-                <!-- Sites Management -->
-                <a href="{{ route('admin.sites.index') }}"
-                    class="group bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-blue-500/20 hover:border-blue-500/40">
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="text-xs font-semibold text-blue-300 px-2.5 py-1 bg-black/20 rounded-full">#Management</span>
-                        <svg class="w-4 h-4 text-blue-300 group-hover:translate-x-1 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Sites</h3>
-                    <p class="text-xs text-blue-200/80">Manage websites</p>
-                </a>
-
-                <!-- HRM Module -->
-                <a href="{{ route('admin.hrm.employees.index') }}"
-                    class="group bg-gradient-to-br from-lime-500/20 to-lime-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-lime-500/20 hover:border-lime-500/40">
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="text-xs font-semibold text-lime-300 px-2.5 py-1 bg-black/20 rounded-full">#HRM</span>
-                        <svg class="w-4 h-4 text-lime-300 group-hover:translate-x-1 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">HR Management</h3>
-                    <p class="text-xs text-lime-200/80">Employees & payroll</p>
-                </a>
-
-                <!-- Attendance -->
-                <a href="{{ route('admin.hrm.attendance.index') }}"
-                    class="group bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-purple-500/20 hover:border-purple-500/40">
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="text-xs font-semibold text-purple-300 px-2.5 py-1 bg-black/20 rounded-full">#Tracking</span>
-                        <svg class="w-4 h-4 text-purple-300 group-hover:translate-x-1 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Attendance</h3>
-                    <p class="text-xs text-purple-200/80">Track employee time</p>
-                </a>
-
-                <!-- Content -->
-                <a href="{{ route('admin.sites.index') }}"
-                    class="group bg-gradient-to-br from-indigo-500/20 to-indigo-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-indigo-500/20 hover:border-indigo-500/40">
-                    <div class="flex items-center justify-between mb-3">
-                        <span
-                            class="text-xs font-semibold text-indigo-300 px-2.5 py-1 bg-black/20 rounded-full">#Content</span>
-                        <svg class="w-4 h-4 text-indigo-300 group-hover:translate-x-1 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Content</h3>
-                    <p class="text-xs text-indigo-200/80">Blogs & media</p>
-                </a>
-
-            </div>
-        </div>
-
-        <!-- ========== PENDING ACTIONS (Conditional) ========== -->
-        @if(isset($hrmStats) && (($hrmStats['pending_leaves'] ?? 0) > 0 || ($hrmStats['draft_payrolls'] ?? 0) > 0 ||
-        ($hrmStats['unreviewed_anomalies'] ?? 0) > 0))
-        <div class="mb-12">
-            <x-dashboard-section-header title="Pending Actions" subtitle="Requires your attention" />
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                @if(($hrmStats['pending_leaves'] ?? 0) > 0)
-                <a href="{{ route('admin.hrm.leaves.index') }}?status=pending"
-                    class="bg-yellow-500/10 rounded-xl p-4 border border-yellow-500/30 hover:border-yellow-500/50 transition group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <span class="text-2xl font-bold text-yellow-400">{{ $hrmStats['pending_leaves'] ?? 0 }}</span>
-                    </div>
-                    <h3 class="text-base font-semibold text-white">Pending Leave Requests</h3>
-                </a>
-                @endif
-
-                @if(($hrmStats['draft_payrolls'] ?? 0) > 0)
-                <a href="{{ route('admin.hrm.payroll.index') }}?status=draft"
-                    class="bg-slate-500/10 rounded-xl p-4 border border-blue-500/30 hover:border-blue-500/50 transition group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 bg-slate-500/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <span class="text-2xl font-bold text-blue-400">{{ $hrmStats['draft_payrolls'] ?? 0 }}</span>
-                    </div>
-                    <h3 class="text-base font-semibold text-white">Draft Payrolls</h3>
-                </a>
-                @endif
-
-                @if(($hrmStats['unreviewed_anomalies'] ?? 0) > 0)
-                <a href="{{ route('admin.hrm.attendance.index') }}"
-                    class="bg-red-500/10 rounded-xl p-4 border border-red-500/30 hover:border-red-500/50 transition group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                        </div>
-                        <span class="text-2xl font-bold text-red-400">{{ $hrmStats['unreviewed_anomalies'] ?? 0
-                            }}</span>
-                    </div>
-                    <h3 class="text-base font-semibold text-white">Attendance Anomalies</h3>
-                </a>
-                @endif
-
-            </div>
-        </div>
-        @endif
-
-        <!-- ========== AI INSIGHTS SECTION (Full Width) ========== -->
-        <div class="mb-6">
-            <div
-                class="bg-gradient-to-r from-lime-950/20 via-slate-900 to-lime-950/20 rounded-2xl border border-lime-500/20 overflow-hidden backdrop-blur-sm">
-                <!-- Header -->
-                <div class="bg-gradient-to-r from-lime-500/5 to-transparent px-6 py-4 border-b border-lime-500/10">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-lg bg-lime-500/10 border border-lime-500/20 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707.707M5.34 5.34l.707.707" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h2 class="text-lg font-bold text-white">AI Insights</h2>
-                                <p class="text-xs text-slate-400">Powered by real-time analytics</p>
-                            </div>
-                        </div>
-                        <span
-                            class="px-3 py-1 rounded-full bg-lime-500/10 border border-lime-500/20 text-xs font-medium text-lime-300">Live
-                            Monitor</span>
-                    </div>
-                </div>
-
-                <!-- Content -->
-                <div class="p-6 space-y-5">
-                    <!-- Main Insight -->
-                    <div
-                        class="bg-gradient-to-r from-slate-900/40 to-slate-800/40 rounded-xl p-4 border border-lime-500/10">
-                        <p class="text-sm text-slate-300 leading-relaxed" id="ai-insight-text">
-                            Analyzing finance and HRM signals...
-                        </p>
-                        <div class="mt-3 flex items-center gap-2 text-[11px] text-lime-300/70">
-                            <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
-                            <span>Auto-updating from live data</span>
-                        </div>
-                    </div>
-
-                    <!-- AI Chat Interface -->
-                    <div class="space-y-3">
-                        <label class="text-xs font-medium text-slate-400 block">Ask AI for
-                            Recommendations</label>
-                        <div class="flex gap-2">
-                            <div class="flex-1 relative">
-                                <input type="text" id="ai-query-input"
-                                    class="w-full bg-slate-900/60 border border-slate-700/50 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-lime-500/50 focus:ring-1 focus:ring-lime-500/20 transition"
-                                    placeholder="e.g., Where should we focus spending? What's the revenue trend?">
-                                <div
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs pointer-events-none">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <button type="button" id="ai-send-btn"
-                                class="px-5 py-3 rounded-lg bg-gradient-to-r from-lime-500 to-lime-600 text-slate-950 text-sm font-semibold hover:from-lime-400 hover:to-lime-500 transition-all duration-200 hover:shadow-lg hover:shadow-lime-500/20 flex items-center gap-2">
-                                <span>Send</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                </svg>
-                            </button>
-                        </div>
-                        <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
-                            <svg class="w-3 h-3 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                            </svg>
-                            Analyzes finance trends, HRM metrics, and provides actionable recommendations in
-                            real-time
-                        </p>
-                    </div>
-
-                    <!-- Quick Insights Grid (Optional) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-700/30">
-                        <button
-                            class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
-                            <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">
-                                Performance</p>
-                            <p class="text-xs text-slate-500 group-hover:text-slate-400">How's our cash flow?
-                            </p>
-                        </button>
-                        <button
-                            class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
-                            <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">
-                                Efficiency</p>
-                            <p class="text-xs text-slate-500 group-hover:text-slate-400">Where are we spending
-                                most?</p>
-                        </button>
-                        <button
-                            class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
-                            <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">Growth
-                            </p>
-                            <p class="text-xs text-slate-500 group-hover:text-slate-400">Next opportunities?</p>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    @push('scripts')
-    <script>
-        const hrmStats = @json($hrmStats ?? []);
+    <!-- ========== LEADS CENTER SECTION ========== -->
+    <div class="mt-16 mb-12">
+        <x-dashboard-section-header title="Leads Center" subtitle="Manage and track sales leads"
+            action="{{ route('admin.leads.dashboard') }}" actionLabel="View Full Leads Dashboard" />
+        <div
+            class="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <div id="leads-dashboard-container" class="min-h-96 flex flex-col items-center justify-center">
+                <svg class="w-16 h-16 text-slate-300 dark:text-slate-600 mb-4" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <p class="text-slate-600 dark:text-slate-400 text-center mb-2">Leads dashboard loading...</p>
+                <p class="text-xs text-slate-500 dark:text-slate-500 text-center mb-6">If this takes too long, <a
+                        href="{{ route('admin.leads.dashboard') }}"
+                        class="text-cyan-500 hover:text-cyan-400 font-medium">click here to view the full dashboard</a>
+                </p>
+                <div class="animate-pulse">
+                    <div class="h-2 w-12 bg-slate-300 dark:bg-slate-700 rounded"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== QUICK ACCESS MODULES ========== -->
+    <div class="mb-12">
+        <x-dashboard-section-header title="Quick Access" subtitle="Jump to modules" />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <!-- Leads Management -->
+            <a href="{{ route('admin.leads.dashboard') }}"
+                class="group bg-gradient-to-br from-rose-500/20 to-rose-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-rose-500/20 hover:border-rose-500/40">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-rose-300">Leads Center</span>
+                    <svg class="w-4 h-4 text-rose-400 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+                <p class="text-xs text-slate-400">Track sales pipeline</p>
+                <p class="text-rose-300 text-xs mt-2 font-medium" id="leads-count">Loading...</p>
+            </a>
+
+            <!-- Sites Management -->
+            <a href="{{ route('admin.sites.index') }}"
+                class="group bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-blue-500/20 hover:border-blue-500/40">
+                <div class="flex items-center justify-between mb-3">
+                    <span
+                        class="text-xs font-semibold text-blue-300 px-2.5 py-1 bg-black/20 rounded-full">#Management</span>
+                    <svg class="w-4 h-4 text-blue-300 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Sites</h3>
+                <p class="text-xs text-blue-200/80">Manage websites</p>
+            </a>
+
+            <!-- HRM Module -->
+            <a href="{{ route('admin.hrm.employees.index') }}"
+                class="group bg-gradient-to-br from-lime-500/20 to-lime-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-lime-500/20 hover:border-lime-500/40">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold text-lime-300 px-2.5 py-1 bg-black/20 rounded-full">#HRM</span>
+                    <svg class="w-4 h-4 text-lime-300 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">HR Management</h3>
+                <p class="text-xs text-lime-200/80">Employees & payroll</p>
+            </a>
+
+            <!-- Attendance -->
+            <a href="{{ route('admin.hrm.attendance.index') }}"
+                class="group bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-purple-500/20 hover:border-purple-500/40">
+                <div class="flex items-center justify-between mb-3">
+                    <span
+                        class="text-xs font-semibold text-purple-300 px-2.5 py-1 bg-black/20 rounded-full">#Tracking</span>
+                    <svg class="w-4 h-4 text-purple-300 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Attendance</h3>
+                <p class="text-xs text-purple-200/80">Track employee time</p>
+            </a>
+
+            <!-- Content -->
+            <a href="{{ route('admin.sites.index') }}"
+                class="group bg-gradient-to-br from-indigo-500/20 to-indigo-600/10 rounded-xl p-4 cursor-pointer transition-all hover:scale-105 border border-indigo-500/20 hover:border-indigo-500/40">
+                <div class="flex items-center justify-between mb-3">
+                    <span
+                        class="text-xs font-semibold text-indigo-300 px-2.5 py-1 bg-black/20 rounded-full">#Content</span>
+                    <svg class="w-4 h-4 text-indigo-300 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Content</h3>
+                <p class="text-xs text-indigo-200/80">Blogs & media</p>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- ========== PENDING ACTIONS (Conditional) ========== -->
+    @if(isset($hrmStats) && (($hrmStats['pending_leaves'] ?? 0) > 0 || ($hrmStats['draft_payrolls'] ?? 0) > 0 ||
+    ($hrmStats['unreviewed_anomalies'] ?? 0) > 0))
+    <div class="mb-12">
+        <x-dashboard-section-header title="Pending Actions" subtitle="Requires your attention" />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            @if(($hrmStats['pending_leaves'] ?? 0) > 0)
+            <a href="{{ route('admin.hrm.leaves.index') }}?status=pending"
+                class="bg-yellow-500/10 rounded-xl p-4 border border-yellow-500/30 hover:border-yellow-500/50 transition group">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold text-yellow-400">{{ $hrmStats['pending_leaves'] ?? 0 }}</span>
+                </div>
+                <h3 class="text-base font-semibold text-white">Pending Leave Requests</h3>
+            </a>
+            @endif
+
+            @if(($hrmStats['draft_payrolls'] ?? 0) > 0)
+            <a href="{{ route('admin.hrm.payroll.index') }}?status=draft"
+                class="bg-slate-500/10 rounded-xl p-4 border border-blue-500/30 hover:border-blue-500/50 transition group">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-slate-500/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold text-blue-400">{{ $hrmStats['draft_payrolls'] ?? 0 }}</span>
+                </div>
+                <h3 class="text-base font-semibold text-white">Draft Payrolls</h3>
+            </a>
+            @endif
+
+            @if(($hrmStats['unreviewed_anomalies'] ?? 0) > 0)
+            <a href="{{ route('admin.hrm.attendance.index') }}"
+                class="bg-red-500/10 rounded-xl p-4 border border-red-500/30 hover:border-red-500/50 transition group">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold text-red-400">{{ $hrmStats['unreviewed_anomalies'] ?? 0
+                        }}</span>
+                </div>
+                <h3 class="text-base font-semibold text-white">Attendance Anomalies</h3>
+            </a>
+            @endif
+
+        </div>
+    </div>
+    @endif
+
+    <!-- ========== AI INSIGHTS SECTION (Full Width) ========== -->
+    <div class="mb-6">
+        <div
+            class="bg-gradient-to-r from-lime-950/20 via-slate-900 to-lime-950/20 rounded-2xl border border-lime-500/20 overflow-hidden backdrop-blur-sm">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-lime-500/5 to-transparent px-6 py-4 border-b border-lime-500/10">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-lime-500/10 border border-lime-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707.707M5.34 5.34l.707.707" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">AI Insights</h2>
+                            <p class="text-xs text-slate-400">Powered by real-time analytics</p>
+                        </div>
+                    </div>
+                    <span
+                        class="px-3 py-1 rounded-full bg-lime-500/10 border border-lime-500/20 text-xs font-medium text-lime-300">Live
+                        Monitor</span>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 space-y-5">
+                <!-- Main Insight -->
+                <div
+                    class="bg-gradient-to-r from-slate-900/40 to-slate-800/40 rounded-xl p-4 border border-lime-500/10">
+                    <p class="text-sm text-slate-300 leading-relaxed" id="ai-insight-text">
+                        Analyzing finance and HRM signals...
+                    </p>
+                    <div class="mt-3 flex items-center gap-2 text-[11px] text-lime-300/70">
+                        <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
+                        <span>Auto-updating from live data</span>
+                    </div>
+                </div>
+
+                <!-- AI Chat Interface -->
+                <div class="space-y-3">
+                    <label class="text-xs font-medium text-slate-400 block">Ask AI for
+                        Recommendations</label>
+                    <div class="flex gap-2">
+                        <div class="flex-1 relative">
+                            <input type="text" id="ai-query-input"
+                                class="w-full bg-slate-900/60 border border-slate-700/50 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-lime-500/50 focus:ring-1 focus:ring-lime-500/20 transition"
+                                placeholder="e.g., Where should we focus spending? What's the revenue trend?">
+                            <div
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs pointer-events-none">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                            </div>
+                        </div>
+                        <button type="button" id="ai-send-btn"
+                            class="px-5 py-3 rounded-lg bg-gradient-to-r from-lime-500 to-lime-600 text-slate-950 text-sm font-semibold hover:from-lime-400 hover:to-lime-500 transition-all duration-200 hover:shadow-lg hover:shadow-lime-500/20 flex items-center gap-2">
+                            <span>Send</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                        <svg class="w-3 h-3 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                        </svg>
+                        Analyzes finance trends, HRM metrics, and provides actionable recommendations in
+                        real-time
+                    </p>
+                </div>
+
+                <!-- Quick Insights Grid (Optional) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-700/30">
+                    <button
+                        class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
+                        <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">
+                            Performance</p>
+                        <p class="text-xs text-slate-500 group-hover:text-slate-400">How's our cash flow?
+                        </p>
+                    </button>
+                    <button
+                        class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
+                        <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">
+                            Efficiency</p>
+                        <p class="text-xs text-slate-500 group-hover:text-slate-400">Where are we spending
+                            most?</p>
+                    </button>
+                    <button
+                        class="group text-left p-3 rounded-lg bg-slate-900/40 border border-slate-700/50 hover:border-lime-500/30 hover:bg-slate-900/60 transition">
+                        <p class="text-xs font-medium text-slate-400 group-hover:text-lime-300 mb-1">Growth
+                        </p>
+                        <p class="text-xs text-slate-500 group-hover:text-slate-400">Next opportunities?</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@push('scripts')
+<script>
+    const hrmStats = @json($hrmStats ?? []);
     const financeData = @json($financeData ?? null);
 
     function updateAiInsight(finance, hrm) {
@@ -821,6 +836,6 @@
         // Refresh every 30 seconds
         setInterval(loadLeadsSummary, 30000);
     });
-    </script>
-    @endpush
-    @endsection
+</script>
+@endpush
+@endsection
