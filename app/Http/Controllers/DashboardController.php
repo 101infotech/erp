@@ -106,25 +106,69 @@ class DashboardController extends Controller
     private function getFinanceData()
     {
         try {
-            $totalRevenue = \App\Models\FinanceTransaction::where('type', 'income')->sum('amount');
-            $totalExpenses = \App\Models\FinanceTransaction::where('type', 'expense')->sum('amount');
-            $pendingReceivables = \App\Models\FinanceTransaction::where('status', 'pending')
-                ->where('type', 'income')
-                ->sum('amount');
+            // KPIs from transactions
+            $revenue = \App\Models\FinanceTransaction::income()->completed()->sum('amount');
+            $expenses = \App\Models\FinanceTransaction::expense()->completed()->sum('amount');
+            $netProfit = $revenue - $expenses;
+            $margin = $revenue > 0 ? round(($netProfit / $revenue) * 100, 1) : 0;
+
+            // Pending receivables (sales) and payables (purchases)
+            $pendingSalesQuery = \App\Models\FinanceSale::pending();
+            $pendingSales = [
+                'count' => (clone $pendingSalesQuery)->count(),
+                'total' => (clone $pendingSalesQuery)->sum('net_amount'),
+                'items' => (clone $pendingSalesQuery)->latest()->limit(5)->get()->map(function ($sale) {
+                    return [
+                        'customer' => $sale->customer_name,
+                        'number' => $sale->invoice_number ?: $sale->sale_number,
+                        'date' => $sale->sale_date_bs,
+                        'amount' => $sale->net_amount,
+                    ];
+                })->toArray(),
+            ];
+
+            $pendingPurchasesQuery = \App\Models\FinancePurchase::pending();
+            $pendingPurchases = [
+                'count' => (clone $pendingPurchasesQuery)->count(),
+                'total' => (clone $pendingPurchasesQuery)->sum('net_amount'),
+                'items' => (clone $pendingPurchasesQuery)->latest()->limit(5)->get()->map(function ($purchase) {
+                    return [
+                        'vendor' => $purchase->vendor_name,
+                        'number' => $purchase->bill_number ?: $purchase->purchase_number,
+                        'date' => $purchase->purchase_date_bs,
+                        'amount' => $purchase->net_amount,
+                    ];
+                })->toArray(),
+            ];
+
+            // Recent transactions
+            $recentTransactions = \App\Models\FinanceTransaction::orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get()
+                ->map(function ($txn) {
+                    return [
+                        'description' => $txn->description,
+                        'date' => $txn->transaction_date_bs,
+                        'type' => $txn->transaction_type,
+                        'amount' => $txn->amount,
+                    ];
+                })->toArray();
 
             return [
-                'total_revenue' => $totalRevenue,
-                'total_expenses' => $totalExpenses,
-                'pending_receivables' => $pendingReceivables,
-                'net_profit' => $totalRevenue - $totalExpenses,
+                'kpis' => [
+                    'revenue' => ['total' => (float) $revenue],
+                    'expense' => ['total' => (float) $expenses],
+                    'profit' => ['net' => (float) $netProfit, 'margin' => (float) $margin],
+                    'sales' => ['pending' => (float) $pendingSales['total']],
+                ],
+                'pending_payments' => [
+                    'sales' => $pendingSales,
+                    'purchases' => $pendingPurchases,
+                ],
+                'recent_transactions' => $recentTransactions,
             ];
         } catch (\Exception $e) {
-            return [
-                'total_revenue' => 0,
-                'total_expenses' => 0,
-                'pending_receivables' => 0,
-                'net_profit' => 0,
-            ];
+            return null;
         }
     }
 
